@@ -1,0 +1,22 @@
+---
+import siteConfig from "@/data/site-config.json";
+
+const { headline, body, cta } = siteConfig.subscription;
+---
+
+<section class="bg-primary text-primary-foreground">
+  <div class="container py-20 md:py-24">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="font-serif text-3xl tracking-tight md:text-4xl">{headline}</h2>
+      <p class="mt-4 text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+        {body}
+      </p>
+      <a
+        href="/products"
+        class="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-background px-8 text-base font-medium text-foreground transition-all duration-150 hover:bg-background/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-background/60 focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+      >
+        {cta}
+      </a>
+    </div>
+  </div>
+</section>

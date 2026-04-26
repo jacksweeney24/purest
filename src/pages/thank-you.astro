@@ -1,0 +1,22 @@
+---
+// Placeholder destination used when Shopify is not configured yet.
+// Once real creds land in `.env`, the cart will redirect to Shopify checkout
+// instead and this page becomes unreachable from the cart flow.
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Thank you" description="Your order is on the way.">
+  <section class="container flex min-h-[60vh] flex-col items-center justify-center text-center">
+    <h1 class="font-serif text-4xl tracking-tight md:text-5xl">Thank you.</h1>
+    <p class="mt-4 max-w-md text-base text-muted-foreground">
+      This is a placeholder confirmation page. Once Shopify is connected, your
+      cart will redirect to a real checkout instead.
+    </p>
+    <a
+      href="/"
+      class="mt-10 inline-flex h-11 items-center justify-center rounded-full border border-input px-6 text-sm font-medium transition-colors hover:bg-secondary"
+    >
+      Back to home
+    </a>
+  </section>
+</Layout>

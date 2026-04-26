@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Brand palette — warm, calm, premium.
+ *
+ * The palette uses HSL because shadcn/ui expects HSL channel values (no `hsl()`
+ * wrapper) so Tailwind can compose them with opacity modifiers like `bg-primary/50`.
+ *
+ * Why a cream background instead of pure white?
+ * Pure white can feel sterile and clinical. A cream tone (47 33% 96%) feels
+ * warm and "natural" — it pairs better with the "real fruit + real salt" story.
+ */
+@layer base {
+  :root {
+    /*
+     * Premium white + cream + black palette.
+     *
+     * Page surface is pure white so product photography (shot on white)
+     * integrates seamlessly. Cream lives in `--secondary` and is used for
+     * section accents (Value Props, Footer) — this gives the page a quiet
+     * white/cream/black rhythm without losing the brand's warmth.
+     *
+     * Primary uses 9% lightness instead of pure black (#000) so it feels
+     * intentional rather than harsh, and matches the wordmark's ink density.
+     */
+
+    /* Surfaces */
+    --background: 0 0% 100%;   /* pure white — matches product photo backgrounds */
+    --foreground: 0 0% 9%;     /* near-black ink */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Primary = the brand action color. Black ink, same density as the logo. */
+    --primary: 0 0% 9%;
+    --primary-foreground: 47 33% 96%;
+
+    /* Secondary surface = warm cream. Used for section accents to add warmth. */
+    --secondary: 47 33% 96%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 47 30% 96%;
+    --muted-foreground: 25 6% 42%;
+
+    /*
+     * Pure monochrome — no chromatic accent. Restraint per Rams.
+     * Anything that previously used accent (e.g. cart count badge) now uses
+     * the same near-black ink. The result is unified and quiet.
+     */
+    --accent: 0 0% 9%;
+    --accent-foreground: 47 33% 96%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 12% 86%;
+    --input: 30 12% 86%;
+    --ring: 0 0% 9%;
+
+    /* Sharper radius — architectural, not consumer-app. */
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  /*
+   * Apply the border color to all elements that use a Tailwind border utility.
+   * shadcn/ui's components (e.g. <Card>, <Sheet>) rely on this default.
+   */
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* A small flourish for headings — slightly tighter tracking, balanced wrapping. */
+  h1, h2, h3 {
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+}

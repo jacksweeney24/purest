@@ -1,0 +1,59 @@
+[
+  {
+    "id": "mock-grapefruit",
+    "title": "Grapefruit Electrolyte",
+    "handle": "grapefruit",
+    "description": "A bright, citrus-forward jar made with real grapefruit and Celtic sea salt. 30 servings.",
+    "priceRange": { "minVariantPrice": { "amount": "38.00", "currencyCode": "USD" } },
+    "image": {
+      "url": "https://images.unsplash.com/photo-1546548970-71785318a17b?auto=format&fit=crop&w=900&q=80",
+      "altText": "Grapefruit electrolyte jar with fresh fruit"
+    },
+    "variants": [
+      {
+        "id": "mock-grapefruit-30",
+        "title": "30 servings",
+        "price": { "amount": "38.00", "currencyCode": "USD" },
+        "availableForSale": true
+      }
+    ]
+  },
+  {
+    "id": "mock-lemon",
+    "title": "Lemon Electrolyte",
+    "handle": "lemon",
+    "description": "Crisp lemon, real salt, no fillers. A refreshing daily hydrator. 30 servings.",
+    "priceRange": { "minVariantPrice": { "amount": "38.00", "currencyCode": "USD" } },
+    "image": {
+      "url": "https://images.unsplash.com/photo-1582719471384-894fbb16e074?auto=format&fit=crop&w=900&q=80",
+      "altText": "Lemon electrolyte jar"
+    },
+    "variants": [
+      {
+        "id": "mock-lemon-30",
+        "title": "30 servings",
+        "price": { "amount": "38.00", "currencyCode": "USD" },
+        "availableForSale": true
+      }
+    ]
+  },
+  {
+    "id": "mock-watermelon",
+    "title": "Watermelon Electrolyte",
+    "handle": "watermelon",
+    "description": "Real watermelon, mineral-rich salt, and nothing else. Summer in a jar. 30 servings.",
+    "priceRange": { "minVariantPrice": { "amount": "38.00", "currencyCode": "USD" } },
+    "image": {
+      "url": "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=900&q=80",
+      "altText": "Watermelon electrolyte jar"
+    },
+    "variants": [
+      {
+        "id": "mock-watermelon-30",
+        "title": "30 servings",
+        "price": { "amount": "38.00", "currencyCode": "USD" },
+        "availableForSale": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+---
+import siteConfig from "@/data/site-config.json";
+
+const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
+  siteConfig.hero;
+---
+
+{/*
+ * Hero: minimal — image + one headline + one subhead + one button.
+ * No badges, no chips, no kickers. Hierarchy through type weight and spacing.
+ *
+ * The image uses <picture> so modern browsers get the smaller WebP.
+ * Both files are fetched with priority since this is above the fold.
+ */}
+<section class="relative overflow-hidden">
+  {/*
+   * Layout: image-first on mobile (visual hook), text-left on desktop (editorial).
+   * `order-*` utilities reorder the flex/grid children at the md breakpoint
+   * without duplicating the image markup.
+   *
+   * Tighter mobile gap (gap-8) lets the text feel anchored to the image
+   * above it instead of floating in space.
+   */}
+  <div class="container grid grid-cols-1 items-center gap-8 py-16 md:grid-cols-2 md:gap-16 md:py-24">
+    <div class="order-2 animate-fade-in md:order-1">
+      {/*
+       * `set:html` renders the headline as HTML so Pam's agent can italicize
+       * any phrase in site-config.json by wrapping it in <em> tags. Safe here
+       * because the content is admin-controlled, not user-submitted.
+       */}
+      <h1
+        class="font-serif text-5xl leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
+        set:html={headline}
+      />
+
+      <p class="mt-6 max-w-md text-lg text-muted-foreground">
+        {subheadline}
+      </p>
+      <a
+        href={ctaHref}
+        class="mt-10 inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      >
+        {cta}
+      </a>
+    </div>
+    <div class="order-1 aspect-[4/5] overflow-hidden rounded-lg bg-secondary md:order-2 md:aspect-square">
+      <picture>
+        <source srcset={image} type="image/webp" />
+        <img
+          src={imageFallback}
+          alt={imageAlt}
+          class="h-full w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </picture>
+    </div>
+  </div>
+</section>

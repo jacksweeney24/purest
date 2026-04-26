@@ -1,0 +1,36 @@
+---
+import siteConfig from "@/data/site-config.json";
+import Logo from "@/components/Logo.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border/60 bg-secondary">
+  <div
+    class="container flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <Logo className="h-7" />
+      <div class="mt-3 text-sm text-muted-foreground">
+        {siteConfig.brand.tagline}
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 text-sm sm:flex-row sm:items-center sm:gap-6">
+      <a
+        href={`mailto:${siteConfig.footer.email}`}
+        class="text-muted-foreground transition-colors hover:text-foreground"
+      >
+        {siteConfig.footer.email}
+      </a>
+      <a
+        href={siteConfig.footer.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-muted-foreground transition-colors hover:text-foreground"
+      >
+        Instagram
+      </a>
+      <span class="text-muted-foreground">© {year} {siteConfig.brand.name}</span>
+    </div>
+  </div>
+</footer>

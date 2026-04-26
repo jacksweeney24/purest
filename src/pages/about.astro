@@ -1,0 +1,44 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Newsletter from "@/components/Newsletter.tsx";
+---
+
+<Layout
+  title="About · Purest Electrolyte"
+  description="Why Pam started Purest Electrolyte."
+>
+  <article class="container max-w-2xl py-20 md:py-28">
+    <h1 class="font-serif text-4xl tracking-tight md:text-5xl">Our story</h1>
+
+    <div class="prose mt-10 space-y-6 text-base leading-relaxed text-foreground/85">
+      <p>
+        Purest Electrolyte started in a kitchen, not a lab. Pam was tired of
+        opening every "clean" hydration product on the shelf and finding the
+        same long list of dyes, sweeteners, and synthetic flavors hiding behind
+        marketing words.
+      </p>
+      <p>
+        So she made her own. Real fruit, freeze-dried so the flavor stays
+        intact. Mineral-rich Celtic sea salt for hydration that actually
+        absorbs. And nothing else. The whole back of the jar fits in one
+        sentence.
+      </p>
+      <p>
+        Every batch is small, made by hand, and tasted before it goes out. If
+        it isn't something we'd drink every morning, it doesn't ship.
+      </p>
+    </div>
+
+    <hr class="my-16 border-border/60" />
+
+    <section>
+      <h2 class="font-serif text-2xl tracking-tight">Stay in the loop</h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        New flavors, restocks, and the occasional letter from Pam.
+      </p>
+      <div class="mt-6">
+        <Newsletter client:load />
+      </div>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Estelle",
+    "location": "Aspen, CO",
+    "title": "Excellent!",
+    "text": "Wow, this tastes incredibly real and delicious! I've tried every electrolyte on the market, but I never realized how many chemicals I was consuming.",
+    "rating": 5
+  },
+  {
+    "name": "Kristen",
+    "location": "Louisville, CO",
+    "title": "Excellent!",
+    "text": "I can drink this all day long. It tastes so refreshing!",
+    "rating": 5
+  },
+  {
+    "name": "Kajsa",
+    "title": "Excellent!",
+    "text": "We love Purest Electrolyte and drink it all the time! It keeps us hydrated and energized. Clean ingredients, great taste — highly recommend!",
+    "rating": 5
+  },
+  {
+    "name": "Nick",
+    "location": "Austin, TX",
+    "title": "Excellent!",
+    "text": "As a runner of many years, I thought I had my hydration figured out, trying every electrolyte product on the market. But it wasn't until I added Purest Electrolyte to my daily regimen that I realized how dehydrated I had been. Now I use it several times a day, and the difference is remarkable.",
+    "rating": 5
+  },
+  {
+    "name": "Max",
+    "title": "Changed my performance!",
+    "text": "I'm an athlete that's super picky about ingredients and I've tried every electrolyte. Truly this is by far the best one I've ever had. The full spectrum of minerals makes such a difference.",
+    "rating": 5
+  }
+]

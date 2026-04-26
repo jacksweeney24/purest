@@ -1,0 +1,32 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SaleBanner from "@/components/SaleBanner.astro";
+import Hero from "@/components/Hero.astro";
+import ValueProps from "@/components/ValueProps.astro";
+import FeaturedProduct from "@/components/FeaturedProduct.tsx";
+import SubscriptionCTA from "@/components/SubscriptionCTA.astro";
+import Testimonials from "@/components/Testimonials.astro";
+import { getProducts } from "@/lib/shopify";
+
+// Build-time fetch. Astro evaluates this on the server during `astro build`,
+// so the homepage is fully static — no client-side product loading needed.
+const products = await getProducts();
+const featured = products[0];
+---
+
+<Layout>
+  <SaleBanner />
+  <Hero />
+  <ValueProps />
+
+  {
+    featured && (
+      <section class="container py-20 md:py-28">
+        <FeaturedProduct product={featured} client:load />
+      </section>
+    )
+  }
+
+  <SubscriptionCTA />
+  <Testimonials />
+</Layout>

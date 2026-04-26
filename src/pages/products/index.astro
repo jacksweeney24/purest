@@ -1,0 +1,24 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import ProductGrid from "@/components/ProductGrid.tsx";
+import { getProducts } from "@/lib/shopify";
+
+const products = await getProducts();
+---
+
+<Layout title="Shop · Purest Electrolyte" description="All Purest Electrolyte flavors.">
+  <section class="container py-16 md:py-20">
+    <header class="max-w-2xl">
+      <h1 class="font-serif text-4xl tracking-tight md:text-5xl">All flavors</h1>
+      <p class="mt-4 text-lg text-muted-foreground">
+        Every jar is the same recipe: real fruit, real salt, nothing else. Pick
+        the flavor you'll actually look forward to.
+      </p>
+    </header>
+
+    <div class="mt-12">
+      {/* client:load is required because ProductCard's add-to-cart button is interactive. */}
+      <ProductGrid products={products} client:load />
+    </div>
+  </section>
+</Layout>

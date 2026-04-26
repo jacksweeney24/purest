@@ -1,0 +1,35 @@
+---
+// Three columns on desktop, stacked on mobile.
+// Pure restraint: short label + one sentence. No icons fighting for attention.
+const props = [
+  {
+    title: "Real fruit",
+    body: "Freeze-dried whole fruit — never artificial flavors, never sweeteners.",
+  },
+  {
+    title: "Real salt",
+    body: "Mineral-rich Celtic sea salt for hydration that actually absorbs.",
+  },
+  {
+    title: "Nothing else",
+    body: "No chemicals, no fillers, no dyes. Read the back of the jar.",
+  },
+];
+---
+
+<section class="border-y border-border/60 bg-secondary">
+  <div class="container py-16 md:py-20">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-16">
+      {
+        props.map((prop) => (
+          <div>
+            <h3 class="font-serif text-2xl tracking-tight">{prop.title}</h3>
+            <p class="mt-3 text-base leading-relaxed text-muted-foreground">
+              {prop.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,29 @@
+{
+  "brand": {
+    "name": "Purest Electrolyte",
+    "tagline": "Real fruit. Real salt. Real hydration."
+  },
+  "hero": {
+    "headline": "Your new <em>hydration ritual</em>",
+    "subheadline": "Real fruit + real salt = real hydration. Nothing else.",
+    "cta": "Shop now",
+    "ctaHref": "/products",
+    "image": "/images/ginger-lime.webp",
+    "imageFallback": "/images/ginger-lime.jpg",
+    "imageAlt": "Ginger lime electrolyte"
+  },
+  "saleBanner": {
+    "enabled": false,
+    "text": "Summer Sale: 20% off all jars",
+    "code": "SUMMER20"
+  },
+  "subscription": {
+    "headline": "Subscribe & save 15%",
+    "body": "Skip the trip. Get your jars on a schedule that works for you, and never run dry mid-run.",
+    "cta": "Start a subscription"
+  },
+  "footer": {
+    "instagram": "https://instagram.com/purestelectrolyte",
+    "email": "hello@purestelectrolyte.com"
+  }
+}

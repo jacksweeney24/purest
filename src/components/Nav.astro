@@ -1,0 +1,50 @@
+---
+import siteConfig from "@/data/site-config.json";
+import CartIcon from "@/components/CartIcon.tsx";
+import Logo from "@/components/Logo.astro";
+
+// Active link styling. Astro.url.pathname is the current page URL.
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
+
+const links = [
+  { href: "/products", label: "Shop" },
+  { href: "/about", label: "About" },
+];
+---
+
+{/*
+ * Sticky nav with a soft backdrop blur. Minimal: logo left, two links, cart right.
+ * No mobile hamburger needed yet — three top-level items fit on a phone.
+ */}
+<header
+  class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+>
+  <nav class="container flex h-16 items-center justify-between">
+    <a
+      href="/"
+      class="flex items-center transition-opacity hover:opacity-80"
+      aria-label={`${siteConfig.brand.name} home`}
+    >
+      <Logo className="h-7 sm:h-8" />
+    </a>
+    <div class="flex items-center gap-1 sm:gap-2">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary",
+              isActive(link.href) && "text-foreground",
+              !isActive(link.href) && "text-muted-foreground",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <CartIcon client:load />
+    </div>
+  </nav>
+</header>

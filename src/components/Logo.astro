@@ -1,0 +1,34 @@
+---
+/*
+ * Reusable logo component.
+ *
+ * Uses <picture> so modern browsers get the smaller WebP and older browsers
+ * fall back to PNG. Both files share the same intrinsic 800×312 aspect ratio,
+ * so we only set `height` and let the browser compute the width — this
+ * prevents layout shift while letting us style the height in Tailwind.
+ *
+ * Source aspect ratio: 800 / 312 ≈ 2.564.
+ */
+
+interface Props {
+  /** Tailwind height class, e.g. "h-7". Width is derived from the aspect ratio. */
+  className?: string;
+  /** Alt text for accessibility. Defaults to the brand name. */
+  alt?: string;
+}
+
+const { className = "h-7", alt = "Purest Electrolyte" } = Astro.props;
+---
+
+<picture>
+  <source srcset="/images/purest-logo.webp" type="image/webp" />
+  <img
+    src="/images/purest-logo.png"
+    alt={alt}
+    width="800"
+    height="312"
+    class:list={["w-auto", className]}
+    loading="eager"
+    decoding="async"
+  />
+</picture>

@@ -1,0 +1,20 @@
+---
+import siteConfig from "@/data/site-config.json";
+
+const { enabled, text, code } = siteConfig.saleBanner;
+---
+
+{
+  enabled && (
+    <div class="bg-primary text-primary-foreground">
+      <div class="container flex h-9 items-center justify-center gap-2 text-xs sm:text-sm">
+        <span>{text}</span>
+        {code && (
+          <span class="font-medium tracking-wider">
+            Code: <span class="underline underline-offset-2">{code}</span>
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}

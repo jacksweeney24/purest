@@ -1,0 +1,66 @@
+---
+// The base HTML layout. Every page uses this.
+// Slots: default content, plus an optional "head" slot for page-specific meta tags.
+import "@/styles/global.css";
+import Nav from "@/components/Nav.astro";
+import Footer from "@/components/Footer.astro";
+import Cart from "@/components/Cart.tsx";
+import siteConfig from "@/data/site-config.json";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = siteConfig.brand.name,
+  description = siteConfig.brand.tagline,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/*
+     * Fraunces — a variable serif with editorial / magazine character.
+     * High contrast, flowing italics, and refined letterforms — same family
+     * NYT Cooking, AD, and similar publications use for editorial headlines.
+     *
+     * The `opsz` (optical size) axis ranges 9–144 so the font self-tunes:
+     * headlines get the display cut, smaller text gets the text cut.
+     * Loading both upright and italic so we can use *italic emphasis* in
+     * headlines (e.g. "and *so much more*").
+     *
+     * preconnect speeds up the connection to Google's CDN; display=swap
+     * renders system serif first, then swaps in Fraunces once loaded.
+     */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Nav />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    {/*
+     * The Cart drawer is mounted once at the layout level so it's available
+     * from any page. `client:load` hydrates immediately on page load so the
+     * cart's persisted state is visible right away.
+     */}
+    <Cart client:load />
+  </body>
+</html>
