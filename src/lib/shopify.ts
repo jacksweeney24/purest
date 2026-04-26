@@ -171,5 +171,26 @@ export async function createCheckout(
     const all = [...(errors ?? []), ...userErrors].map((e) => e.message).join("; ");
     throw new Error(all || "Failed to create checkout");
   }
-  return data.cartCreate.cart.checkoutUrl;
+  return rewriteToShopifyDomain(data.cartCreate.cart.checkoutUrl);
+}
+
+/**
+ * Shopify returns checkout URLs using the store's *primary domain*, which is
+ * the same domain serving our Astro site (e.g. purestelectrolyte.com). Hitting
+ * that URL would 404 against our static site. We rewrite the host to the
+ * .myshopify.com domain so the browser reaches Shopify's checkout servers.
+ *
+ * The proper fix is a checkout subdomain in Shopify Admin (e.g.
+ * checkout.purestelectrolyte.com). Once that's configured this rewrite
+ * becomes a no-op because Shopify will return the subdomain URL directly.
+ */
+function rewriteToShopifyDomain(checkoutUrl: string): string {
+  try {
+    const parsed = new URL(checkoutUrl);
+    parsed.protocol = "https:";
+    parsed.host = domain;
+    return parsed.toString();
+  } catch {
+    return checkoutUrl;
+  }
 }
