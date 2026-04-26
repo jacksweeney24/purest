@@ -58,7 +58,7 @@ export async function shopifyFetch<T>(
   if (!hasShopify) {
     throw new Error("Shopify is not configured. Set PUBLIC_SHOPIFY_* env vars.");
   }
-  const res = await fetch(`https://${domain}/api/2024-01/graphql.json`, {
+  const res = await fetch(`https://${domain}/api/2025-01/graphql.json`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -130,36 +130,46 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 /**
- * Creates a Shopify checkout and returns the URL to redirect the user to.
- * In mock mode, redirects to /thank-you (a placeholder you can build later).
+ * Creates a Shopify cart and returns the hosted checkout URL.
+ *
+ * Shopify deprecated the Checkout API (`checkoutCreate`) in 2024 and replaced
+ * it with the Cart API (`cartCreate`). The output is the same — a URL we
+ * redirect the user to — but the field names changed:
+ *   - `lineItems` -> `lines`
+ *   - `variantId` -> `merchandiseId`
+ *   - `checkout.webUrl` -> `cart.checkoutUrl`
+ *
+ * In mock mode (no Shopify creds), redirects to /thank-you instead.
  */
 export async function createCheckout(
   lines: { variantId: string; quantity: number }[],
 ): Promise<string> {
   if (!hasShopify) {
-    // No real backend yet — surface a friendly placeholder so the cart UX still works.
     return "/thank-you";
   }
-  const lineItems = lines
-    .map((l) => `{ variantId: "${l.variantId}", quantity: ${l.quantity} }`)
+  // The variantId values from getProducts() are already Shopify GIDs
+  // (e.g. "gid://shopify/ProductVariant/12345"), which is what the Cart API
+  // calls `merchandiseId`. We just rename the field.
+  const cartLines = lines
+    .map((l) => `{ merchandiseId: "${l.variantId}", quantity: ${l.quantity} }`)
     .join(", ");
   const query = `mutation {
-    checkoutCreate(input: { lineItems: [${lineItems}] }) {
-      checkout { webUrl }
-      checkoutUserErrors { message }
+    cartCreate(input: { lines: [${cartLines}] }) {
+      cart { checkoutUrl }
+      userErrors { field message }
     }
   }`;
   type Resp = {
-    checkoutCreate: {
-      checkout: { webUrl: string } | null;
-      checkoutUserErrors: { message: string }[];
+    cartCreate: {
+      cart: { checkoutUrl: string } | null;
+      userErrors: { field?: string[] | null; message: string }[];
     };
   };
   const { data, errors } = await shopifyFetch<Resp>(query);
-  const userErrors = data?.checkoutCreate.checkoutUserErrors ?? [];
-  if (errors?.length || userErrors.length || !data?.checkoutCreate.checkout) {
+  const userErrors = data?.cartCreate.userErrors ?? [];
+  if (errors?.length || userErrors.length || !data?.cartCreate.cart) {
     const all = [...(errors ?? []), ...userErrors].map((e) => e.message).join("; ");
     throw new Error(all || "Failed to create checkout");
   }
-  return data.checkoutCreate.checkout.webUrl;
+  return data.cartCreate.cart.checkoutUrl;
 }
