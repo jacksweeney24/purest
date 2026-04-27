@@ -20,9 +20,7 @@ interface Props {
 const { className = "h-7", alt = "Purest Electrolyte" } = Astro.props;
 ---
 
-<picture>
-  <source srcset="/images/purest-logo.webp" type="image/webp" />
-  <img
+<img
     src="/images/purest-logo.png"
     alt={alt}
     width="800"
@@ -31,4 +29,3 @@ const { className = "h-7", alt = "Purest Electrolyte" } = Astro.props;
     loading="eager"
     decoding="async"
   />
-</picture>
