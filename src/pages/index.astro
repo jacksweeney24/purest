@@ -7,6 +7,9 @@ import FeaturedProduct from "@/components/FeaturedProduct.tsx";
 import SubscriptionCTA from "@/components/SubscriptionCTA.astro";
 import Testimonials from "@/components/Testimonials.astro";
 import { getProducts } from "@/lib/shopify";
+import FounderStory from "@/components/FounderStory.astro";
+import Dehydration from "@/components/Dehydration.astro";
+import Comparison from "@/components/Comparison.astro";
 
 // Build-time fetch. Astro evaluates this on the server during `astro build`,
 // so the homepage is fully static — no client-side product loading needed.
@@ -27,6 +30,9 @@ const featured = products[0];
     )
   }
 
+  <Dehydration />
+  <Comparison />
+  <FounderStory />
   <SubscriptionCTA />
   <Testimonials />
 </Layout>

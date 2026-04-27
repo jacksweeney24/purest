@@ -1,0 +1,45 @@
+---
+---
+
+<section class="container py-20 md:py-28">
+  <div class="max-w-2xl mx-auto text-center mb-12">
+    <p class="text-xs uppercase tracking-widest text-muted-foreground">The difference</p>
+    <h2 class="mt-4 font-serif text-3xl tracking-tight md:text-4xl">
+      Not all electrolytes are equal.
+    </h2>
+    <p class="mt-4 text-base text-foreground/70">
+      Most brands hide behind marketing. We hide nothing.
+    </p>
+  </div>
+
+  <div class="mx-auto max-w-2xl overflow-hidden rounded-sm border border-border">
+    <!-- Header -->
+    <div class="grid grid-cols-3 bg-foreground text-background">
+      <div class="p-4 text-sm font-medium"></div>
+      <div class="p-4 text-center text-sm font-medium">Purest</div>
+      <div class="p-4 text-center text-sm font-medium text-background/60">Typical Brands</div>
+    </div>
+
+    <!-- Rows -->
+    {[
+      ["Real fruit ingredients", true, false],
+      ["Visible ingredients in clear jar", true, false],
+      ["No artificial flavors", true, false],
+      ["No synthetic dyes", true, false],
+      ["Full mineral spectrum", true, false],
+      ["No mystery 'natural flavors'", true, false],
+      ["Small batch, hand-made", true, false],
+      ["Founder stands behind every jar", true, false],
+    ].map(([label, purest, them], i) => (
+      <div class={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? 'bg-background' : 'bg-stone-50/50'}`}>
+        <div class="p-4 text-sm text-foreground/80">{label}</div>
+        <div class="p-4 text-center text-sm font-medium text-green-700">
+          {purest ? "✓" : "✗"}
+        </div>
+        <div class="p-4 text-center text-sm text-foreground/40">
+          {them ? "✓" : "✗"}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
