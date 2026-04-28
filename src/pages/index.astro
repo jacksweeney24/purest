@@ -2,8 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import SaleBanner from "@/components/SaleBanner.astro";
 import Hero from "@/components/Hero.astro";
-import ValueProps from "@/components/ValueProps.astro";
-import FeaturedProduct from "@/components/FeaturedProduct.tsx";
+import ProductGrid from "@/components/ProductGrid.tsx";
 import SubscriptionCTA from "@/components/SubscriptionCTA.astro";
 import Testimonials from "@/components/Testimonials.astro";
 import { getProducts } from "@/lib/shopify";
@@ -11,26 +10,24 @@ import FounderStory from "@/components/FounderStory.astro";
 import Dehydration from "@/components/Dehydration.astro";
 import Comparison from "@/components/Comparison.astro";
 
-// Build-time fetch. Astro evaluates this on the server during `astro build`,
-// so the homepage is fully static — no client-side product loading needed.
 const products = await getProducts();
-const featured = products[0];
+// Electrolyte flavors first, water bottle last
+const flavors = products.filter(p => !p.title.toLowerCase().includes('water bottle'));
+const other = products.filter(p => p.title.toLowerCase().includes('water bottle'));
+const orderedProducts = [...flavors, ...other];
 ---
 
 <Layout>
   <SaleBanner />
   <Hero />
-  {/* ValueProps removed - redundant with hero messaging */}
 
-  {
-    featured && (
-      <section class="container py-12 md:py-16">
-        <FeaturedProduct product={featured} client:load />
-      </section>
-    )
-  }
+  {/* ALL products right below hero — LMNT style, shop without scrolling */}
+  <section class="container py-10 md:py-14">
+    <h2 class="font-serif text-2xl tracking-tight mb-8 md:text-3xl">Shop all flavors</h2>
+    <ProductGrid products={orderedProducts} client:load />
+  </section>
 
-  {/* In Each Jar infographic — right below Explore all flavors */}
+  {/* In Each Jar infographic */}
   <section class="bg-white py-2">
     <div class="container max-w-7xl">
       <img
