@@ -3,7 +3,12 @@ import Layout from "@/layouts/Layout.astro";
 import ProductGrid from "@/components/ProductGrid.tsx";
 import { getProducts } from "@/lib/shopify";
 
-const products = await getProducts();
+const allProducts = await getProducts();
+// Move the water bottle to the end of the list
+const products = [
+  ...allProducts.filter(p => !p.title.toLowerCase().includes('water bottle')),
+  ...allProducts.filter(p => p.title.toLowerCase().includes('water bottle')),
+];
 ---
 
 <Layout title="Shop · Purest Electrolyte" description="All Purest Electrolyte flavors.">
