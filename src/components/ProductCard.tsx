@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart-store";
 import type { Product } from "@/lib/shopify";
 import { formatPrice } from "@/lib/utils";
+import flavorCopy from "@/data/flavor-copy.json";
 
 interface Props {
   product: Product;
@@ -46,17 +47,17 @@ export default function ProductCard({ product }: Props) {
           <div className="h-full w-full" />
         )}
       </div>
-      <div className="mt-4 flex items-baseline justify-between gap-2">
-        <h3 className="text-base font-medium">{product.title}</h3>
-        <span className="text-sm tabular-nums text-muted-foreground">
-          {formatPrice(price.amount, price.currencyCode)}
-        </span>
-      </div>
-      {product.description && (
+      <div className="mt-4">
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="text-base font-medium">{product.title}</h3>
+          <span className="text-base font-semibold tabular-nums">
+            {formatPrice(price.amount, price.currencyCode)}
+          </span>
+        </div>
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-          {product.description}
+          {(flavorCopy as any)[product.handle]?.tagline ?? product.description}
         </p>
-      )}
+      </div>
       </a>
       <Button
         className="mt-4"
