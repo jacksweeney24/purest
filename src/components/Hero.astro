@@ -43,13 +43,13 @@ const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
         {cta}
       </a>
     </div>
-    <div class="order-1 aspect-[4/5] overflow-hidden rounded-lg bg-secondary md:order-2 md:aspect-square">
+    <div class="order-1 aspect-square overflow-hidden rounded-lg bg-white md:order-2">
       <picture>
         <source srcset={image} type="image/webp" />
         <img
           src={imageFallback}
           alt={imageAlt}
-          class="h-full w-full object-cover"
+          class="h-full w-full object-contain p-4"
           loading="eager"
           fetchpriority="high"
         />
