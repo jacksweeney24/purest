@@ -195,6 +195,42 @@ function rewriteToShopifyDomain(checkoutUrl: string): string {
   }
 }
 
+export async function getArticle(blogHandle: string, articleHandle: string): Promise<{ title: string; contentHtml: string; publishedAt: string; image: { url: string; altText: string | null } | null } | null> {
+  if (!hasShopify) return null;
+  const query = `{
+    blog(handle: "${blogHandle}") {
+      articleByHandle(handle: "${articleHandle}") {
+        title contentHtml publishedAt
+        image { url altText }
+      }
+    }
+  }`;
+  type Resp = { blog: { articleByHandle: any } };
+  const { data, errors } = await shopifyFetch<Resp>(query);
+  if (errors?.length || !data?.blog?.articleByHandle) return null;
+  return data.blog.articleByHandle;
+}
+
+export async function getBlogArticles(blogHandle: string): Promise<{ handle: string; title: string; excerptHtml: string; publishedAt: string; image: { url: string; altText: string | null } | null }[]> {
+  if (!hasShopify) return [];
+  const query = `{
+    blog(handle: "${blogHandle}") {
+      articles(first: 20) {
+        edges {
+          node {
+            handle title excerptHtml publishedAt
+            image { url altText }
+          }
+        }
+      }
+    }
+  }`;
+  type Resp = { blog: { articles: { edges: { node: any }[] } } };
+  const { data, errors } = await shopifyFetch<Resp>(query);
+  if (errors?.length || !data?.blog) return [];
+  return data.blog.articles.edges.map((e: any) => e.node);
+}
+
 /** Fetches a single product by handle with all images. */
 export async function getProduct(handle: string): Promise<Product & { images: ProductImage[] } | null> {
   if (!hasShopify) {

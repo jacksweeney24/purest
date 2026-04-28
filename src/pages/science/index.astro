@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { getBlogArticles } from "@/lib/shopify";
+
+const articles = await getBlogArticles("science");
+---
+
+<Layout title="The Science · Purest Electrolyte" description="Research and science behind Purest Electrolyte.">
+  <section class="container py-16 md:py-20">
+    <header class="max-w-2xl">
+      <p class="text-xs uppercase tracking-widest text-muted-foreground">Research</p>
+      <h1 class="mt-4 font-serif text-4xl tracking-tight md:text-5xl">The Science</h1>
+      <p class="mt-4 text-lg text-muted-foreground">Why real ingredients work better than lab-made ones. The research behind Purest.</p>
+    </header>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((article) => (
+        <a href={`/science/${article.handle}`} class="group block rounded-xl border border-border/60 bg-white p-6 transition-shadow hover:shadow-md">
+          {article.image && (
+            <div class="mb-4 aspect-video overflow-hidden rounded-lg bg-stone-100">
+              <img src={article.image.url} alt={article.image.altText ?? article.title} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+            </div>
+          )}
+          <p class="text-xs text-muted-foreground">{new Date(article.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+          <h2 class="mt-2 font-serif text-xl tracking-tight group-hover:opacity-70 transition-opacity">{article.title}</h2>
+          {article.excerptHtml && (
+            <div class="mt-2 line-clamp-3 text-sm text-muted-foreground" set:html={article.excerptHtml} />
+          )}
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

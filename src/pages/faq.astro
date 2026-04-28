@@ -1,0 +1,68 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const faqs = [
+  {
+    q: "What's in Purest Electrolyte?",
+    a: "Just two things: organic freeze-dried real fruit and natural sun-dried French gray sea salt. That's it. You can see every ingredient in the jar."
+  },
+  {
+    q: "How is Purest different from other electrolytes?",
+    a: "Most electrolytes use only 3 synthetic minerals. Purest delivers 85+ trace minerals naturally occurring in sun-dried sea salt, paired with real freeze-dried fruit for glucose-assisted absorption. No lab-made ingredients. No hidden additives."
+  },
+  {
+    q: "How do I use it?",
+    a: "Mix one serving in 8-16 oz of water and drink. You can use it before, during, or after activity — or any time you need to hydrate. Many people love it first thing in the morning."
+  },
+  {
+    q: "How much sodium is in each serving?",
+    a: "700+ mg of naturally occurring sodium from French gray sea salt per serving. This is naturally occurring sodium — not processed or synthetic."
+  },
+  {
+    q: "Is there added sugar?",
+    a: "Zero added sugar. The only natural sweetness comes from the organic freeze-dried fruit itself — nothing else is added."
+  },
+  {
+    q: "Can kids drink it?",
+    a: "Purest is made with clean, natural ingredients. Many parents use it for their active kids. We recommend consulting your pediatrician if you have questions about your child's specific needs."
+  },
+  {
+    q: "How should I store it?",
+    a: "Store in a cool, dry place away from direct sunlight. Keep the jar sealed when not in use."
+  },
+  {
+    q: "Do you offer subscriptions?",
+    a: "Yes! Subscribe & Save 10% on monthly deliveries. Never run out of your favorite flavor. Cancel anytime."
+  },
+  {
+    q: "What is your return policy?",
+    a: "We stand behind Purest 100%. If you're not satisfied with your purchase, contact us at hydrate@purestelectrolyte.com and we'll make it right."
+  },
+  {
+    q: "Where is Purest developed?",
+    a: "Purest was developed and tested at 8,900 feet in Aspen, Colorado — by Pam Sweeney and her four high-level athlete kids who needed real hydration at altitude."
+  },
+];
+---
+
+<Layout title="FAQ · Purest Electrolyte" description="Frequently asked questions about Purest Electrolyte.">
+  <section class="container py-16 md:py-20 max-w-3xl">
+    <header>
+      <p class="text-xs uppercase tracking-widest text-muted-foreground">Help</p>
+      <h1 class="mt-4 font-serif text-4xl tracking-tight">Frequently Asked Questions</h1>
+      <p class="mt-4 text-muted-foreground">Have a question? Email us at <a href="mailto:hydrate@purestelectrolyte.com" class="underline underline-offset-2">hydrate@purestelectrolyte.com</a></p>
+    </header>
+
+    <div class="mt-12 divide-y divide-border">
+      {faqs.map((faq) => (
+        <details class="group py-5">
+          <summary class="flex cursor-pointer items-center justify-between gap-4 font-serif text-lg tracking-tight list-none">
+            {faq.q}
+            <span class="text-muted-foreground transition-transform group-open:rotate-45">+</span>
+          </summary>
+          <p class="mt-3 text-muted-foreground leading-relaxed">{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>

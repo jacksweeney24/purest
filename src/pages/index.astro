@@ -11,6 +11,7 @@ import Dehydration from "@/components/Dehydration.astro";
 import Comparison from "@/components/Comparison.astro";
 import StatsBar from "@/components/StatsBar.astro";
 import WhatsInside from "@/components/WhatsInside.astro";
+import PressBar from "@/components/PressBar.astro";
 
 const products = await getProducts();
 // Electrolyte flavors first, water bottle last
@@ -22,6 +23,7 @@ const orderedProducts = [...flavors, ...other];
 <Layout>
   <SaleBanner />
   <Hero />
+  <PressBar />
 
   {/* ALL products right below hero — LMNT style, shop without scrolling */}
   <section class="container py-10 md:py-14">
