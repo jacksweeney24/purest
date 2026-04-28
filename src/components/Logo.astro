@@ -23,9 +23,10 @@ const { className = "h-7", alt = "Purest Electrolyte" } = Astro.props;
 <img
     src="/images/purest-logo.png"
     alt={alt}
-    width="800"
-    height="312"
-    class:list={["w-auto", className]}
+    width="1280"
+    height="475"
+    class:list={["w-auto max-w-[100px] sm:max-w-[120px]", className]}
     loading="eager"
     decoding="async"
+    style="object-fit: contain;"
   />

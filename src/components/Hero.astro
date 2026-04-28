@@ -12,8 +12,8 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
   <div class="container">
     <div class="grid md:grid-cols-2 min-h-[480px] md:min-h-[560px] items-center gap-8 py-12 md:py-0">
 
-      {/* Left: headline + description + CTA */}
-      <div class="space-y-5 py-8 md:py-16">
+      {/* Left: headline + description + CTA — order-2 on mobile so image shows first */}
+      <div class="space-y-5 py-8 md:py-16 order-2 md:order-1">
 
         {/* Social proof */}
         <div class="flex items-center gap-2 text-sm">
@@ -43,8 +43,8 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
         <p class="text-xs text-foreground/40">Free shipping on orders over $50</p>
       </div>
 
-      {/* Right: product image */}
-      <div class="relative h-[360px] md:h-full md:min-h-[560px] -mx-4 md:mx-0 md:-mr-8 lg:-mr-16">
+      {/* Right: product image — order-1 on mobile so it shows first */}
+      <div class="relative h-[360px] md:h-full md:min-h-[560px] -mx-4 md:mx-0 md:-mr-8 lg:-mr-16 order-1 md:order-2">
         <picture>
           <source srcset={image} type="image/webp" />
           <img
