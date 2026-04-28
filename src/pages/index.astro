@@ -10,6 +10,7 @@ import FounderStory from "@/components/FounderStory.astro";
 import Dehydration from "@/components/Dehydration.astro";
 import Comparison from "@/components/Comparison.astro";
 import StatsBar from "@/components/StatsBar.astro";
+import WhatsInside from "@/components/WhatsInside.astro";
 
 const products = await getProducts();
 // Electrolyte flavors first, water bottle last
@@ -41,6 +42,7 @@ const orderedProducts = [...flavors, ...other];
     </div>
   </section>
 
+  <WhatsInside />
   <Dehydration />
   <Comparison />
   <FounderStory />
