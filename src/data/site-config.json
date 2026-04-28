@@ -8,9 +8,9 @@
     "subheadline": "Real fruit + real salt = real hydration. Nothing else.",
     "cta": "Shop now",
     "ctaHref": "/products",
-    "image": "/images/ginger-lime.webp",
-    "imageFallback": "/images/ginger-lime.jpg",
-    "imageAlt": "Purest Electrolyte Ginger Limeaid jar with fresh ginger and lime"
+    "image": "/images/hero.jpg",
+    "imageFallback": "/images/hero.jpg",
+    "imageAlt": "All 5 Purest Electrolyte flavors on a tropical beach - Ginger Limeaid, Hibiscus Lime, Passion Cherry, Cranberry, and Chocolate"
   },
   "saleBanner": {
     "enabled": false,
