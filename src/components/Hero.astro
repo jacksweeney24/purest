@@ -1,49 +1,47 @@
 ---
 import siteConfig from "@/data/site-config.json";
 
-const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
-  siteConfig.hero;
+const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
 {/*
- * Hero: minimal — image + one headline + one subhead + one button.
- * No badges, no chips, no kickers. Hierarchy through type weight and spacing.
- *
- * The image uses <picture> so modern browsers get the smaller WebP.
- * Both files are fetched with priority since this is above the fold.
+ * Split hero: text left, product image right — LMNT-style layout.
+ * Purest's light, airy brand feel instead of LMNT's dark aesthetic.
  */}
-<section>
-  {/* Full-width image with ONLY headline overlaid */}
-  <div class="relative w-full">
-    <picture>
-      <source srcset={image} type="image/webp" />
-      <img
-        src={imageFallback}
-        alt={imageAlt}
-        class="w-full h-auto block"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </picture>
-    {/* Only the headline on the image */}
-    <div class="absolute inset-x-0 top-[4%] flex flex-col items-center px-6">
-      <h1
-        class="font-serif text-2xl leading-tight tracking-tight text-white text-center sm:text-3xl md:text-4xl drop-shadow-lg"
-        set:html={headline}
-      />
-    </div>
-  </div>
+<section class="w-full bg-stone-50 overflow-hidden">
+  <div class="container">
+    <div class="grid md:grid-cols-2 min-h-[480px] md:min-h-[560px] items-center gap-8 py-12 md:py-0">
 
-  {/* Subheadline + CTA below the image */}
-  <div class="container py-8 text-center">
-    <p class="font-serif text-lg text-muted-foreground max-w-md mx-auto">
-      {subheadline}
-    </p>
-    <a
-      href={ctaHref}
-      class="mt-6 inline-flex h-16 items-center justify-center rounded-full bg-primary px-14 text-lg font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
-    >
-      {cta}
-    </a>
+      {/* Left: headline + description + CTA */}
+      <div class="space-y-6 py-8 md:py-16">
+        <h1 class="font-serif text-5xl leading-tight tracking-tight md:text-6xl lg:text-7xl">
+          Real hydration.<br /><em>Finally.</em>
+        </h1>
+        <p class="font-serif text-lg text-foreground/70 max-w-sm leading-relaxed">
+          Real fruit. Real salt. Nothing else. Purest is the electrolyte you can actually feel — because every ingredient is visible in the jar.
+        </p>
+        <a
+          href={ctaHref}
+          class="inline-flex h-16 items-center justify-center rounded-full bg-primary px-14 text-lg font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+        >
+          {cta}
+        </a>
+      </div>
+
+      {/* Right: product image */}
+      <div class="relative h-[360px] md:h-full md:min-h-[560px] -mx-4 md:mx-0 md:-mr-8 lg:-mr-16">
+        <picture>
+          <source srcset={image} type="image/webp" />
+          <img
+            src={imageFallback}
+            alt={imageAlt}
+            class="absolute inset-0 w-full h-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </picture>
+      </div>
+
+    </div>
   </div>
 </section>
