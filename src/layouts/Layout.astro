@@ -49,6 +49,15 @@ const {
 
     <title>{title}</title>
     <slot name="head" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PJ3W3KJBLF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PJ3W3KJBLF');
+    </script>
   </head>
   <body class="min-h-screen flex flex-col">
     <Nav />
