@@ -13,19 +13,34 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
     <div class="grid md:grid-cols-2 min-h-[480px] md:min-h-[560px] items-center gap-8 py-12 md:py-0">
 
       {/* Left: headline + description + CTA */}
-      <div class="space-y-6 py-8 md:py-16">
+      <div class="space-y-5 py-8 md:py-16">
+
+        {/* Social proof */}
+        <div class="flex items-center gap-2 text-sm">
+          <span class="text-amber-400 text-lg">★★★★★</span>
+          <span class="text-foreground/60">Loved by athletes, parents & everyday hydrators</span>
+        </div>
+
         <h1 class="font-serif text-5xl leading-tight tracking-tight md:text-6xl lg:text-7xl">
           Real hydration.<br /><em>Finally.</em>
         </h1>
-        <p class="font-serif text-lg text-foreground/70 max-w-sm leading-relaxed">
-          Real fruit. Real salt. Nothing else. Purest is the electrolyte you can actually feel — because every ingredient is visible in the jar.
-        </p>
+
+        {/* Benefit bullets */}
+        <ul class="space-y-2 text-sm text-foreground/75">
+          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> Real freeze-dried fruit — you can see it in every jar</li>
+          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> French gray sea salt — nature's full mineral spectrum</li>
+          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> Zero sugar. Zero junk. Nothing hidden.</li>
+          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> Made at 9,000 ft in Aspen — tested by real athletes</li>
+        </ul>
+
         <a
           href={ctaHref}
           class="inline-flex h-16 items-center justify-center rounded-full bg-primary px-14 text-lg font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
         >
           {cta}
         </a>
+
+        <p class="text-xs text-foreground/40">Free shipping on orders over $50</p>
       </div>
 
       {/* Right: product image */}

@@ -9,6 +9,7 @@ import { getProducts } from "@/lib/shopify";
 import FounderStory from "@/components/FounderStory.astro";
 import Dehydration from "@/components/Dehydration.astro";
 import Comparison from "@/components/Comparison.astro";
+import StatsBar from "@/components/StatsBar.astro";
 
 const products = await getProducts();
 // Electrolyte flavors first, water bottle last
@@ -26,6 +27,8 @@ const orderedProducts = [...flavors, ...other];
     <h2 class="font-serif text-2xl tracking-tight mb-8 md:text-3xl">Shop all flavors</h2>
     <ProductGrid products={orderedProducts} client:load />
   </section>
+
+  <StatsBar />
 
   {/* In Each Jar infographic */}
   <section class="bg-white py-2">
