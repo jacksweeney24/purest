@@ -3,7 +3,7 @@
     "id": "mock-grapefruit",
     "title": "Grapefruit Electrolyte",
     "handle": "grapefruit",
-    "description": "A bright, citrus-forward jar made with real grapefruit and Celtic sea salt. 30 servings.",
+    "description": "A bright, citrus-forward jar made with real grapefruit and French gray sea salt. 30 servings.",
     "priceRange": { "minVariantPrice": { "amount": "38.00", "currencyCode": "USD" } },
     "image": {
       "url": "https://images.unsplash.com/photo-1546548970-71785318a17b?auto=format&fit=crop&w=900&q=80",
