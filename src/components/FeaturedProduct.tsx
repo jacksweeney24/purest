@@ -47,12 +47,7 @@ export default function FeaturedProduct({ product }: Props) {
         <p className="mt-1 text-lg text-muted-foreground">
           {formatPrice(price.amount, price.currencyCode)}
         </p>
-        {product.description && (
-          <p className="mt-6 max-w-md text-base leading-relaxed text-foreground/80">
-            {product.description}
-          </p>
-        )}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
           <Button size="lg" disabled={soldOut} onClick={handleAdd}>
             {soldOut ? "Sold out" : "Add to cart"}
           </Button>
