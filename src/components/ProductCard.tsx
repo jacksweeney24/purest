@@ -33,7 +33,7 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group flex flex-col">
-      <div className="aspect-square overflow-hidden rounded-lg bg-secondary">
+      <div className="aspect-square overflow-hidden rounded-lg bg-white">
         {product.image ? (
           <img
             src={product.image.url}

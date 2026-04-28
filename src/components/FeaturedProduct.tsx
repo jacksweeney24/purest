@@ -31,7 +31,7 @@ export default function FeaturedProduct({ product }: Props) {
 
   return (
     <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
-      <div className="aspect-square overflow-hidden rounded-2xl bg-secondary">
+      <div className="aspect-square overflow-hidden rounded-2xl bg-white">
         {product.image && (
           <img
             src={product.image.url}
