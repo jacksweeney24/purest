@@ -194,3 +194,34 @@ function rewriteToShopifyDomain(checkoutUrl: string): string {
     return checkoutUrl;
   }
 }
+
+/** Fetches a single product by handle with all images. */
+export async function getProduct(handle: string): Promise<Product & { images: ProductImage[] } | null> {
+  if (!hasShopify) {
+    const p = (mockProducts as Product[]).find(p => p.handle === handle);
+    if (!p) return null;
+    return { ...p, images: p.image ? [p.image] : [] };
+  }
+  const query = `{
+    product(handle: "${handle}") {
+      id title description handle
+      priceRange { minVariantPrice { amount currencyCode } }
+      images(first: 10) { edges { node { url altText } } }
+      variants(first: 5) {
+        edges { node { id title price { amount currencyCode } availableForSale } }
+      }
+    }
+  }`;
+  type Resp = { product: any };
+  const { data, errors } = await shopifyFetch<Resp>(query);
+  if (errors?.length || !data?.product) return null;
+  const p = data.product;
+  const images = p.images.edges.map((e: any) => e.node);
+  return {
+    id: p.id, title: p.title, description: p.description, handle: p.handle,
+    priceRange: p.priceRange,
+    image: images[0] ?? null,
+    images,
+    variants: p.variants.edges.map((e: any) => e.node),
+  };
+}

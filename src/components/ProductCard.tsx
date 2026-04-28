@@ -33,6 +33,7 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group flex flex-col">
+      <a href={`/products/${product.handle}`} className="block">
       <div className="aspect-square overflow-hidden rounded-lg bg-white">
         {product.image ? (
           <img
@@ -56,6 +57,7 @@ export default function ProductCard({ product }: Props) {
           {product.description}
         </p>
       )}
+      </a>
       <Button
         className="mt-4"
         variant="outline"
