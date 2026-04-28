@@ -8,9 +8,9 @@
     "subheadline": "Real fruit + real salt = real hydration. Nothing else.",
     "cta": "Shop now",
     "ctaHref": "/products",
-    "image": "/images/product-lineup.jpg",
-    "imageFallback": "/images/product-lineup.jpg",
-    "imageAlt": "Purest Electrolyte - all flavors"
+    "image": "/images/ginger-lime.webp",
+    "imageFallback": "/images/ginger-lime.jpg",
+    "imageAlt": "Purest Electrolyte Ginger Limeaid jar with fresh ginger and lime"
   },
   "saleBanner": {
     "enabled": false,
