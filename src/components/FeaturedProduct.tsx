@@ -57,7 +57,7 @@ export default function FeaturedProduct({ product }: Props) {
             {soldOut ? "Sold out" : "Add to cart"}
           </Button>
           <Button asChild variant="ghost" size="lg">
-            <a href="/products">See all flavors</a>
+            <a href="/products" className="font-serif italic tracking-wide text-foreground/70 hover:text-foreground transition-colors">Explore all flavors →</a>
           </Button>
         </div>
       </div>
