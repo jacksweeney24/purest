@@ -12,8 +12,8 @@ const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
  * The image uses <picture> so modern browsers get the smaller WebP.
  * Both files are fetched with priority since this is above the fold.
  */}
-<section class="relative overflow-hidden">
-  {/* Full-width image with text overlay */}
+<section>
+  {/* Full-width image with ONLY headline overlaid */}
   <div class="relative w-full">
     <picture>
       <source srcset={image} type="image/webp" />
@@ -25,21 +25,25 @@ const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
         fetchpriority="high"
       />
     </picture>
-    {/* Text overlay at bottom of image */}
-    <div class="absolute inset-0 flex flex-col items-center justify-end pb-8 px-6 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
+    {/* Only the headline on the image */}
+    <div class="absolute inset-0 flex flex-col items-center justify-center px-6 bg-black/20">
       <h1
         class="font-serif text-4xl leading-tight tracking-tight text-white text-center sm:text-5xl md:text-6xl drop-shadow-lg"
         set:html={headline}
       />
-      <p class="mt-3 max-w-md text-base text-white/90 text-center drop-shadow">
-        {subheadline}
-      </p>
-      <a
-        href={ctaHref}
-        class="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-base font-medium text-foreground transition-all duration-150 hover:bg-white/90 active:scale-[0.98]"
-      >
-        {cta}
-      </a>
     </div>
+  </div>
+
+  {/* Subheadline + CTA below the image */}
+  <div class="container py-8 text-center">
+    <p class="text-lg text-muted-foreground max-w-md mx-auto">
+      {subheadline}
+    </p>
+    <a
+      href={ctaHref}
+      class="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+    >
+      {cta}
+    </a>
   </div>
 </section>
