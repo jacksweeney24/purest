@@ -6,31 +6,65 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border/60 bg-secondary">
-  <div
-    class="container flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between"
-  >
-    <div>
-      <Logo className="h-7" />
-      <div class="mt-3 text-sm text-muted-foreground">
-        {siteConfig.brand.tagline}
+  <div class="container py-12">
+    <div class="grid gap-10 sm:grid-cols-2 md:grid-cols-4">
+
+      <!-- Brand -->
+      <div class="space-y-3 md:col-span-1">
+        <Logo className="h-7" />
+        <p class="text-sm text-muted-foreground">{siteConfig.brand.tagline}</p>
+        <a
+          href={`mailto:${siteConfig.footer.email}`}
+          class="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {siteConfig.footer.email}
+        </a>
       </div>
+
+      <!-- Shop -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-medium uppercase tracking-widest">Shop</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><a href="/products" class="hover:text-foreground transition-colors">All Flavors</a></li>
+          <li><a href="/products" class="hover:text-foreground transition-colors">Ginger Limeaid</a></li>
+          <li><a href="/products" class="hover:text-foreground transition-colors">Hibiscus Lime</a></li>
+          <li><a href="/products" class="hover:text-foreground transition-colors">Chocolate Cordyceps</a></li>
+          <li><a href="/products" class="hover:text-foreground transition-colors">5 Day Reset</a></li>
+        </ul>
+      </div>
+
+      <!-- About -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-medium uppercase tracking-widest">About</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li><a href="/about" class="hover:text-foreground transition-colors">Our Story</a></li>
+          <li><a href="/about" class="hover:text-foreground transition-colors">Why French Gray Sea Salt</a></li>
+          <li><a href="/about" class="hover:text-foreground transition-colors">Real Ingredients</a></li>
+        </ul>
+      </div>
+
+      <!-- Connect -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-medium uppercase tracking-widest">Connect</h4>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li>
+            <a
+              href={siteConfig.footer.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-foreground transition-colors"
+            >Instagram</a>
+          </li>
+          <li>
+            <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
-    <div class="flex flex-col gap-4 text-sm sm:flex-row sm:items-center sm:gap-6">
-      <a
-        href={`mailto:${siteConfig.footer.email}`}
-        class="text-muted-foreground transition-colors hover:text-foreground"
-      >
-        {siteConfig.footer.email}
-      </a>
-      <a
-        href={siteConfig.footer.instagram}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-muted-foreground transition-colors hover:text-foreground"
-      >
-        Instagram
-      </a>
-      <span class="text-muted-foreground">© {year} {siteConfig.brand.name}</span>
+
+    <div class="mt-10 border-t border-border/40 pt-6 text-sm text-muted-foreground">
+      © {year} {siteConfig.brand.name}. All rights reserved.
     </div>
   </div>
 </footer>
