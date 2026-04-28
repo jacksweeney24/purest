@@ -13,47 +13,33 @@ const { headline, subheadline, cta, ctaHref, image, imageFallback, imageAlt } =
  * Both files are fetched with priority since this is above the fold.
  */}
 <section class="relative overflow-hidden">
-  {/*
-   * Layout: image-first on mobile (visual hook), text-left on desktop (editorial).
-   * `order-*` utilities reorder the flex/grid children at the md breakpoint
-   * without duplicating the image markup.
-   *
-   * Tighter mobile gap (gap-8) lets the text feel anchored to the image
-   * above it instead of floating in space.
-   */}
-  <div class="container grid grid-cols-1 items-center gap-8 py-10 md:grid-cols-2 md:gap-12 md:py-16">
-    <div class="order-2 animate-fade-in md:order-1">
-      {/*
-       * `set:html` renders the headline as HTML so Pam's agent can italicize
-       * any phrase in site-config.json by wrapping it in <em> tags. Safe here
-       * because the content is admin-controlled, not user-submitted.
-       */}
+  {/* Full-width image with text overlay */}
+  <div class="relative w-full">
+    <picture>
+      <source srcset={image} type="image/webp" />
+      <img
+        src={imageFallback}
+        alt={imageAlt}
+        class="w-full h-auto block"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+    {/* Text overlay at bottom of image */}
+    <div class="absolute inset-0 flex flex-col items-center justify-end pb-8 px-6 bg-gradient-to-t from-black/60 via-black/10 to-transparent">
       <h1
-        class="font-serif text-5xl leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
+        class="font-serif text-4xl leading-tight tracking-tight text-white text-center sm:text-5xl md:text-6xl drop-shadow-lg"
         set:html={headline}
       />
-
-      <p class="mt-6 max-w-md text-lg text-muted-foreground">
+      <p class="mt-3 max-w-md text-base text-white/90 text-center drop-shadow">
         {subheadline}
       </p>
       <a
         href={ctaHref}
-        class="mt-10 inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        class="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-base font-medium text-foreground transition-all duration-150 hover:bg-white/90 active:scale-[0.98]"
       >
         {cta}
       </a>
-    </div>
-    <div class="order-1 aspect-square overflow-hidden rounded-lg bg-white md:order-2">
-      <picture>
-        <source srcset={image} type="image/webp" />
-        <img
-          src={imageFallback}
-          alt={imageAlt}
-          class="h-full w-full object-contain"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </picture>
     </div>
   </div>
 </section>
