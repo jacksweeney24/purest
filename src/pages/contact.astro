@@ -1,0 +1,39 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. We'd love to hear from you.">
+  <section class="container py-20 md:py-28 max-w-2xl text-center">
+
+    <p class="text-xs uppercase tracking-widest text-muted-foreground">Get in touch</p>
+    <h1 class="mt-4 font-serif text-4xl tracking-tight md:text-5xl">
+      We'd love to hear from you.
+    </h1>
+    <p class="mt-4 text-muted-foreground text-lg">
+      Questions about a product, an order, wholesale, press, or anything else — just reach out.
+      Pam reads every message personally.
+    </p>
+
+    {/* Big clickable email — works with any email program */}
+    <a
+      href="mailto:hydrate@purestelectrolyte.com"
+      class="mt-10 inline-block rounded-full bg-foreground px-10 py-6 font-serif text-xl md:text-2xl text-background hover:bg-foreground/90 transition-colors break-all"
+    >
+      hydrate@purestelectrolyte.com
+    </a>
+
+    <p class="mt-6 text-sm text-muted-foreground">
+      Tap the email above to open it in your email app
+    </p>
+
+    <div class="mt-16 pt-12 border-t border-border space-y-3 text-sm text-muted-foreground">
+      <p>📍 Aspen, Colorado · Developed at 8,900 ft</p>
+      <p>
+        <a href="https://instagram.com/purestelectrolyte" class="underline underline-offset-2 hover:text-foreground">
+          @purestelectrolyte on Instagram
+        </a>
+      </p>
+    </div>
+
+  </section>
+</Layout>
