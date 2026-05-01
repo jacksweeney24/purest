@@ -3,7 +3,6 @@ import siteConfig from "@/data/site-config.json";
 import CartIcon from "@/components/CartIcon.tsx";
 import Logo from "@/components/Logo.astro";
 
-// Active link styling. Astro.url.pathname is the current page URL.
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
@@ -17,14 +16,12 @@ const links = [
 ];
 ---
 
-{/*
- * Sticky nav with a soft backdrop blur. Minimal: logo left, two links, cart right.
- * No mobile hamburger needed yet — three top-level items fit on a phone.
- */}
 <header
   class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
   <nav class="container flex h-16 items-center justify-between">
+
+    {/* Logo */}
     <a
       href="/"
       class="flex items-center transition-opacity hover:opacity-80"
@@ -32,22 +29,94 @@ const links = [
     >
       <Logo className="h-11 sm:h-12" />
     </a>
-    <div class="flex items-center gap-1 sm:gap-2">
-      {
-        links.map((link) => (
-          <a
-            href={link.href}
-            class:list={[
-              "rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary",
-              isActive(link.href) && "text-foreground",
-              !isActive(link.href) && "text-muted-foreground",
-            ]}
-          >
-            {link.label}
-          </a>
-        ))
-      }
+
+    {/* Desktop links */}
+    <div class="hidden md:flex items-center gap-1">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "rounded-md px-3 py-2 text-sm transition-colors hover:bg-secondary",
+            isActive(link.href) ? "text-foreground" : "text-muted-foreground",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    {/* Right side: cart + hamburger */}
+    <div class="flex items-center gap-2">
       <CartIcon client:load />
+
+      {/* Hamburger button — mobile only */}
+      <button
+        id="menu-toggle"
+        class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-md hover:bg-secondary transition-colors"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <span class="hamburger-line block w-5 h-0.5 bg-foreground transition-all duration-300"></span>
+        <span class="hamburger-line block w-5 h-0.5 bg-foreground transition-all duration-300"></span>
+        <span class="hamburger-line block w-5 h-0.5 bg-foreground transition-all duration-300"></span>
+      </button>
     </div>
   </nav>
+
+  {/* Mobile menu dropdown */}
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t border-border/60 bg-background"
+  >
+    <div class="container py-4 flex flex-col gap-1">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "rounded-md px-4 py-3 text-sm transition-colors hover:bg-secondary",
+            isActive(link.href) ? "text-foreground font-medium" : "text-muted-foreground",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const lines = document.querySelectorAll(".hamburger-line");
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = !menu?.classList.contains("hidden");
+
+    if (isOpen) {
+      menu?.classList.add("hidden");
+      toggle.setAttribute("aria-expanded", "false");
+      // Reset lines
+      lines[0].style.transform = "";
+      lines[1].style.opacity = "1";
+      lines[2].style.transform = "";
+    } else {
+      menu?.classList.remove("hidden");
+      toggle.setAttribute("aria-expanded", "true");
+      // Animate to X
+      lines[0].style.transform = "translateY(7px) rotate(45deg)";
+      lines[1].style.opacity = "0";
+      lines[2].style.transform = "translateY(-7px) rotate(-45deg)";
+    }
+  });
+
+  // Close menu when a link is tapped
+  menu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.add("hidden");
+      toggle?.setAttribute("aria-expanded", "false");
+      lines[0].style.transform = "";
+      lines[1].style.opacity = "1";
+      lines[2].style.transform = "";
+    });
+  });
+</script>
