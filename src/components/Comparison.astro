@@ -33,11 +33,15 @@
     ].map(([label, purest, them], i) => (
       <div class={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? 'bg-background' : 'bg-stone-50/50'}`}>
         <div class="p-4 text-sm text-foreground/80">{label}</div>
-        <div class="p-4 text-center text-sm font-medium text-green-700">
-          {purest ? "✓" : "✗"}
+        <div class="p-4 flex items-center justify-center">
+          {purest
+            ? <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 font-black text-lg">✓</span>
+            : <span class="text-foreground/30 text-lg">✗</span>}
         </div>
-        <div class="p-4 text-center text-sm text-foreground/40">
-          {them ? "✓" : "✗"}
+        <div class="p-4 flex items-center justify-center">
+          {them
+            ? <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 font-black text-lg">✓</span>
+            : <span class="text-foreground/20 text-lg">✗</span>}
         </div>
       </div>
     ))}
