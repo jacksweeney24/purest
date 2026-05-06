@@ -21,6 +21,8 @@ export interface CartItem {
   currencyCode: string;
   imageUrl: string | null;
   quantity: number;
+  sellingPlanId?: string;
+  sellingPlanName?: string;
 }
 
 const STORAGE_KEY = "purest-cart-v1";

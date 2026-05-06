@@ -41,6 +41,7 @@ export default function Cart() {
         items.map((item) => ({
           variantId: item.variantId,
           quantity: item.quantity,
+          sellingPlanId: item.sellingPlanId,
         })),
       );
       window.location.href = url;

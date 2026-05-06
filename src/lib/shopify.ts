@@ -35,6 +35,23 @@ export interface ProductVariant {
   availableForSale: boolean;
 }
 
+export interface SellingPlan {
+  id: string;
+  name: string;
+  description: string | null;
+  priceAdjustments: {
+    adjustmentValue:
+      | { adjustmentPercentage: number }
+      | { adjustmentAmount: Money }
+      | { price: Money };
+  }[];
+}
+
+export interface SellingPlanGroup {
+  name: string;
+  sellingPlans: SellingPlan[];
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -43,6 +60,7 @@ export interface Product {
   priceRange: { minVariantPrice: Money };
   image: ProductImage | null;
   variants: ProductVariant[];
+  sellingPlanGroups: SellingPlanGroup[];
 }
 
 // --- API client ------------------------------------------------------------
@@ -126,6 +144,7 @@ export async function getProducts(): Promise<Product[]> {
     priceRange: node.priceRange,
     image: node.images.edges[0]?.node ?? null,
     variants: node.variants.edges.map((e) => e.node),
+    sellingPlanGroups: [],
   }));
 }
 
@@ -142,16 +161,18 @@ export async function getProducts(): Promise<Product[]> {
  * In mock mode (no Shopify creds), redirects to /thank-you instead.
  */
 export async function createCheckout(
-  lines: { variantId: string; quantity: number }[],
+  lines: { variantId: string; quantity: number; sellingPlanId?: string }[],
 ): Promise<string> {
   if (!hasShopify) {
     return "/thank-you";
   }
-  // The variantId values from getProducts() are already Shopify GIDs
-  // (e.g. "gid://shopify/ProductVariant/12345"), which is what the Cart API
-  // calls `merchandiseId`. We just rename the field.
   const cartLines = lines
-    .map((l) => `{ merchandiseId: "${l.variantId}", quantity: ${l.quantity} }`)
+    .map((l) => {
+      const base = `merchandiseId: "${l.variantId}", quantity: ${l.quantity}`;
+      return l.sellingPlanId
+        ? `{ ${base}, sellingPlanId: "${l.sellingPlanId}" }`
+        : `{ ${base} }`;
+    })
     .join(", ");
   const query = `mutation {
     cartCreate(input: { lines: [${cartLines}] }) {
@@ -246,6 +267,27 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
       variants(first: 5) {
         edges { node { id title price { amount currencyCode } availableForSale } }
       }
+      sellingPlanGroups(first: 5) {
+        edges {
+          node {
+            name
+            sellingPlans(first: 5) {
+              edges {
+                node {
+                  id name description
+                  priceAdjustments {
+                    adjustmentValue {
+                      ... on SellingPlanPercentagePriceAdjustment { adjustmentPercentage }
+                      ... on SellingPlanFixedAmountPriceAdjustment { adjustmentAmount { amount currencyCode } }
+                      ... on SellingPlanFixedPriceAdjustment { price { amount currencyCode } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }`;
   type Resp = { product: any };
@@ -259,5 +301,9 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
     image: images[0] ?? null,
     images,
     variants: p.variants.edges.map((e: any) => e.node),
+    sellingPlanGroups: (p.sellingPlanGroups?.edges ?? []).map((g: any) => ({
+      name: g.node.name,
+      sellingPlans: g.node.sellingPlans.edges.map((s: any) => s.node),
+    })),
   };
 }
