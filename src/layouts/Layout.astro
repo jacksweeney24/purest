@@ -76,7 +76,35 @@ const {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-PJ3W3KJBLF');
+      gtag('config', 'G-PJ3W3KJBLF', {
+        'send_page_view': true,
+        'allow_enhanced_conversions': true
+      });
+      // GA4 ecommerce helper — fires view_item on product pages
+      window.gtagViewItem = function(product) {
+        gtag('event', 'view_item', {
+          currency: 'USD',
+          value: parseFloat(product.price) || 0,
+          items: [{
+            item_id: product.id,
+            item_name: product.title,
+            price: parseFloat(product.price) || 0,
+            quantity: 1
+          }]
+        });
+      };
+      window.gtagAddToCart = function(product, quantity) {
+        gtag('event', 'add_to_cart', {
+          currency: 'USD',
+          value: (parseFloat(product.price) || 0) * (quantity || 1),
+          items: [{
+            item_id: product.id,
+            item_name: product.title,
+            price: parseFloat(product.price) || 0,
+            quantity: quantity || 1
+          }]
+        });
+      };
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
