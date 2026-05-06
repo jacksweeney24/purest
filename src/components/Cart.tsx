@@ -89,6 +89,11 @@ export default function Cart() {
                               {item.variantTitle}
                             </div>
                           )}
+                        {item.sellingPlanId && (
+                          <div className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                            🔄 Subscribe &amp; Save 10% off
+                          </div>
+                        )}
                       </div>
                       <button
                         type="button"
@@ -105,7 +110,18 @@ export default function Cart() {
                         onChange={(q) => updateQuantity(item.variantId, q)}
                       />
                       <div className="text-sm font-medium">
-                        {formatPrice(item.price * item.quantity, item.currencyCode)}
+                        {item.sellingPlanId ? (
+                          <>
+                            <span className="line-through text-muted-foreground mr-1">
+                              {formatPrice(item.price * item.quantity, item.currencyCode)}
+                            </span>
+                            <span className="text-green-700">
+                              {formatPrice(item.price * item.quantity * 0.9, item.currencyCode)}
+                            </span>
+                          </>
+                        ) : (
+                          formatPrice(item.price * item.quantity, item.currencyCode)
+                        )}
                       </div>
                     </div>
                   </div>
