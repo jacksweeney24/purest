@@ -4,7 +4,11 @@ import { addToCart } from "@/lib/cart-store";
 import type { Product, SellingPlan } from "@/lib/shopify";
 
 export default function AddToCart({ product }: { product: Product }) {
-  const variant = product.variants.find((v) => v.availableForSale) ?? product.variants[0];
+  const hasVariants = product.variants.length > 1;
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(
+    (product.variants.find((v) => v.availableForSale) ?? product.variants[0])?.id ?? ""
+  );
+  const variant = product.variants.find((v) => v.id === selectedVariantId) ?? product.variants[0];
   const soldOut = !variant?.availableForSale;
 
   // Flatten all selling plans from all groups
@@ -46,6 +50,31 @@ export default function AddToCart({ product }: { product: Product }) {
 
   return (
     <div className="space-y-4">
+      {/* Variant / Flavor selector */}
+      {hasVariants && (
+        <div>
+          <p className="text-sm font-medium mb-2">Choose your jar flavor</p>
+          <div className="flex flex-wrap gap-2">
+            {product.variants.map((v) => (
+              <button
+                key={v.id}
+                onClick={() => setSelectedVariantId(v.id)}
+                disabled={!v.availableForSale}
+                className={`px-4 py-2 rounded-full text-sm border transition-colors ${
+                  selectedVariantId === v.id
+                    ? "bg-foreground text-background border-foreground"
+                    : v.availableForSale
+                    ? "border-border hover:border-foreground"
+                    : "border-border opacity-40 cursor-not-allowed line-through"
+                }`}
+              >
+                {v.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Purchase type toggle */}
       {hasSubscription && (
         <div className="rounded-xl border border-border overflow-hidden">
