@@ -75,9 +75,11 @@ const price = new Intl.NumberFormat("en-US", {
           <p class="mt-3 text-2xl font-medium">{price}</p>
         </div>
 
-        {product.description && (
+        {product.descriptionHtml ? (
+          <div class="text-base leading-relaxed text-foreground/75 space-y-3 prose prose-sm max-w-none" set:html={product.descriptionHtml} />
+        ) : product.description ? (
           <p class="text-base leading-relaxed text-foreground/75">{product.description}</p>
-        )}
+        ) : null}
 
         <!-- Add to cart -->
         <AddToCart product={product} client:load />

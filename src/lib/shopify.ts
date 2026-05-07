@@ -58,6 +58,7 @@ export interface Product {
   title: string;
   handle: string;
   description: string;
+  descriptionHtml: string;
   priceRange: { minVariantPrice: Money };
   image: ProductImage | null;
   variants: ProductVariant[];
@@ -142,6 +143,7 @@ export async function getProducts(): Promise<Product[]> {
     id: node.id,
     title: node.title,
     description: node.description,
+    descriptionHtml: '',
     handle: node.handle,
     priceRange: node.priceRange,
     image: node.images.edges[0]?.node ?? null,
@@ -263,7 +265,7 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
   }
   const query = `{
     product(handle: "${handle}") {
-      id title description handle
+      id title description descriptionHtml handle
       priceRange { minVariantPrice { amount currencyCode } }
       images(first: 10) { edges { node { url altText } } }
       variants(first: 10) {
@@ -298,7 +300,7 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
   const p = data.product;
   const images = p.images.edges.map((e: any) => e.node);
   return {
-    id: p.id, title: p.title, description: p.description, handle: p.handle,
+    id: p.id, title: p.title, description: p.description, descriptionHtml: p.descriptionHtml ?? '', handle: p.handle,
     priceRange: p.priceRange,
     image: images[0] ?? null,
     images,
