@@ -70,9 +70,9 @@ export default function LaJollaSignup() {
   if (status === "done") {
     return (
       <div className="text-center py-4">
-        <p className="text-lg font-serif">You're in.</p>
+        <p className="text-lg font-serif">You're entered to win.</p>
         <p className="text-sm text-muted-foreground mt-1">
-          Check your inbox — your recovery guide and runner offer are on their way.
+          Winner announced after May 16. Check your inbox for your free recovery guide too.
         </p>
       </div>
     );
@@ -101,7 +101,7 @@ export default function LaJollaSignup() {
         disabled={status === "submitting"}
         className="rounded-full h-11 text-sm font-medium"
       >
-        {status === "submitting" ? "Sending…" : "Get the Recovery Guide"}
+        {status === "submitting" ? "Entering…" : "Enter to Win"}
       </Button>
       {status === "error" && (
         <p className="text-xs text-red-500 text-center">Something went wrong. Try again or email us at hydrate@purestelectrolyte.com</p>
