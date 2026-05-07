@@ -32,6 +32,7 @@ export interface ProductVariant {
   id: string;
   title: string;
   price: Money;
+  compareAtPrice: Money | null;
   availableForSale: boolean;
 }
 
@@ -104,12 +105,13 @@ export async function getProducts(): Promise<Product[]> {
           handle
           priceRange { minVariantPrice { amount currencyCode } }
           images(first: 1) { edges { node { url altText } } }
-          variants(first: 5) {
+          variants(first: 10) {
             edges {
               node {
                 id
                 title
                 price { amount currencyCode }
+                compareAtPrice { amount currencyCode }
                 availableForSale
               }
             }
@@ -264,8 +266,8 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
       id title description handle
       priceRange { minVariantPrice { amount currencyCode } }
       images(first: 10) { edges { node { url altText } } }
-      variants(first: 5) {
-        edges { node { id title price { amount currencyCode } availableForSale } }
+      variants(first: 10) {
+        edges { node { id title price { amount currencyCode } compareAtPrice { amount currencyCode } availableForSale } }
       }
       sellingPlanGroups(first: 5) {
         edges {

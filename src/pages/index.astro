@@ -14,10 +14,12 @@ import WhatsInside from "@/components/WhatsInside.astro";
 import PressBar from "@/components/PressBar.astro";
 
 const products = await getProducts();
-// Electrolyte flavors first, water bottle last
-const flavors = products.filter(p => !p.title.toLowerCase().includes('water bottle'));
-const other = products.filter(p => p.title.toLowerCase().includes('water bottle'));
-const orderedProducts = [...flavors, ...other];
+// Bundle first, then 5-day kit, then flavors, then water bottle last
+const bundle = products.filter(p => p.handle === 'the-hydration-ritual-kit');
+const kit = products.filter(p => p.handle === '20-count-variety-pack');
+const flavors = products.filter(p => !p.title.toLowerCase().includes('water bottle') && p.handle !== 'the-hydration-ritual-kit' && p.handle !== '20-count-variety-pack');
+const bottle = products.filter(p => p.title.toLowerCase().includes('water bottle'));
+const orderedProducts = [...bundle, ...kit, ...flavors, ...bottle];
 ---
 
 <Layout>
