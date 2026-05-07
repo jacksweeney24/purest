@@ -162,8 +162,8 @@ export default function AddToCart({ product }: { product: Product }) {
 
       {/* Trust badges */}
       <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">🔄 Satisfaction guaranteed</span>
-        <span className="flex items-center gap-1">🚚 Free shipping over $50</span>
+        <span className="flex items-center gap-1">Satisfaction guaranteed</span>
+        <span className="flex items-center gap-1">Free shipping over $50</span>
       </div>
     </div>
   );

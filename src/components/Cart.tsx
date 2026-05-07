@@ -91,7 +91,7 @@ export default function Cart() {
                           )}
                         {item.sellingPlanId && (
                           <div className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                            🔄 Subscribe &amp; Save 10% off
+                            Subscribe &amp; Save 10% off
                           </div>
                         )}
                       </div>

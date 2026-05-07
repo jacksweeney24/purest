@@ -70,7 +70,7 @@ export default function LaJollaSignup() {
   if (status === "done") {
     return (
       <div className="text-center py-4">
-        <p className="text-lg font-serif">You're in. 🥥</p>
+        <p className="text-lg font-serif">You're in.</p>
         <p className="text-sm text-muted-foreground mt-1">
           Check your inbox — your recovery guide and runner offer are on their way.
         </p>
