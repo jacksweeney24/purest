@@ -50,7 +50,7 @@ export default function ProductCard({ product }: Props) {
               src={product.image.url}
               alt={product.image.altText ?? product.title}
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.02]"
             />
           ) : (
             <div className="h-full w-full" />
