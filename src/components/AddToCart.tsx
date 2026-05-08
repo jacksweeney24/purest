@@ -122,11 +122,6 @@ export default function AddToCart({ product }: { product: Product }) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Subscribe &amp; Save</span>
-                {allPlans[0] && (
-                  <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-medium">
-                    {getPlanDiscount(allPlans[0])}
-                  </span>
-                )}
               </div>
               {/* Plan frequency selector */}
               {purchaseType === "subscribe" && allPlans.length > 1 && (

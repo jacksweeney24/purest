@@ -198,7 +198,6 @@ export default function ProductCard({ product }: Props) {
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
                 <span>{selectedPlan?.name}</span>
-                <span className="text-green-700 font-medium">{getPlanDiscount(selectedPlan!)}</span>
               </div>
               <button
                 onClick={handleSubscribeConfirm}

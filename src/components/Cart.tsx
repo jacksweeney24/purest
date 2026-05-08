@@ -121,7 +121,7 @@ export default function Cart() {
                             <option value="">One-time</option>
                             {item.availablePlans.map((plan) => (
                               <option key={plan.id} value={plan.id}>
-                                {plan.name}{plan.discountPct ? ` (${plan.discountPct}% off)` : ""}
+                                {plan.name}
                               </option>
                             ))}
                           </select>
