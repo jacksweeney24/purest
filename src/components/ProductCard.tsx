@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart-store";
-import type { Product } from "@/lib/shopify";
+import type { Product, SellingPlan } from "@/lib/shopify";
 import { formatPrice } from "@/lib/utils";
 import flavorCopy from "@/data/flavor-copy.json";
 
@@ -22,6 +22,32 @@ export default function ProductCard({ product }: Props) {
   const soldOut = !variant?.availableForSale;
   const isBundle = product.handle === 'the-hydration-ritual-kit';
 
+  // Subscription plan (use first/monthly plan)
+  const allPlans: SellingPlan[] = (product.sellingPlanGroups ?? []).flatMap((g) => g.sellingPlans);
+  const monthlyPlan = allPlans[0];
+  const hasSubscription = !!monthlyPlan && !hasVariants && !soldOut;
+
+  // Calculate subscribe price from first price adjustment
+  function getSubscribePrice(): string | null {
+    if (!monthlyPlan || !price) return null;
+    const adj = monthlyPlan.priceAdjustments?.[0]?.adjustmentValue as any;
+    const basePrice = parseFloat(price.amount);
+    if (adj?.adjustmentPercentage) {
+      const subPrice = basePrice * (1 - adj.adjustmentPercentage / 100);
+      return formatPrice(subPrice.toFixed(2), price.currencyCode);
+    }
+    if (adj?.adjustmentAmount?.amount) {
+      const subPrice = basePrice - parseFloat(adj.adjustmentAmount.amount);
+      return formatPrice(subPrice.toFixed(2), price.currencyCode);
+    }
+    if (adj?.price?.amount) {
+      return formatPrice(adj.price.amount, price.currencyCode);
+    }
+    return null;
+  }
+
+  const subscribePrice = getSubscribePrice();
+
   function handleAdd() {
     if (!variant) return;
     addToCart({
@@ -32,6 +58,21 @@ export default function ProductCard({ product }: Props) {
       price: parseFloat(price.amount),
       currencyCode: price.currencyCode,
       imageUrl: product.image?.url ?? null,
+    });
+  }
+
+  function handleSubscribe() {
+    if (!variant || !monthlyPlan) return;
+    addToCart({
+      variantId: variant.id,
+      productId: product.id,
+      title: product.title,
+      variantTitle: variant.title,
+      price: parseFloat(price.amount),
+      currencyCode: price.currencyCode,
+      imageUrl: product.image?.url ?? null,
+      sellingPlanId: monthlyPlan.id,
+      sellingPlanName: monthlyPlan.name,
     });
   }
 
@@ -82,6 +123,29 @@ export default function ProductCard({ product }: Props) {
         >
           Choose flavor →
         </a>
+      ) : hasSubscription && subscribePrice ? (
+        // LMNT-style two-button layout
+        <div className="mt-4 flex flex-col gap-2">
+          <button
+            onClick={handleAdd}
+            disabled={soldOut}
+            className="flex items-center justify-between w-full rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+          >
+            <span className="flex items-center gap-1.5">
+              <span className="text-xs">↗</span> One-time
+            </span>
+            <span className="font-semibold">{formatPrice(price.amount, price.currencyCode)}</span>
+          </button>
+          <button
+            onClick={handleSubscribe}
+            className="flex items-center justify-between w-full rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            <span className="flex items-center gap-1.5">
+              <span className="text-xs">↗</span> Subscribe
+            </span>
+            <span className="font-semibold">{subscribePrice}</span>
+          </button>
+        </div>
       ) : (
         <Button
           className="mt-4"

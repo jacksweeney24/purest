@@ -117,6 +117,27 @@ export async function getProducts(): Promise<Product[]> {
               }
             }
           }
+          sellingPlanGroups(first: 1) {
+            edges {
+              node {
+                name
+                sellingPlans(first: 3) {
+                  edges {
+                    node {
+                      id name description
+                      priceAdjustments {
+                        adjustmentValue {
+                          ... on SellingPlanPercentagePriceAdjustment { adjustmentPercentage }
+                          ... on SellingPlanFixedAmountPriceAdjustment { adjustmentAmount { amount currencyCode } }
+                          ... on SellingPlanFixedPriceAdjustment { price { amount currencyCode } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -148,7 +169,10 @@ export async function getProducts(): Promise<Product[]> {
     priceRange: node.priceRange,
     image: node.images.edges[0]?.node ?? null,
     variants: node.variants.edges.map((e) => e.node),
-    sellingPlanGroups: [],
+    sellingPlanGroups: (node.sellingPlanGroups?.edges ?? []).map((g: any) => ({
+      name: g.node.name,
+      sellingPlans: g.node.sellingPlans.edges.map((s: any) => s.node),
+    })),
   }));
 }
 
