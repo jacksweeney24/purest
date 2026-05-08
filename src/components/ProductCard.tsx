@@ -165,15 +165,18 @@ export default function ProductCard({ product }: Props) {
 
           {/* Subscribe button — opens frequency picker */}
           {!showFrequency ? (
-            <button
-              onClick={() => setShowFrequency(true)}
-              className="flex items-center justify-between w-full rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              <span className="flex items-center gap-1.5">
-                <span className="text-xs">↗</span> Subscribe &amp; Save
-              </span>
-              <span className="font-semibold">{firstPlanPrice}</span>
-            </button>
+            <div>
+              <button
+                onClick={() => setShowFrequency(true)}
+                className="flex items-center justify-between w-full rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
+              >
+                <span className="flex items-center gap-1.5">
+                  <span className="text-xs">↗</span> Subscribe &amp; Save
+                </span>
+                <span className="font-semibold">{firstPlanPrice}</span>
+              </button>
+              <p className="text-center text-xs text-muted-foreground mt-1.5">Pause or cancel anytime</p>
+            </div>
           ) : (
             /* Frequency picker — expands in place */
             <div className="rounded-2xl border border-foreground/20 bg-stone-50 p-3 flex flex-col gap-2">
