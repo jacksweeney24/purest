@@ -12,6 +12,12 @@ import { atom, computed } from "nanostores";
  * (Astro hydrates each page fresh, so without persistence the cart would reset).
  */
 
+export interface CartPlan {
+  id: string;
+  name: string;
+  discountPct: number;
+}
+
 export interface CartItem {
   variantId: string;
   productId: string;
@@ -23,6 +29,7 @@ export interface CartItem {
   quantity: number;
   sellingPlanId?: string;
   sellingPlanName?: string;
+  availablePlans?: CartPlan[];
 }
 
 const STORAGE_KEY = "purest-cart-v1";
@@ -90,6 +97,20 @@ export function updateQuantity(variantId: string, quantity: number): void {
 
 export function removeFromCart(variantId: string): void {
   $cart.set($cart.get().filter((c) => c.variantId !== variantId));
+}
+
+export function updateSellingPlan(variantId: string, plan: CartPlan | null): void {
+  $cart.set(
+    $cart.get().map((c) =>
+      c.variantId === variantId
+        ? {
+            ...c,
+            sellingPlanId: plan?.id ?? undefined,
+            sellingPlanName: plan?.name ?? undefined,
+          }
+        : c,
+    ),
+  );
 }
 
 export function clearCart(): void {

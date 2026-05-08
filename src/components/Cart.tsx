@@ -89,11 +89,6 @@ export default function Cart() {
                               {item.variantTitle}
                             </div>
                           )}
-                        {item.sellingPlanId && (
-                          <div className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                            Subscribe &amp; Save 10% off
-                          </div>
-                        )}
                       </div>
                       <button
                         type="button"
@@ -104,22 +99,58 @@ export default function Cart() {
                         <X className="h-4 w-4" />
                       </button>
                     </div>
+
+                    {/* Subscribe & Save frequency dropdown */}
+                    {item.availablePlans && item.availablePlans.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs text-muted-foreground mb-1">Subscribe &amp; Save Frequency</p>
+                        <div className="relative inline-block">
+                          <select
+                            value={item.sellingPlanId ?? ""}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (!val) {
+                                updateSellingPlan(item.variantId, null);
+                              } else {
+                                const plan = item.availablePlans!.find((p) => p.id === val);
+                                if (plan) updateSellingPlan(item.variantId, plan);
+                              }
+                            }}
+                            className="appearance-none rounded-md border border-input bg-background pl-3 pr-8 py-1.5 text-sm font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-ring"
+                          >
+                            <option value="">One-time</option>
+                            {item.availablePlans.map((plan) => (
+                              <option key={plan.id} value={plan.id}>
+                                {plan.name}{plan.discountPct ? ` (${plan.discountPct}% off)` : ""}
+                              </option>
+                            ))}
+                          </select>
+                          <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">▾</span>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <QuantityStepper
                         value={item.quantity}
                         onChange={(q) => updateQuantity(item.variantId, q)}
                       />
                       <div className="text-sm font-medium">
-                        {item.sellingPlanId ? (
-                          <>
-                            <span className="line-through text-muted-foreground mr-1">
-                              {formatPrice(item.price * item.quantity, item.currencyCode)}
-                            </span>
-                            <span className="text-green-700">
-                              {formatPrice(item.price * item.quantity * 0.9, item.currencyCode)}
-                            </span>
-                          </>
-                        ) : (
+                        {item.sellingPlanId && item.availablePlans ? (() => {
+                          const plan = item.availablePlans.find(p => p.id === item.sellingPlanId);
+                          const disc = plan?.discountPct ?? 0;
+                          const subPrice = item.price * item.quantity * (1 - disc / 100);
+                          return (
+                            <>
+                              <span className="line-through text-muted-foreground mr-1">
+                                {formatPrice(item.price * item.quantity, item.currencyCode)}
+                              </span>
+                              <span className="text-green-700">
+                                {formatPrice(subPrice, item.currencyCode)}
+                              </span>
+                            </>
+                          );
+                        })() : (
                           formatPrice(item.price * item.quantity, item.currencyCode)
                         )}
                       </div>

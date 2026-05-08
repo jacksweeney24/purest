@@ -75,6 +75,13 @@ export default function ProductCard({ product }: Props) {
     setShowFrequency(false);
   }
 
+  // Build CartPlan objects for the store
+  function buildCartPlan(plan: SellingPlan) {
+    const adj = plan.priceAdjustments?.[0]?.adjustmentValue as any;
+    const discountPct = adj?.adjustmentPercentage ?? 0;
+    return { id: plan.id, name: plan.name, discountPct };
+  }
+
   function handleSubscribeConfirm() {
     if (!variant || !selectedPlan) return;
     addToCart({
@@ -87,6 +94,7 @@ export default function ProductCard({ product }: Props) {
       imageUrl: product.image?.url ?? null,
       sellingPlanId: selectedPlan.id,
       sellingPlanName: selectedPlan.name,
+      availablePlans: allPlans.map(buildCartPlan),
     });
     setShowFrequency(false);
   }
