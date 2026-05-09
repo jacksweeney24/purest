@@ -15,30 +15,38 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
       {/* Left: headline + description + CTA — order-2 on mobile so image shows first */}
       <div class="space-y-3 py-4 md:py-8 order-2 md:order-1">
 
-        {/* Social proof */}
-        <div class="flex items-center gap-2 text-sm">
-          <span class="text-foreground/60">Loved by athletes, parents & everyday hydrators</span>
-        </div>
+        {/* How's Your hook */}
+        <p class="text-sm font-medium tracking-wide text-foreground/50 uppercase">How's your health?</p>
 
         <h1 class="font-serif text-5xl leading-tight tracking-tight md:text-6xl lg:text-7xl">
-          Your new<br /><em>hydration ritual.</em>
+          Where Wellness<br />Meets <em>Performance.</em>
         </h1>
+
+        <p class="text-sm font-medium text-foreground/60 tracking-wider">Real Fruit. Real Salt.</p>
 
         {/* Benefit bullets */}
         <ul class="space-y-2 text-sm text-foreground/75">
           <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
           <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
-          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
+          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 0 added sugar, 0 artificial ingredients, nothing hidden</li>
         </ul>
 
-        <a
-          href={ctaHref}
-          class="inline-flex h-16 items-center justify-center rounded-full bg-primary px-14 text-lg font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
-        >
-          {cta}
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a
+            href="#shop"
+            class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+          >
+            Shop now →
+          </a>
+          <a
+            href="/products/20-count-variety-pack"
+            class="inline-flex h-14 items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-medium text-foreground transition-all hover:bg-foreground/5"
+          >
+            Try the 5-Day Kit — $15.99
+          </a>
+        </div>
 
-        <p class="text-xs text-foreground/40">Free shipping on orders over $50</p>
+        <p class="text-xs text-foreground/40">Free shipping on orders over $45</p>
       </div>
 
       {/* Right: product image — order-1 on mobile so it shows first */}
