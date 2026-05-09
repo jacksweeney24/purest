@@ -14,12 +14,20 @@ import WhatsInside from "@/components/WhatsInside.astro";
 import PressBar from "@/components/PressBar.astro";
 
 const products = await getProducts();
-// Bundle first, then 5-day kit, then flavors, then water bottle last
-const bundle = products.filter(p => p.handle === 'the-hydration-ritual-kit');
+// Price anchor order: $15.99 kit first → $25.99 jars → $59 bundle → remaining flavors → bottle last
 const kit = products.filter(p => p.handle === '20-count-variety-pack');
-const flavors = products.filter(p => !p.title.toLowerCase().includes('water bottle') && p.handle !== 'the-hydration-ritual-kit' && p.handle !== '20-count-variety-pack');
+const ginger = products.filter(p => p.handle === '10-count-ginger-limeaid');
+const bundle = products.filter(p => p.handle === 'the-hydration-ritual-kit');
+const passionCherry = products.filter(p => p.handle === '10-serving-passion-cherry');
+const remaining = products.filter(p =>
+  !p.title.toLowerCase().includes('water bottle') &&
+  p.handle !== 'the-hydration-ritual-kit' &&
+  p.handle !== '20-count-variety-pack' &&
+  p.handle !== '10-count-ginger-limeaid' &&
+  p.handle !== '10-serving-passion-cherry'
+);
 const bottle = products.filter(p => p.title.toLowerCase().includes('water bottle'));
-const orderedProducts = [...bundle, ...kit, ...flavors, ...bottle];
+const orderedProducts = [...kit, ...ginger, ...bundle, ...passionCherry, ...remaining, ...bottle];
 ---
 
 <Layout>
