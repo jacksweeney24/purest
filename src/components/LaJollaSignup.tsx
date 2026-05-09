@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
  * Subscribes the user to Klaviyo list ShV6w5 ("La Jolla Half Marathon 2026")
  * and tags them with the event for post-race email sequences.
  */
-export default function LaJollaSignup() {
+export default function LaJollaSignup({ dark = false }: { dark?: boolean }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">("idle");
@@ -70,9 +70,9 @@ export default function LaJollaSignup() {
   if (status === "done") {
     return (
       <div className="text-center py-4">
-        <p className="text-lg font-serif">You're entered to win.</p>
-        <p className="text-sm text-muted-foreground mt-1">
-          Winner announced after May 16. Check your inbox for your free recovery guide too.
+        <p className={`text-lg font-serif ${dark ? "text-background" : ""}`}>You're entered to win. 🥥</p>
+        <p className={`text-sm mt-1 ${dark ? "text-background/60" : "text-muted-foreground"}`}>
+          Winner announced after May 16. Watch your inbox!
         </p>
       </div>
     );
@@ -106,7 +106,7 @@ export default function LaJollaSignup() {
       {status === "error" && (
         <p className="text-xs text-red-500 text-center">Something went wrong. Try again or email us at hydrate@purestelectrolyte.com</p>
       )}
-      <p className="text-xs text-muted-foreground text-center">
+      <p className={`text-xs text-center ${dark ? "text-background/50" : "text-muted-foreground"}`}>
         No spam. Unsubscribe anytime.
       </p>
     </form>

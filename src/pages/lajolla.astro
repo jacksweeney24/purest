@@ -7,50 +7,55 @@ import LaJollaSignup from "@/components/LaJollaSignup.tsx";
   title="La Jolla Half Marathon — Purest Electrolyte"
   description="Real hydration for real runners. Exclusive offer for La Jolla Half Marathon 2026 participants."
 >
-  <!-- Hero -->
-  <section class="bg-background border-b border-border/40">
-    <div class="container max-w-3xl py-16 md:py-24 text-center">
-      <p class="text-xs uppercase tracking-widest text-muted-foreground mb-4">
+
+  <!-- GIVEAWAY HERO — First thing they see -->
+  <section class="bg-foreground text-background">
+    <div class="container max-w-2xl py-16 md:py-24 text-center">
+      <p class="text-xs uppercase tracking-widest opacity-50 mb-4">
         La Jolla Half Marathon 2026
       </p>
       <h1 class="font-serif text-4xl md:text-6xl tracking-tight leading-tight">
-        Hydration for<br /><em>real recovery.</em>
+        Enter to win<br /><em>The Hydration<br />Ritual Kit.</em>
       </h1>
-      <p class="mt-6 text-base md:text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-        Real freeze-dried fruit. French gray sea salt. 85+ trace minerals.
-        Nothing synthetic, nothing hidden. Made in Aspen, Colorado — and
-        tested at 8,900 feet.
+      <p class="mt-4 text-base opacity-70 max-w-sm mx-auto">
+        A $59 value — The Hydration Ritual Kit includes our 5-Day Kit, a full jar, and the Purest glass bottle.
       </p>
       <div class="mt-8">
-        <img
-          src="/images/product-lineup.jpg"
-          alt="Purest Electrolyte jars — real fruit, real salt"
-          class="mx-auto rounded-sm w-full object-cover"
-        />
+        <LaJollaSignup client:load dark={true} />
       </div>
+      <p class="mt-4 text-xs opacity-40">No purchase necessary. Winner notified by email after May 16, 2026.</p>
     </div>
   </section>
 
-  <!-- Race Day Offer -->
-  <section class="bg-foreground text-background">
-    <div class="container max-w-2xl py-12 md:py-16 text-center">
-      <p class="text-xs uppercase tracking-widest opacity-60 mb-3">
+  <!-- Product Image — large, single, clean -->
+  <section class="bg-background">
+    <img
+      src="/images/hydration-ritual-kit.jpg"
+      alt="The Hydration Ritual Kit — Purest Electrolyte"
+      class="w-full object-cover max-h-[600px]"
+    />
+  </section>
+
+  <!-- Race Day Discount Code -->
+  <section class="bg-background border-t border-border/40">
+    <div class="container max-w-2xl py-16 md:py-20 text-center">
+      <p class="text-xs uppercase tracking-widest text-muted-foreground mb-3">
         Exclusive for La Jolla Runners
       </p>
       <h2 class="font-serif text-3xl md:text-4xl tracking-tight">
-        10% off your online order
+        10% off your order. Today.
       </h2>
-      <p class="mt-3 text-base opacity-75">
-        Use code at checkout — good for any order on our site.
+      <p class="mt-3 text-base text-muted-foreground max-w-sm mx-auto">
+        Use this code at checkout — good sitewide, any order.
       </p>
-      <div class="mt-6 inline-block bg-background text-foreground rounded-sm px-8 py-4">
-        <p class="text-xs uppercase tracking-widest text-muted-foreground mb-1">Your race code</p>
-        <p class="font-serif text-3xl tracking-widest font-medium">LAJOLLA10</p>
+      <div class="mt-6 inline-block bg-foreground text-background rounded-sm px-8 py-5">
+        <p class="text-xs uppercase tracking-widest opacity-60 mb-1">Your race code</p>
+        <p class="font-serif text-4xl tracking-widest font-medium">LAJOLLA10</p>
       </div>
       <div class="mt-8">
         <a
           href="/products"
-          class="inline-flex items-center justify-center rounded-full bg-background text-foreground px-8 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
+          class="inline-flex items-center justify-center rounded-full bg-foreground text-background px-8 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
         >
           Shop now →
         </a>
@@ -58,33 +63,11 @@ import LaJollaSignup from "@/components/LaJollaSignup.tsx";
     </div>
   </section>
 
-  <!-- Giveaway / Email Capture -->
-  <section class="bg-background">
-    <div class="container max-w-2xl py-16 md:py-20 text-center">
-      <p class="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-        La Jolla Half Marathon 2026
-      </p>
-      <h2 class="font-serif text-3xl md:text-4xl tracking-tight">
-        Win The Hydration Ritual Kit
-      </h2>
-      <p class="mt-2 text-lg text-muted-foreground font-medium">A $59 value. Yours free.</p>
-      <p class="mt-4 text-base text-muted-foreground max-w-md mx-auto">
-        Enter your email below to register. One winner will be selected after race day
-        and contacted directly. Everyone who enters also receives a free post-race
-        recovery guide.
-      </p>
-      <div class="mt-8">
-        <LaJollaSignup client:load />
-      </div>
-      <p class="mt-4 text-xs text-muted-foreground">No purchase necessary. Winner notified by email after May 16, 2026.</p>
-    </div>
-  </section>
-
   <!-- What Makes Purest Different -->
   <section class="bg-stone-50 border-t border-border/40">
     <div class="container max-w-2xl py-16 md:py-20">
       <h2 class="font-serif text-2xl md:text-3xl tracking-tight text-center mb-12">
-        Not all electrolytes are equal.
+        Real fruit. Real salt. Nothing else.
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
         <div>
@@ -103,8 +86,7 @@ import LaJollaSignup from "@/components/LaJollaSignup.tsx";
       <div class="mt-12 text-center">
         <p class="text-sm text-muted-foreground italic max-w-lg mx-auto">
           "As a runner of many years, I thought I had my hydration figured out.
-          It wasn't until I added Purest to my daily regimen that I realized how
-          dehydrated I had been."
+          It wasn't until I added Purest that I realized how depleted I had been."
         </p>
         <p class="text-xs text-muted-foreground mt-2">— Nick, Austin TX</p>
       </div>
@@ -137,4 +119,5 @@ import LaJollaSignup from "@/components/LaJollaSignup.tsx";
       </div>
     </div>
   </section>
+
 </Layout>
