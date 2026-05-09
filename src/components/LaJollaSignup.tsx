@@ -17,8 +17,8 @@ export default function LaJollaSignup({ dark = false }: { dark?: boolean }) {
     setStatus("submitting");
 
     try {
-      // Subscribe to Klaviyo list ShV6w5 (La Jolla Half Marathon 2026)
-      const res = await fetch("https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/", {
+      // Klaviyo Client API — safe for browser use, no private key needed
+      const res = await fetch("https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,24 +26,22 @@ export default function LaJollaSignup({ dark = false }: { dark?: boolean }) {
         },
         body: JSON.stringify({
           data: {
-            type: "profile-subscription-bulk-create-job",
+            type: "subscription",
             attributes: {
-              profiles: {
-                data: [
-                  {
-                    type: "profile",
-                    attributes: {
-                      email: email,
-                      first_name: name || undefined,
-                      properties: {
-                        event: "La Jolla Half Marathon 2026",
-                        source: "lajolla-landing-page"
-                      }
+              custom_source: "La Jolla Landing Page",
+              profile: {
+                data: {
+                  type: "profile",
+                  attributes: {
+                    email: email,
+                    ...(name ? { first_name: name } : {}),
+                    properties: {
+                      event: "La Jolla Half Marathon 2026",
+                      source: "lajolla-landing-page"
                     }
                   }
-                ]
-              },
-              custom_source: "La Jolla Landing Page"
+                }
+              }
             },
             relationships: {
               list: {
@@ -60,9 +58,12 @@ export default function LaJollaSignup({ dark = false }: { dark?: boolean }) {
       if (res.ok || res.status === 202) {
         setStatus("done");
       } else {
+        const body = await res.text();
+        console.error("Klaviyo error", res.status, body);
         setStatus("error");
       }
-    } catch {
+    } catch (err) {
+      console.error("Signup fetch error", err);
       setStatus("error");
     }
   }
