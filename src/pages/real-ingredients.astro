@@ -1,0 +1,99 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Real Ingredients · Purest Electrolyte"
+  description="No sugar. No dyes. No ingredients you can't pronounce. Just freeze-dried real fruit and French gray sea salt. That's it."
+>
+  <section class="container py-14 md:py-20 max-w-3xl">
+
+    <a href="/about" class="text-sm text-muted-foreground hover:text-foreground mb-8 inline-block">← Back to About</a>
+
+    <h1 class="font-serif text-4xl md:text-5xl tracking-tight mb-6">Real Ingredients. Nothing Else.</h1>
+    <p class="text-lg text-muted-foreground mb-12 leading-relaxed">
+      Turn over most electrolyte drinks and you'll find a paragraph of chemicals. Turn over Purest and you'll find two things: <strong>real freeze-dried fruit</strong> and <strong>French gray sea salt</strong>. That's the entire ingredient list.
+    </p>
+
+    <div class="space-y-12">
+
+      <div>
+        <h2 class="font-serif text-2xl mb-3">What's Actually in Purest?</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-xl border border-border p-5">
+            <div class="text-2xl mb-2">🍋</div>
+            <h3 class="font-medium mb-1">Freeze-Dried Real Fruit</h3>
+            <p class="text-sm text-muted-foreground">Whole fruit — ginger, limes, cherries, cranberries, hibiscus — freeze-dried to lock in flavor and natural sugars. No artificial flavoring. No concentrates. Real fruit.</p>
+          </div>
+          <div class="rounded-xl border border-border p-5">
+            <div class="text-2xl mb-2">🧂</div>
+            <h3 class="font-medium mb-1">French Gray Sea Salt</h3>
+            <p class="text-sm text-muted-foreground">Hand-harvested from France's Atlantic coast. Unrefined, unbleached, naturally rich in 85+ trace minerals. Not the cheap table salt used in most sports drinks.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl mb-4">What's NOT in Purest</h2>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {[
+            ["❌", "Added sugar", "No sucrose, fructose, or glucose added"],
+            ["❌", "Artificial sweeteners", "No stevia, sucralose, aspartame, or monk fruit"],
+            ["❌", "Food dyes", "No Red 40, Blue 1, Yellow 5 or any synthetic coloring"],
+            ["❌", "Maltodextrin", "A cheap filler that spikes blood sugar — not here"],
+            ["❌", "Citric acid", "A common preservative that can irritate digestion"],
+            ["❌", "Natural flavors", "An industry loophole for lab-made chemicals — we use actual fruit"],
+            ["❌", "Preservatives", "Nothing to extend shelf life artificially"],
+            ["❌", "Anti-caking agents", "No silicon dioxide or other processing aids"],
+          ].map(([icon, title, desc]) => (
+            <div class="flex gap-3 items-start p-3 rounded-lg bg-secondary/60">
+              <span class="text-base mt-0.5">{icon}</span>
+              <div>
+                <p class="text-sm font-medium">{title}</p>
+                <p class="text-xs text-muted-foreground mt-0.5">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl mb-3">Why "Natural Flavors" Isn't Good Enough</h2>
+        <p class="text-foreground/80 leading-relaxed mb-4">
+          You'll see "natural flavors" on almost every electrolyte drink label — including many marketed as "clean." Here's what that actually means: under FDA regulations, "natural flavors" can include hundreds of lab-derived chemical compounds as long as they originated from a natural source at some point in the process.
+        </p>
+        <p class="text-foreground/80 leading-relaxed">
+          At Purest, we don't use natural flavors. We use <em>actual freeze-dried fruit</em>. The flavor in your Ginger LimeAid isn't from a ginger-derived chemical compound — it's from real ginger that was freeze-dried whole. There's a difference, and you can taste it.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl mb-3">Why Freeze-Dried?</h2>
+        <p class="text-foreground/80 leading-relaxed mb-4">
+          Freeze-drying removes water from fruit at very low temperatures, preserving the natural flavor compounds, color, and nutrition that heat processing destroys. The result is fruit that tastes intensely like itself — and mixes into water to create a drink that actually tastes like fruit, not like a candy version of fruit.
+        </p>
+        <p class="text-foreground/80 leading-relaxed">
+          It's also how we keep the ingredient list so clean. Real freeze-dried fruit doesn't need additives to taste good or stay shelf-stable.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl mb-3">You Can See Through the Jar</h2>
+        <p class="text-foreground/80 leading-relaxed">
+          We use glass jars on purpose. You can look right through and see your electrolytes. There's nothing to hide. The powder looks like what it is — ground fruit and sea salt. If we were using artificial dyes or synthetic compounds, we wouldn't want you looking that closely.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="mt-16 pt-8 border-t border-border">
+      <a
+        href="/products"
+        class="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-8 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
+      >
+        Shop Purest Electrolyte →
+      </a>
+    </div>
+
+  </section>
+</Layout>
