@@ -110,14 +110,24 @@ export default function ProductCard({ product }: Props) {
             Best Value
           </div>
         )}
-        <div className="aspect-square overflow-hidden rounded-lg bg-white">
+        <div className="aspect-square overflow-hidden rounded-lg bg-white relative">
           {product.image ? (
-            <img
-              src={product.image.url}
-              alt={product.image.altText ?? product.title}
-              loading="lazy"
-              className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.02]"
-            />
+            <>
+              {/* Default product image */}
+              <img
+                src={product.image.url}
+                alt={product.image.altText ?? product.title}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-contain p-4 transition-opacity duration-500 group-hover:opacity-0"
+              />
+              {/* Hover lifestyle image */}
+              <img
+                src="/images/lifestyle-all-flavors.jpg"
+                alt="All Purest Electrolyte flavors"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+              />
+            </>
           ) : (
             <div className="h-full w-full" />
           )}
