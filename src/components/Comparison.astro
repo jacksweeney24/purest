@@ -23,13 +23,10 @@
     <!-- Rows -->
     {[
       ["Real fruit ingredients", true, false],
-      ["Visible ingredients in clear jar", true, false],
       ["No artificial flavors", true, false],
       ["No synthetic dyes", true, false],
       ["Full mineral spectrum", true, false],
       ["No mystery 'natural flavors'", true, false],
-      ["Small batch, hand-made", true, false],
-      ["Founder stands behind every jar", true, false],
     ].map(([label, purest, them], i) => (
       <div class={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? 'bg-background' : 'bg-stone-50/50'}`}>
         <div class="p-4 text-sm text-foreground/80">{label}</div>
