@@ -52,41 +52,30 @@ const price = new Intl.NumberFormat("en-US", {
       <div class="space-y-3">
         {product.images.length > 0 ? (
           <>
-            <!-- Sliding carousel -->
+            <!-- Simple swipe gallery -->
             <div
               id="image-gallery"
               class="relative rounded-lg bg-white overflow-hidden w-full"
-              style="aspect-ratio: 1 / 1; touch-action: pan-y; -webkit-user-select: none; user-select: none;"
+              style="aspect-ratio: 1 / 1;"
             >
-              <!-- Sliding track -->
-              <div
-                id="carousel-track"
-                class="flex h-full transition-transform duration-300 ease-in-out"
-                style={`width: ${product.images.length * 100}%; transform: translateX(0%);`}
-              >
-                {product.images.map((img: any, i: number) => (
-                  <div
-                    class="h-full flex-shrink-0 flex items-center justify-center bg-white"
-                    style={`width: ${100 / product.images.length}%;`}
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.altText ?? product.title}
-                      class="w-full h-full object-contain select-none p-2"
-                      draggable="false"
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                      style="pointer-events: none; max-width: 100%; max-height: 100%;"
-                    />
-                  </div>
-                ))}
-              </div>
+              {product.images.map((img: any, i: number) => (
+                <img
+                  src={img.url}
+                  alt={img.altText ?? product.title}
+                  class={`gallery-slide absolute inset-0 w-full h-full object-contain p-3 transition-opacity duration-300 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+                  draggable="false"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  style="pointer-events: none;"
+                  data-index={String(i)}
+                />
+              ))}
 
               {/* Dot indicators */}
               {product.images.length > 1 && (
                 <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
                   {product.images.map((_img: any, i: number) => (
                     <span
-                      class={`dot-indicator block w-2 h-2 rounded-full transition-all duration-200 ${i === 0 ? 'bg-stone-700 scale-110' : 'bg-stone-300'}`}
+                      class={`dot-indicator block w-2 h-2 rounded-full transition-all duration-200 ${i === 0 ? 'bg-stone-700' : 'bg-stone-300'}`}
                       data-index={String(i)}
                     />
                   ))}
@@ -149,87 +138,47 @@ const price = new Intl.NumberFormat("en-US", {
 </Layout>
 
 <script>
+  const slides = Array.from(document.querySelectorAll('.gallery-slide')) as HTMLImageElement[];
   const thumbnails = Array.from(document.querySelectorAll('.thumbnail-btn')) as HTMLButtonElement[];
-  const track = document.getElementById('carousel-track') as HTMLElement;
-  const gallery = document.getElementById('image-gallery') as HTMLElement;
   const dots = Array.from(document.querySelectorAll('.dot-indicator')) as HTMLElement[];
-  const total = thumbnails.length;
-  let currentIndex = 0;
+  const gallery = document.getElementById('image-gallery');
+  const total = slides.length;
+  let current = 0;
 
-  function goToImage(index: number) {
+  function goTo(index: number) {
+    if (total === 0) return;
     if (index < 0) index = total - 1;
     if (index >= total) index = 0;
-    currentIndex = index;
-
-    // Slide the track
-    if (track) {
-      const pct = (currentIndex / total) * 100;
-      track.style.transform = `translateX(-${pct}%)`;
-    }
-
-    // Update dots
-    dots.forEach((dot, i) => {
-      if (i === currentIndex) {
-        dot.classList.add('bg-stone-700', 'scale-110');
-        dot.classList.remove('bg-stone-300');
-      } else {
-        dot.classList.remove('bg-stone-700', 'scale-110');
-        dot.classList.add('bg-stone-300');
-      }
+    slides[current].classList.remove('opacity-100');
+    slides[current].classList.add('opacity-0');
+    current = index;
+    slides[current].classList.remove('opacity-0');
+    slides[current].classList.add('opacity-100');
+    dots.forEach((d, i) => {
+      d.classList.toggle('bg-stone-700', i === current);
+      d.classList.toggle('bg-stone-300', i !== current);
     });
-
-    // Update thumbnails
     thumbnails.forEach((b, i) => {
-      if (i === currentIndex) {
-        b.classList.add('border-stone-700');
-        b.classList.remove('border-transparent');
-      } else {
-        b.classList.remove('border-stone-700');
-        b.classList.add('border-transparent');
-      }
+      b.classList.toggle('border-stone-700', i === current);
+      b.classList.toggle('border-transparent', i !== current);
     });
-    thumbnails[currentIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    thumbnails[current]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
-  // Thumbnail clicks
-  thumbnails.forEach((btn, i) => {
-    btn.addEventListener('click', () => goToImage(i));
-  });
+  thumbnails.forEach((btn, i) => btn.addEventListener('click', () => goTo(i)));
 
-  // Touch swipe
+  // Swipe
   if (gallery) {
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isDragging = false;
-
+    let x0 = 0, y0 = 0;
     gallery.addEventListener('touchstart', (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      isDragging = true;
+      x0 = e.touches[0].clientX;
+      y0 = e.touches[0].clientY;
     }, { passive: true });
-
-    gallery.addEventListener('touchmove', (e: TouchEvent) => {
-      if (!isDragging || !track) return;
-      const dx = e.touches[0].clientX - touchStartX;
-      const dy = e.touches[0].clientY - touchStartY;
-      // If scrolling vertically, let it scroll the page
-      if (Math.abs(dy) > Math.abs(dx)) return;
-      const basePct = (currentIndex / total) * 100;
-      const dragPct = (dx / gallery.offsetWidth) * (100 / total) * -1;
-      track.style.transition = 'none';
-      track.style.transform = `translateX(calc(-${basePct}% - ${dragPct * total}%))`;
-    }, { passive: true });
-
     gallery.addEventListener('touchend', (e: TouchEvent) => {
-      if (!isDragging) return;
-      isDragging = false;
-      track.style.transition = 'transform 300ms ease-in-out';
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        goToImage(dx < 0 ? currentIndex + 1 : currentIndex - 1);
-      } else {
-        goToImage(currentIndex); // snap back
+      const dx = e.changedTouches[0].clientX - x0;
+      const dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        goTo(dx < 0 ? current + 1 : current - 1);
       }
     }, { passive: true });
   }
