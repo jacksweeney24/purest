@@ -100,13 +100,28 @@ const price = new Intl.NumberFormat("en-US", {
             <div
               id="lightbox"
               class="fixed inset-0 z-50 bg-black hidden items-center justify-center"
-              style="touch-action: pinch-zoom;"
             >
+              <!-- Close -->
               <button
                 id="lightbox-close"
-                class="absolute top-4 right-4 z-10 text-white text-3xl font-light leading-none w-10 h-10 flex items-center justify-center"
+                class="absolute top-4 right-4 z-10 text-white text-3xl leading-none w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
                 aria-label="Close"
               >✕</button>
+              <!-- Prev -->
+              <button
+                id="lightbox-prev"
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-white text-2xl w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
+                aria-label="Previous"
+              >‹</button>
+              <!-- Next -->
+              <button
+                id="lightbox-next"
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-white text-2xl w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
+                aria-label="Next"
+              >›</button>
+              <!-- Counter -->
+              <div id="lightbox-counter" class="absolute bottom-4 left-0 right-0 text-center text-white/70 text-sm pointer-events-none"></div>
+              <!-- Image (pinch-zoom enabled by browser) -->
               <img
                 id="lightbox-img"
                 src=""
@@ -208,14 +223,33 @@ const price = new Intl.NumberFormat("en-US", {
   const lightbox = document.getElementById('lightbox') as HTMLElement;
   const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
   const lightboxClose = document.getElementById('lightbox-close');
+  const lightboxPrev = document.getElementById('lightbox-prev');
+  const lightboxNext = document.getElementById('lightbox-next');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  const slides = Array.from(document.querySelectorAll('.gallery-slide-wrap')) as HTMLElement[];
+  let lightboxIndex = 0;
 
-  function openLightbox(src: string, alt: string) {
-    if (!lightbox || !lightboxImg) return;
-    lightboxImg.src = src;
-    lightboxImg.alt = alt;
+  function showLightboxAt(index: number) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    lightboxIndex = index;
+    const el = slides[lightboxIndex];
+    if (lightboxImg) {
+      lightboxImg.src = el.dataset.src || '';
+      lightboxImg.alt = el.dataset.alt || '';
+    }
+    if (lightboxCounter) lightboxCounter.textContent = `${lightboxIndex + 1} / ${slides.length}`;
+    // Hide prev/next if only 1 image
+    if (lightboxPrev) lightboxPrev.style.display = slides.length > 1 ? 'flex' : 'none';
+    if (lightboxNext) lightboxNext.style.display = slides.length > 1 ? 'flex' : 'none';
+  }
+
+  function openLightbox(index: number) {
+    if (!lightbox) return;
     lightbox.classList.remove('hidden');
     lightbox.classList.add('flex');
     document.body.style.overflow = 'hidden';
+    showLightboxAt(index);
   }
 
   function closeLightbox() {
@@ -225,28 +259,16 @@ const price = new Intl.NumberFormat("en-US", {
     document.body.style.overflow = '';
   }
 
-  // Tap on carousel slide opens lightbox
-  document.querySelectorAll('.gallery-slide-wrap').forEach((wrap) => {
-    let scrolled = false;
-    if (gallery) {
-      gallery.addEventListener('scroll', () => { scrolled = true; }, { passive: true, once: false });
-    }
-    wrap.addEventListener('touchstart', () => { scrolled = false; }, { passive: true });
-    wrap.addEventListener('touchend', (e: Event) => {
-      if (!scrolled) {
-        const el = wrap as HTMLElement;
-        openLightbox(el.dataset.src || '', el.dataset.alt || '');
-      }
-    });
-    // Desktop click
-    wrap.addEventListener('click', () => {
-      const el = wrap as HTMLElement;
-      openLightbox(el.dataset.src || '', el.dataset.alt || '');
-    });
+  // Tap on slide opens lightbox
+  let isScrolling = false;
+  gallery?.addEventListener('scroll', () => { isScrolling = true; setTimeout(() => { isScrolling = false; }, 100); }, { passive: true });
+
+  slides.forEach((wrap, i) => {
+    wrap.addEventListener('click', () => { if (!isScrolling) openLightbox(i); });
   });
 
   lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
+  lightboxPrev?.addEventListener('click', () => showLightboxAt(lightboxIndex - 1));
+  lightboxNext?.addEventListener('click', () => showLightboxAt(lightboxIndex + 1));
+  lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 </script>
