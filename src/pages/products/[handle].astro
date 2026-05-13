@@ -62,7 +62,7 @@ const price = new Intl.NumberFormat("en-US", {
                 <img
                   src={img.url}
                   alt={img.altText ?? product.title}
-                  class={`gallery-slide absolute inset-0 w-full h-full object-contain p-3 transition-opacity duration-300 ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+                  class={`gallery-slide absolute inset-0 w-full h-full object-contain p-3 transition-opacity duration-200 ${i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                   draggable="false"
                   loading={i === 0 ? 'eager' : 'lazy'}
                   style="pointer-events: none;"
@@ -149,11 +149,13 @@ const price = new Intl.NumberFormat("en-US", {
     if (total === 0) return;
     if (index < 0) index = total - 1;
     if (index >= total) index = 0;
-    slides[current].classList.remove('opacity-100');
-    slides[current].classList.add('opacity-0');
+    // Hide current
+    slides[current].classList.remove('opacity-100', 'z-10');
+    slides[current].classList.add('opacity-0', 'z-0');
     current = index;
-    slides[current].classList.remove('opacity-0');
-    slides[current].classList.add('opacity-100');
+    // Show new
+    slides[current].classList.remove('opacity-0', 'z-0');
+    slides[current].classList.add('opacity-100', 'z-10');
     dots.forEach((d, i) => {
       d.classList.toggle('bg-stone-700', i === current);
       d.classList.toggle('bg-stone-300', i !== current);
