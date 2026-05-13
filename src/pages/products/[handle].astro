@@ -52,30 +52,36 @@ const price = new Intl.NumberFormat("en-US", {
       <div class="space-y-3">
         {product.images.length > 0 ? (
           <>
-            <!-- Simple swipe gallery -->
-            <div
-              id="image-gallery"
-              class="relative rounded-lg bg-white overflow-hidden w-full"
-              style="aspect-ratio: 1 / 1;"
-            >
-              {product.images.map((img: any, i: number) => (
-                <img
-                  src={img.url}
-                  alt={img.altText ?? product.title}
-                  class={`gallery-slide absolute inset-0 w-full h-full object-contain p-3 transition-opacity duration-200 ${i === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                  draggable="false"
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  style="pointer-events: none;"
-                  data-index={String(i)}
-                />
-              ))}
+            <!-- Native scroll-snap carousel -->
+            <div class="relative w-full rounded-lg overflow-hidden bg-white" style="aspect-ratio:1/1">
+              <div
+                id="image-gallery"
+                class="flex w-full h-full overflow-x-scroll"
+                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;"
+              >
+                {product.images.map((img: any, i: number) => (
+                  <div
+                    class="flex-shrink-0 w-full h-full flex items-center justify-center bg-white"
+                    style="scroll-snap-align: start;"
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.altText ?? product.title}
+                      class="w-full h-full object-contain p-3"
+                      draggable="false"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      style="pointer-events:none;"
+                    />
+                  </div>
+                ))}
+              </div>
 
               {/* Dot indicators */}
               {product.images.length > 1 && (
                 <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
                   {product.images.map((_img: any, i: number) => (
                     <span
-                      class={`dot-indicator block w-2 h-2 rounded-full transition-all duration-200 ${i === 0 ? 'bg-stone-700' : 'bg-stone-300'}`}
+                      class={`dot-indicator block w-2 h-2 rounded-full transition-colors duration-200 ${i === 0 ? 'bg-stone-700' : 'bg-stone-300'}`}
                       data-index={String(i)}
                     />
                   ))}
@@ -138,50 +144,41 @@ const price = new Intl.NumberFormat("en-US", {
 </Layout>
 
 <script>
-  const slides = Array.from(document.querySelectorAll('.gallery-slide')) as HTMLImageElement[];
+  const gallery = document.getElementById('image-gallery') as HTMLElement;
   const thumbnails = Array.from(document.querySelectorAll('.thumbnail-btn')) as HTMLButtonElement[];
   const dots = Array.from(document.querySelectorAll('.dot-indicator')) as HTMLElement[];
-  const gallery = document.getElementById('image-gallery');
-  const total = slides.length;
-  let current = 0;
+  const total = thumbnails.length;
 
-  function goTo(index: number) {
-    if (total === 0) return;
-    if (index < 0) index = total - 1;
-    if (index >= total) index = 0;
-    // Hide current
-    slides[current].classList.remove('opacity-100', 'z-10');
-    slides[current].classList.add('opacity-0', 'z-0');
-    current = index;
-    // Show new
-    slides[current].classList.remove('opacity-0', 'z-0');
-    slides[current].classList.add('opacity-100', 'z-10');
+  function updateActive(index: number) {
     dots.forEach((d, i) => {
-      d.classList.toggle('bg-stone-700', i === current);
-      d.classList.toggle('bg-stone-300', i !== current);
+      d.classList.toggle('bg-stone-700', i === index);
+      d.classList.toggle('bg-stone-300', i !== index);
     });
     thumbnails.forEach((b, i) => {
-      b.classList.toggle('border-stone-700', i === current);
-      b.classList.toggle('border-transparent', i !== current);
+      b.classList.toggle('border-stone-700', i === index);
+      b.classList.toggle('border-transparent', i !== index);
     });
-    thumbnails[current]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    thumbnails[index]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
-  thumbnails.forEach((btn, i) => btn.addEventListener('click', () => goTo(i)));
-
-  // Swipe
-  if (gallery) {
-    let x0 = 0, y0 = 0;
-    gallery.addEventListener('touchstart', (e: TouchEvent) => {
-      x0 = e.touches[0].clientX;
-      y0 = e.touches[0].clientY;
-    }, { passive: true });
-    gallery.addEventListener('touchend', (e: TouchEvent) => {
-      const dx = e.changedTouches[0].clientX - x0;
-      const dy = e.changedTouches[0].clientY - y0;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        goTo(dx < 0 ? current + 1 : current - 1);
+  // Thumbnail clicks scroll the carousel to the right slide
+  thumbnails.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      if (gallery) {
+        gallery.scrollTo({ left: gallery.offsetWidth * i, behavior: 'smooth' });
       }
+      updateActive(i);
+    });
+  });
+
+  // Update dots as user scrolls/swipes
+  if (gallery) {
+    gallery.addEventListener('scroll', () => {
+      const index = Math.round(gallery.scrollLeft / gallery.offsetWidth);
+      updateActive(index);
     }, { passive: true });
+
+    // Hide scrollbar in WebKit
+    gallery.style.cssText += 'scrollbar-width:none;';
   }
 </script>
