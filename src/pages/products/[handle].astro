@@ -56,13 +56,15 @@ const price = new Intl.NumberFormat("en-US", {
             <div class="relative w-full rounded-lg overflow-hidden bg-white" style="aspect-ratio:1/1">
               <div
                 id="image-gallery"
-                class="flex w-full h-full overflow-x-scroll"
+                class="flex w-full h-full overflow-x-scroll cursor-zoom-in"
                 style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;"
               >
                 {product.images.map((img: any, i: number) => (
                   <div
-                    class="flex-shrink-0 w-full h-full flex items-center justify-center bg-white"
+                    class="gallery-slide-wrap flex-shrink-0 w-full h-full flex items-center justify-center bg-white"
                     style="scroll-snap-align: start;"
+                    data-src={img.url}
+                    data-alt={img.altText ?? product.title}
                   >
                     <img
                       src={img.url}
@@ -76,6 +78,11 @@ const price = new Intl.NumberFormat("en-US", {
                 ))}
               </div>
 
+              {/* Zoom hint */}
+              <div class="absolute top-2 right-2 bg-black/30 text-white text-xs px-2 py-1 rounded-full pointer-events-none">
+                🔍 tap to zoom
+              </div>
+
               {/* Dot indicators */}
               {product.images.length > 1 && (
                 <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
@@ -87,6 +94,26 @@ const price = new Intl.NumberFormat("en-US", {
                   ))}
                 </div>
               )}
+            </div>
+
+            <!-- Lightbox overlay -->
+            <div
+              id="lightbox"
+              class="fixed inset-0 z-50 bg-black hidden items-center justify-center"
+              style="touch-action: pinch-zoom;"
+            >
+              <button
+                id="lightbox-close"
+                class="absolute top-4 right-4 z-10 text-white text-3xl font-light leading-none w-10 h-10 flex items-center justify-center"
+                aria-label="Close"
+              >✕</button>
+              <img
+                id="lightbox-img"
+                src=""
+                alt=""
+                class="max-w-full max-h-full object-contain"
+                style="touch-action: pinch-zoom;"
+              />
             </div>
 
             <!-- Thumbnail row -->
@@ -164,9 +191,7 @@ const price = new Intl.NumberFormat("en-US", {
   // Thumbnail clicks scroll the carousel to the right slide
   thumbnails.forEach((btn, i) => {
     btn.addEventListener('click', () => {
-      if (gallery) {
-        gallery.scrollTo({ left: gallery.offsetWidth * i, behavior: 'smooth' });
-      }
+      if (gallery) gallery.scrollTo({ left: gallery.offsetWidth * i, behavior: 'smooth' });
       updateActive(i);
     });
   });
@@ -177,8 +202,51 @@ const price = new Intl.NumberFormat("en-US", {
       const index = Math.round(gallery.scrollLeft / gallery.offsetWidth);
       updateActive(index);
     }, { passive: true });
-
-    // Hide scrollbar in WebKit
-    gallery.style.cssText += 'scrollbar-width:none;';
   }
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox') as HTMLElement;
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  function openLightbox(src: string, alt: string) {
+    if (!lightbox || !lightboxImg) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  // Tap on carousel slide opens lightbox
+  document.querySelectorAll('.gallery-slide-wrap').forEach((wrap) => {
+    let scrolled = false;
+    if (gallery) {
+      gallery.addEventListener('scroll', () => { scrolled = true; }, { passive: true, once: false });
+    }
+    wrap.addEventListener('touchstart', () => { scrolled = false; }, { passive: true });
+    wrap.addEventListener('touchend', (e: Event) => {
+      if (!scrolled) {
+        const el = wrap as HTMLElement;
+        openLightbox(el.dataset.src || '', el.dataset.alt || '');
+      }
+    });
+    // Desktop click
+    wrap.addEventListener('click', () => {
+      const el = wrap as HTMLElement;
+      openLightbox(el.dataset.src || '', el.dataset.alt || '');
+    });
+  });
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
 </script>
