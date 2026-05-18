@@ -138,5 +138,154 @@ const {
      * cart's persisted state is visible right away.
      */}
     <Cart client:load />
+
+    <!-- Email capture pop-up -->
+    <div id="email-popup" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background:rgba(0,0,0,0.55);backdrop-filter:blur(2px)">
+      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+        <!-- Close -->
+        <button id="popup-close" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 text-xl w-8 h-8 flex items-center justify-center" aria-label="Close">&times;</button>
+
+        <!-- Hero image strip -->
+        <div class="h-40 bg-stone-100 overflow-hidden">
+          <img src="/images/lifestyle-all-flavors.jpg" alt="Purest Electrolyte" class="w-full h-full object-cover object-center" />
+        </div>
+
+        <!-- Content -->
+        <div class="px-8 py-7">
+          <div class="text-center mb-5">
+            <div class="inline-block bg-amber-50 text-amber-800 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">Limited Time</div>
+            <h2 class="font-serif text-2xl text-stone-900 leading-snug">Get 10% off your<br/>first order</h2>
+            <p class="text-stone-500 text-sm mt-2">Real fruit. Real salt. Nothing else.<br/>Join thousands of athletes who already switched.</p>
+          </div>
+
+          <form id="popup-form" class="space-y-3">
+            <input
+              type="email"
+              id="popup-email"
+              placeholder="Your email address"
+              required
+              class="w-full border border-stone-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-400"
+            />
+            <button
+              type="submit"
+              id="popup-submit"
+              class="w-full bg-stone-900 text-white rounded-lg px-4 py-3 text-sm font-semibold hover:bg-stone-700 transition-colors"
+            >
+              Claim my 10% off
+            </button>
+          </form>
+
+          <!-- Success state (hidden initially) -->
+          <div id="popup-success" class="hidden text-center py-2">
+            <div class="text-3xl mb-2">🎉</div>
+            <div class="font-semibold text-stone-900">You're in!</div>
+            <div class="text-stone-500 text-sm mt-1">Use code at checkout:</div>
+            <div class="mt-2 bg-stone-100 rounded-lg px-4 py-2 font-mono font-bold text-lg tracking-widest text-stone-900">WELCOME10</div>
+            <button id="popup-shop" class="mt-4 w-full bg-stone-900 text-white rounded-lg px-4 py-3 text-sm font-semibold hover:bg-stone-700 transition-colors">
+              Shop now &rarr;
+            </button>
+          </div>
+
+          <p class="text-center text-xs text-stone-400 mt-4">No spam. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        const STORAGE_KEY = 'purest_popup_dismissed';
+        const DELAY_MS = 10000; // 10 seconds
+        const popup = document.getElementById('email-popup');
+        const closeBtn = document.getElementById('popup-close');
+        const form = document.getElementById('popup-form');
+        const successDiv = document.getElementById('popup-success');
+        const shopBtn = document.getElementById('popup-shop');
+        const submitBtn = document.getElementById('popup-submit') as HTMLButtonElement | null;
+
+        // Don't show if already dismissed or subscribed
+        if (localStorage.getItem(STORAGE_KEY)) return;
+
+        function showPopup() {
+          if (!popup) return;
+          popup.classList.remove('hidden');
+          popup.classList.add('flex');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function hidePopup() {
+          if (!popup) return;
+          popup.classList.add('hidden');
+          popup.classList.remove('flex');
+          document.body.style.overflow = '';
+          localStorage.setItem(STORAGE_KEY, '1');
+        }
+
+        // Show after delay
+        setTimeout(showPopup, DELAY_MS);
+
+        // Close on X
+        closeBtn?.addEventListener('click', hidePopup);
+
+        // Close on backdrop
+        popup?.addEventListener('click', (e) => {
+          if (e.target === popup) hidePopup();
+        });
+
+        // Form submit
+        form?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = (document.getElementById('popup-email') as HTMLInputElement)?.value?.trim();
+          if (!email) return;
+
+          if (submitBtn) {
+            submitBtn.textContent = 'Subscribing...';
+            submitBtn.disabled = true;
+          }
+
+          try {
+            // Klaviyo client-side subscribe (public API key: TYfncY, list: WapMkg = Email List)
+            await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json', 'revision': '2023-12-15' },
+              body: JSON.stringify({
+                data: {
+                  type: 'subscription',
+                  attributes: {
+                    custom_source: 'Website Pop-up',
+                    profile: {
+                      data: {
+                        type: 'profile',
+                        attributes: { email, properties: { source: 'popup', discount_code: 'WELCOME10' } }
+                      }
+                    }
+                  },
+                  relationships: {
+                    list: { data: { type: 'list', id: 'WapMkg' } }
+                  }
+                }
+              })
+            });
+          } catch (_) {
+            // Silently fail — still show success so user gets the code
+          }
+
+          // Show success
+          form.classList.add('hidden');
+          successDiv?.classList.remove('hidden');
+          localStorage.setItem(STORAGE_KEY, '1');
+
+          // GA event
+          if (typeof window !== 'undefined' && (window as any).gtag) {
+            (window as any).gtag('event', 'email_capture', { method: 'popup' });
+          }
+        });
+
+        // Shop button
+        shopBtn?.addEventListener('click', () => {
+          hidePopup();
+          window.location.href = '/products';
+        });
+      })();
+    </script>
   </body>
 </html>

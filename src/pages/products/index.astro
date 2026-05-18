@@ -21,7 +21,19 @@ const products = [
       </p>
     </header>
 
-    <div class="mt-12">
+    <!-- New here? Start with Ginger LimeAid -->
+    <div class="mt-8 mb-10 flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 max-w-2xl">
+      <span class="text-3xl flex-shrink-0">👋</span>
+      <div>
+        <div class="font-semibold text-stone-800 text-sm">New to Purest? Start here.</div>
+        <div class="text-stone-600 text-sm mt-0.5">
+          Not sure which flavor to pick? <strong>Ginger LimeAid</strong> is our #1 best seller and the one Pam drinks every morning. Most people start there and never look back.
+          <a href="/products/10-count-ginger-limeaid" class="ml-2 text-amber-700 font-semibold hover:underline">Try Ginger LimeAid →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
       {/* client:load is required because ProductCard's add-to-cart button is interactive. */}
       <ProductGrid products={products} client:load />
     </div>

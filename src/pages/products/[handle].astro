@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import AddToCart from "@/components/AddToCart.tsx";
 import { getProduct, getProducts } from "@/lib/shopify";
+import flavorCopy from "@/data/flavor-copy.json";
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -179,11 +180,114 @@ const price = new Intl.NumberFormat("en-US", {
           <div class="flex items-center gap-2"><span>✓</span> Real fruit only</div>
           <div class="flex items-center gap-2"><span>✓</span> No junk. Ever.</div>
         </div>
+
+        <!-- Guarantee badge -->
+        <div class="flex items-center gap-3 bg-stone-50 border border-stone-200 rounded-lg px-4 py-3 mt-2">
+          <span class="text-2xl">🛡️</span>
+          <div>
+            <div class="text-sm font-semibold text-foreground">Satisfaction Guaranteed</div>
+            <div class="text-xs text-foreground/60">Not happy? We'll make it right. No hassle, no questions.</div>
+          </div>
+        </div>
       </div>
 
     </div>
   </section>
+
+  {/* Flavor story + details section */}
+  {(() => {
+    const copy = (flavorCopy as any)[product.handle];
+    if (!copy) return null;
+    return (
+      <section class="bg-stone-50 border-t border-stone-100">
+        <div class="container py-12 md:py-16 grid gap-10 md:grid-cols-3">
+
+          {/* Story */}
+          <div class="md:col-span-2 space-y-8">
+            {copy.badge && (
+              <div class="inline-block bg-stone-900 text-stone-50 text-xs font-semibold px-3 py-1 rounded-full tracking-wide">
+                {copy.badge}
+              </div>
+            )}
+            {copy.story && (
+              <div>
+                <h2 class="font-serif text-2xl mb-3">The flavor</h2>
+                <p class="text-foreground/70 leading-relaxed">{copy.story}</p>
+              </div>
+            )}
+            {copy.flavorNote && (
+              <div class="border-l-4 border-stone-300 pl-4">
+                <p class="text-sm font-medium text-foreground/50 uppercase tracking-wider mb-1">Taste notes</p>
+                <p class="text-foreground/80 italic">{copy.flavorNote}</p>
+              </div>
+            )}
+            {copy.howToUse && (
+              <div>
+                <h3 class="font-serif text-xl mb-2">How to use</h3>
+                <p class="text-foreground/70 leading-relaxed">{copy.howToUse}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Best for */}
+          {copy.bestFor && (
+            <div>
+              <h3 class="font-serif text-xl mb-4">Best for</h3>
+              <ul class="space-y-2">
+                {copy.bestFor.map((item: string) => (
+                  <li class="flex items-center gap-2 text-foreground/70 text-sm">
+                    <span class="text-stone-400">→</span> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  })()}
+
+  {/* FAQ */}
+  <section class="container py-12">
+    <h2 class="font-serif text-2xl mb-6">Common questions</h2>
+    <div class="divide-y divide-border max-w-2xl" id="faq-list">
+      {[
+        { q: "How much should I use?", a: "One scoop (one serving) mixed into 12–16 oz of cold water. Most people drink 1–2 servings per day. More if you're active, sweating, or at altitude." },
+        { q: "Is there any sugar in this?", a: "Zero added sugar. The light sweetness you taste comes entirely from real freeze-dried fruit — nothing synthetic, no stevia, no monk fruit." },
+        { q: "How is this different from LMNT, Liquid IV, or other brands?", a: "Most electrolyte brands use 3 synthetic minerals and artificial flavors. Purest delivers 85+ trace minerals from natural sun-dried sea salt, plus real freeze-dried fruit. No artificial anything." },
+        { q: "Does the subscription auto-renew?", a: "Yes — your subscription ships on your chosen schedule and can be paused or cancelled anytime with no fees. Manage it directly from your account or email us." },
+        { q: "What's the free shipping threshold?", a: "Free shipping on all orders over $39. Most single jars qualify. Subscribe and it's always free." },
+      ].map((item, i) => (
+        <div class="faq-item py-4 cursor-pointer" data-index={String(i)}>
+          <button class="w-full text-left flex justify-between items-center gap-4 font-medium">
+            <span>{item.q}</span>
+            <span class="faq-icon flex-shrink-0 text-foreground/40 transition-transform">+</span>
+          </button>
+          <div class="faq-answer hidden mt-3 text-sm text-foreground/65 leading-relaxed pr-8">{item.a}</div>
+        </div>
+      ))}
+    </div>
+  </section>
 </Layout>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const answer = item.querySelector('.faq-answer') as HTMLElement;
+      const icon = item.querySelector('.faq-icon') as HTMLElement;
+      const isOpen = !answer.classList.contains('hidden');
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+      document.querySelectorAll('.faq-icon').forEach(i => { i.textContent = '+'; (i as HTMLElement).style.transform = 'rotate(0deg)'; });
+      // Open clicked if it was closed
+      if (!isOpen) {
+        answer.classList.remove('hidden');
+        icon.textContent = '−';
+      }
+    });
+  });
+</script>
 
 <script>
   const gallery = document.getElementById('image-gallery') as HTMLElement;
