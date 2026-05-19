@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purest Electrolyte — Wholesale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #ffffff;
+      color: #000000;
+      width: 8.5in;
+      min-height: 11in;
+      padding: 0.55in 0.65in 0.5in;
+      font-size: 10px;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 18px;
+      border-bottom: 1.5px solid #000;
+      margin-bottom: 20px;
+    }
+
+    .logo { height: 36px; }
+    .logo img { height: 100%; width: auto; display: block; }
+
+    .header-right { text-align: right; }
+    .header-right h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 17px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .header-right p {
+      font-size: 8px;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    /* ── COLUMN HEADERS ── */
+    .col-headers {
+      display: grid;
+      grid-template-columns: 88px 1fr 90px 90px;
+      gap: 18px;
+      padding: 6px 0 8px;
+      border-bottom: 0.75px solid #000;
+      margin-bottom: 0;
+    }
+    .col-header {
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #999;
+    }
+    .col-header.right { text-align: right; }
+
+    /* ── PRODUCT ROW ── */
+    .product-row {
+      display: grid;
+      grid-template-columns: 88px 1fr 90px 90px;
+      gap: 18px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 0.5px solid #e0e0e0;
+    }
+
+    .product-image {
+      width: 88px;
+      height: 88px;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(8%);
+    }
+
+    .product-info { padding-right: 8px; }
+
+    .product-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 13.5px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+
+    .product-size {
+      font-size: 7.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 9px;
+    }
+
+    .ing-label {
+      font-size: 6.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 3px;
+    }
+
+    .ingredients {
+      font-size: 8px;
+      color: #666;
+      line-height: 1.55;
+      font-weight: 300;
+    }
+
+    /* ── PRICING ── */
+    .pricing { text-align: right; }
+
+    .price-block { margin-bottom: 10px; }
+    .price-block:last-child { margin-bottom: 0; }
+
+    .price-label {
+      font-size: 6.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 2px;
+    }
+
+    .price-wholesale {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .price-msrp {
+      font-size: 11px;
+      color: #999;
+      font-weight: 300;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 22px;
+      padding-top: 15px;
+      border-top: 1.5px solid #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .footer-col {}
+
+    .footer-label {
+      font-size: 6.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 5px;
+    }
+
+    .footer-content {
+      font-size: 9px;
+      line-height: 1.75;
+      color: #333;
+      font-weight: 300;
+    }
+
+    .footer-note {
+      font-size: 8px;
+      color: #aaa;
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    @media print {
+      body { padding: 0.45in 0.55in; }
+      @page { size: letter portrait; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <img src="images/purest-logo-correct-dark.png" alt="Purest Electrolyte">
+    </div>
+    <div class="header-right">
+      <h1>Wholesale Price Sheet</h1>
+      <p>2026 &nbsp;·&nbsp; Confidential</p>
+    </div>
+  </div>
+
+  <!-- COLUMN HEADERS -->
+  <div class="col-headers">
+    <div class="col-header"></div>
+    <div class="col-header">Product</div>
+    <div class="col-header right">Wholesale</div>
+    <div class="col-header right">MSRP</div>
+  </div>
+
+  <!-- GINGER LIMEAID -->
+  <div class="product-row">
+    <img class="product-image" src="images/ingredients-ginger-lime.jpg" alt="Ginger LimeAid">
+    <div class="product-info">
+      <div class="product-name">Ginger LimeAid</div>
+      <div class="product-size">10 Servings · Glass Jar</div>
+      <div class="ing-label">Ingredients</div>
+      <div class="ingredients">French Gray Sea Salt, Freeze-Dried Lime, Freeze-Dried Ginger, Citric Acid, Sodium Bicarbonate, Monkfruit</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$13.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$25.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIBISCUS LIME -->
+  <div class="product-row">
+    <img class="product-image" src="images/ingredients-hibiscus-lime.jpg" alt="Hibiscus Lime">
+    <div class="product-info">
+      <div class="product-name">Hibiscus Lime</div>
+      <div class="product-size">10 Servings · Glass Jar</div>
+      <div class="ing-label">Ingredients</div>
+      <div class="ingredients">French Gray Sea Salt, Freeze-Dried Lime, Freeze-Dried Hibiscus, Coconut Water Powder, Citric Acid, Sodium Bicarbonate, Monkfruit</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$13.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$25.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHOCOLATE CORDYCEPS -->
+  <div class="product-row">
+    <img class="product-image" src="images/ingredients-chocolate-cordyceps.jpg" alt="Chocolate Cordyceps">
+    <div class="product-info">
+      <div class="product-name">Chocolate Cordyceps</div>
+      <div class="product-size">10 Servings · Glass Jar</div>
+      <div class="ing-label">Ingredients</div>
+      <div class="ingredients">French Gray Sea Salt, Raw Cacao Powder, Cordyceps Mushroom, Sodium Bicarbonate, Monkfruit, Stevia</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$13.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$25.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSION CHERRY -->
+  <div class="product-row">
+    <img class="product-image" src="images/ingredients-passion-cherry.jpg" alt="Passion Cherry">
+    <div class="product-info">
+      <div class="product-name">Passion Cherry</div>
+      <div class="product-size">10 Servings · Glass Jar</div>
+      <div class="ing-label">Ingredients</div>
+      <div class="ingredients">French Gray Sea Salt, Freeze-Dried Tart Cherry, Freeze-Dried Passion Fruit, Citric Acid, Sodium Bicarbonate, Monkfruit, Stevia</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$13.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$25.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRANBERRY MINT -->
+  <div class="product-row">
+    <img class="product-image" src="images/ingredients-cranberry.jpg" alt="Cranberry Mint">
+    <div class="product-info">
+      <div class="product-name">Cranberry Mint</div>
+      <div class="product-size">10 Servings · Glass Jar</div>
+      <div class="ing-label">Ingredients</div>
+      <div class="ingredients">French Gray Sea Salt, Freeze-Dried Cranberry, Freeze-Dried Peppermint, Citric Acid, Sodium Bicarbonate, Stevia</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$13.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$25.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 DAY HYDRATION KIT -->
+  <div class="product-row">
+    <img class="product-image" src="images/hydration-ritual-kit.jpg" alt="5 Day Hydration Kit">
+    <div class="product-info">
+      <div class="product-name">5 Day Hydration Kit</div>
+      <div class="product-size">5 Single-Serve Vials · All Flavors</div>
+      <div class="ing-label">Contents</div>
+      <div class="ingredients">One vial of each flavor: Ginger LimeAid, Hibiscus Lime, Chocolate Cordyceps, Passion Cherry, Cranberry Mint. Ideal for sampling, gifting, and introducing new customers.</div>
+    </div>
+    <div class="pricing">
+      <div class="price-block">
+        <div class="price-label">Wholesale</div>
+        <div class="price-wholesale">$8.00</div>
+      </div>
+      <div class="price-block">
+        <div class="price-label">MSRP</div>
+        <div class="price-msrp">$15.99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-col">
+      <div class="footer-label">Order Minimum</div>
+      <div class="footer-content">5 jars minimum<br>Mix &amp; match flavors welcome</div>
+      <div class="footer-note">Orders ship within 3–5 business days</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-label">Website</div>
+      <div class="footer-content">purestelectrolyte.com</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-label">Instagram</div>
+      <div class="footer-content">@purestelectrolyte</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-label">Contact</div>
+      <div class="footer-content">
+        hydrate@purestelectrolyte.com<br>
+        [YOUR PHONE NUMBER]
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
