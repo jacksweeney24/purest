@@ -74,28 +74,102 @@ import Layout from "@/layouts/Layout.astro";
       <p class="text-muted-foreground">Bloggers, coaches, personal trainers, runners, hikers, yogis, health-focused creators — if your community trusts you, we want to work with you.</p>
     </div>
 
-    <!-- Apply CTA -->
-    <div class="border border-border rounded-xl px-8 py-10 text-center">
-      <h2 class="font-serif text-2xl font-medium mb-3">Ready to apply?</h2>
-      <p class="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
-        Email us at <strong>hydrate@purestelectrolyte.com</strong> with the subject line <strong>"Affiliate Application"</strong> and tell us:
-      </p>
-      <ul class="text-sm text-muted-foreground text-left inline-block mb-8 space-y-2">
-        <li>• Your name and where you're located</li>
-        <li>• Your Instagram, TikTok, blog, or YouTube handle</li>
-        <li>• How you'd share Purest with your community</li>
-        <li>• Why you love what we're doing</li>
-      </ul>
-      <div>
-        <a
-          href="mailto:hydrate@purestelectrolyte.com?subject=Affiliate Application"
-          class="inline-block bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity"
-        >
-          Apply Now →
-        </a>
+    <!-- Apply Form -->
+    <div class="border border-border rounded-xl px-8 py-10">
+      <h2 class="font-serif text-2xl font-medium mb-2">Ready to apply?</h2>
+      <p class="text-muted-foreground text-sm mb-8">We review every application personally. You'll hear back within 3–5 business days.</p>
+
+      <form id="affiliate-form" class="space-y-5">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="aff-name">Your name</label>
+            <input id="aff-name" name="name" type="text" required placeholder="Pam Sweeney"
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="aff-email">Email address</label>
+            <input id="aff-email" name="email" type="email" required placeholder="you@example.com"
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5" for="aff-handle">Your Instagram, TikTok, or website</label>
+          <input id="aff-handle" name="social_handle" type="text" required placeholder="@yourhandle or yourwebsite.com"
+            class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5" for="aff-message">Why do you want to partner with Purest?</label>
+          <textarea id="aff-message" name="message" required rows="4" placeholder="Tell us about your community and how you'd share Purest..."
+            class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"></textarea>
+        </div>
+        <button type="submit" id="aff-submit"
+          class="w-full bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity">
+          Submit Application →
+        </button>
+      </form>
+
+      <div id="affiliate-success" class="hidden text-center py-8">
+        <div class="text-3xl mb-3">🎉</div>
+        <div class="font-serif text-xl font-medium mb-2">Application received!</div>
+        <p class="text-muted-foreground text-sm">Thank you! Pam reviews every application personally and will be in touch within 3–5 days.</p>
       </div>
-      <p class="text-xs text-muted-foreground mt-4">We review applications within 3–5 business days.</p>
     </div>
+
+    <script>
+      const form = document.getElementById('affiliate-form');
+      const success = document.getElementById('affiliate-success');
+      const btn = document.getElementById('aff-submit');
+
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btn.textContent = 'Submitting...';
+        btn.setAttribute('disabled', 'true');
+
+        const name = (document.getElementById('aff-name') as HTMLInputElement).value.trim();
+        const email = (document.getElementById('aff-email') as HTMLInputElement).value.trim();
+        const handle = (document.getElementById('aff-handle') as HTMLInputElement).value.trim();
+        const message = (document.getElementById('aff-message') as HTMLTextAreaElement).value.trim();
+        const firstName = name.split(' ')[0];
+        const lastName = name.split(' ').slice(1).join(' ');
+
+        try {
+          await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'revision': '2023-12-15' },
+            body: JSON.stringify({
+              data: {
+                type: 'subscription',
+                attributes: {
+                  custom_source: 'Affiliate Application',
+                  profile: {
+                    data: {
+                      type: 'profile',
+                      attributes: {
+                        email,
+                        first_name: firstName,
+                        last_name: lastName,
+                        properties: {
+                          application_type: 'affiliate',
+                          social_handle: handle,
+                          application_message: message,
+                          application_date: new Date().toISOString().split('T')[0]
+                        }
+                      }
+                    }
+                  }
+                },
+                relationships: {
+                  list: { data: { type: 'list', id: 'UwYEZd' } }
+                }
+              }
+            })
+          });
+        } catch (_) {}
+
+        form?.classList.add('hidden');
+        success?.classList.remove('hidden');
+      });
+    </script>
 
   </section>
 </Layout>

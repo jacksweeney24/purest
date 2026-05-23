@@ -79,29 +79,111 @@ import Layout from "@/layouts/Layout.astro";
       <p class="text-sm text-muted-foreground">— Pam Sweeney, Founder</p>
     </div>
 
-    <!-- Apply CTA -->
-    <div class="border border-border rounded-xl px-8 py-10 text-center">
-      <h2 class="font-serif text-2xl font-medium mb-3">Apply to join the Council</h2>
-      <p class="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
-        Email <strong>hydrate@purestelectrolyte.com</strong> with the subject line <strong>"Athlete Council"</strong> and tell us:
-      </p>
-      <ul class="text-sm text-muted-foreground text-left inline-block mb-8 space-y-2">
-        <li>• Your name, location, and sport or activity</li>
-        <li>• Your social media handles (any platform)</li>
-        <li>• What your training or active life looks like right now</li>
-        <li>• Why Purest fits your lifestyle</li>
-        <li>• Any races, events, or competitions coming up</li>
-      </ul>
-      <div>
-        <a
-          href="mailto:hydrate@purestelectrolyte.com?subject=Athlete Council Application"
-          class="inline-block bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity"
-        >
-          Apply to Join →
-        </a>
+    <!-- Apply Form -->
+    <div class="border border-border rounded-xl px-8 py-10">
+      <h2 class="font-serif text-2xl font-medium mb-2">Apply to join the Council</h2>
+      <p class="text-muted-foreground text-sm mb-8">Pam reviews every application personally. We keep the council small on purpose.</p>
+
+      <form id="council-form" class="space-y-5">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="ac-name">Your name</label>
+            <input id="ac-name" name="name" type="text" required placeholder="Pam Sweeney"
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="ac-email">Email address</label>
+            <input id="ac-email" name="email" type="email" required placeholder="you@example.com"
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="ac-sport">Your sport or activity</label>
+            <input id="ac-sport" name="sport" type="text" required placeholder="Running, skiing, surfing..."
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1.5" for="ac-handle">Social media handle</label>
+            <input id="ac-handle" name="social_handle" type="text" required placeholder="@yourhandle"
+              class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5" for="ac-message">Tell us about your active life and why Purest fits</label>
+          <textarea id="ac-message" name="message" required rows="4" placeholder="What does your training look like? Any upcoming races or events? Why do you love what we're doing?"
+            class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"></textarea>
+        </div>
+        <button type="submit" id="ac-submit"
+          class="w-full bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity">
+          Submit Application →
+        </button>
+      </form>
+
+      <div id="council-success" class="hidden text-center py-8">
+        <div class="text-3xl mb-3">🎉</div>
+        <div class="font-serif text-xl font-medium mb-2">Application received!</div>
+        <p class="text-muted-foreground text-sm">Thank you! Pam will review your application personally and reach out within a few days.</p>
       </div>
-      <p class="text-xs text-muted-foreground mt-4">We keep the council small on purpose. Pam reviews every application personally.</p>
     </div>
+
+    <script>
+      const form = document.getElementById('council-form');
+      const success = document.getElementById('council-success');
+      const btn = document.getElementById('ac-submit');
+
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btn.textContent = 'Submitting...';
+        btn.setAttribute('disabled', 'true');
+
+        const name = (document.getElementById('ac-name') as HTMLInputElement).value.trim();
+        const email = (document.getElementById('ac-email') as HTMLInputElement).value.trim();
+        const sport = (document.getElementById('ac-sport') as HTMLInputElement).value.trim();
+        const handle = (document.getElementById('ac-handle') as HTMLInputElement).value.trim();
+        const message = (document.getElementById('ac-message') as HTMLTextAreaElement).value.trim();
+        const firstName = name.split(' ')[0];
+        const lastName = name.split(' ').slice(1).join(' ');
+
+        try {
+          await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'revision': '2023-12-15' },
+            body: JSON.stringify({
+              data: {
+                type: 'subscription',
+                attributes: {
+                  custom_source: 'Athlete Council Application',
+                  profile: {
+                    data: {
+                      type: 'profile',
+                      attributes: {
+                        email,
+                        first_name: firstName,
+                        last_name: lastName,
+                        properties: {
+                          application_type: 'athlete_council',
+                          sport,
+                          social_handle: handle,
+                          application_message: message,
+                          application_date: new Date().toISOString().split('T')[0]
+                        }
+                      }
+                    }
+                  }
+                },
+                relationships: {
+                  list: { data: { type: 'list', id: 'Xka8K8' } }
+                }
+              }
+            })
+          });
+        } catch (_) {}
+
+        form?.classList.add('hidden');
+        success?.classList.remove('hidden');
+      });
+    </script>
 
   </section>
 </Layout>
