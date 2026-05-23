@@ -9,20 +9,21 @@ import Layout from "@/layouts/Layout.astro";
     <header class="text-center mb-16">
       <p class="text-sm uppercase tracking-widest text-muted-foreground mb-4">Partner With Purest</p>
       <h1 class="font-serif text-4xl md:text-5xl font-medium mb-6">Share what you love.<br/>Get paid for it.</h1>
-      <p class="text-lg text-muted-foreground max-w-xl mx-auto">
+      <p class="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
         If you're already telling people about Purest, you should be earning from it. Our affiliate program gives you a unique code, a real commission, and products you can actually stand behind.
       </p>
+      <a href="#apply" class="inline-block bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity">Apply Now &rarr;</a>
     </header>
 
     <!-- How It Works -->
     <div class="mb-16">
       <h2 class="font-serif text-2xl font-medium mb-8 text-center">How it works</h2>
       <div class="grid gap-6 md:grid-cols-3">
-        <div class="bg-secondary border border-border rounded-xl p-6 text-center">
+        <a href="#apply" class="bg-secondary border border-border rounded-xl p-6 text-center block hover:border-foreground/30 transition-colors">
           <div class="text-3xl mb-3">✉️</div>
           <h3 class="font-semibold mb-2">1. Apply</h3>
           <p class="text-sm text-muted-foreground">Fill out a quick application. We review within 3–5 days and send you a welcome kit.</p>
-        </div>
+        </a>
         <div class="bg-secondary border border-border rounded-xl p-6 text-center">
           <div class="text-3xl mb-3">🔗</div>
           <h3 class="font-semibold mb-2">2. Share</h3>
@@ -75,7 +76,7 @@ import Layout from "@/layouts/Layout.astro";
     </div>
 
     <!-- Apply Form -->
-    <div class="border border-border rounded-xl px-8 py-10">
+    <div id="apply" class="border border-border rounded-xl px-8 py-10">
       <h2 class="font-serif text-2xl font-medium mb-2">Ready to apply?</h2>
       <p class="text-muted-foreground text-sm mb-8">We review every application personally. You'll hear back within 3–5 business days.</p>
 
