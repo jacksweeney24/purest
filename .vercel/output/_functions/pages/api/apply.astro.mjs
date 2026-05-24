@@ -1,6 +1,8 @@
 export { renderers } from '../../renderers.mjs';
 
 const prerender = false;
+const PAM_EMAIL = "hydrate@purestelectrolyte.com";
+const FROM_EMAIL = "Purest Electrolyte <noreply@purestelectrolyte.com>";
 const POST = async ({ request }) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -22,7 +24,7 @@ const POST = async ({ request }) => {
     dateStyle: "full",
     timeStyle: "short"
   });
-  `
+  const htmlBody = `
     <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; color: #1a1a1a;">
       <h2 style="margin-top: 0; font-size: 22px;">🏅 New ${appLabel}</h2>
       <p style="color: #555; font-size: 14px;">Submitted ${submitted} (Mountain Time)</p>
@@ -59,9 +61,35 @@ const POST = async ({ request }) => {
       <p style="font-size: 13px; color: #888;">Reply directly to this email to reach the applicant.</p>
     </div>
   `;
-  {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY ?? undefined                              ;
+  if (!RESEND_API_KEY) {
     console.error("RESEND_API_KEY is not configured in Vercel environment variables.");
     return new Response(JSON.stringify({ success: true }), { status: 200, headers });
+  }
+  try {
+    const emailRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: [PAM_EMAIL],
+        reply_to: email,
+        subject: `New ${appLabel} — ${name}`,
+        html: htmlBody
+      })
+    });
+    const result = await emailRes.json();
+    if (!emailRes.ok) {
+      console.error("Resend API error:", result);
+      return new Response(JSON.stringify({ error: "Email delivery failed" }), { status: 500, headers });
+    }
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers });
+  } catch (err) {
+    console.error("Application submit error:", err);
+    return new Response(JSON.stringify({ error: "Server error" }), { status: 500, headers });
   }
 };
 const OPTIONS = async () => {

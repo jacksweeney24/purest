@@ -70,7 +70,7 @@ export const POST: APIRoute = async ({ request }) => {
     </div>
   `;
 
-  const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
+  const RESEND_API_KEY = process.env.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
 
   if (!RESEND_API_KEY) {
     console.error('RESEND_API_KEY is not configured in Vercel environment variables.');
