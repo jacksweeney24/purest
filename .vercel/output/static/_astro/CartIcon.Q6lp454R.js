@@ -1,6 +1,0 @@
-import{j as t}from"./jsx-runtime.Clu77xNG.js";import{c as n,u as o}from"./createLucideIcon.rnRkzPRs.js";import{o as i,e as a}from"./cart-store.Cikgzr2X.js";import"./index._frMCB_H.js";/**
- * @license lucide-react v1.11.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const s=[["path",{d:"M16 10a4 4 0 0 1-8 0",key:"1ltviw"}],["path",{d:"M3.103 6.034h17.794",key:"awc11p"}],["path",{d:"M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z",key:"o988cm"}]],r=n("shopping-bag",s);function f(){const e=o(a);return t.jsxs("button",{type:"button",onClick:i,"aria-label":`Open cart (${e} ${e===1?"item":"items"})`,className:"relative inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",children:[t.jsx(r,{className:"h-5 w-5"}),e>0&&t.jsx("span",{"aria-hidden":"true",className:"absolute -right-0.5 -top-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-medium leading-none text-accent-foreground",children:e})]})}export{f as default};
