@@ -134,35 +134,15 @@ import Layout from "@/layouts/Layout.astro";
         const lastName = name.split(' ').slice(1).join(' ');
 
         try {
-          await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
+          await fetch('/api/apply', {
             method: 'POST',
-            headers: { 'content-type': 'application/json', 'revision': '2023-12-15' },
+            headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
-              data: {
-                type: 'subscription',
-                attributes: {
-                  custom_source: 'Affiliate Application',
-                  profile: {
-                    data: {
-                      type: 'profile',
-                      attributes: {
-                        email,
-                        first_name: firstName,
-                        last_name: lastName,
-                        properties: {
-                          application_type: 'affiliate',
-                          social_handle: handle,
-                          application_message: message,
-                          application_date: new Date().toISOString().split('T')[0]
-                        }
-                      }
-                    }
-                  }
-                },
-                relationships: {
-                  list: { data: { type: 'list', id: 'UwYEZd' } }
-                }
-              }
+              name,
+              email,
+              social_handle: handle,
+              message,
+              application_type: 'affiliate'
             })
           });
         } catch (_) {}

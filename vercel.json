@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/apply.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
