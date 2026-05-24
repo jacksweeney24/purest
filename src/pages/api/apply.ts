@@ -1,12 +1,11 @@
 import type { APIRoute } from 'astro';
+import nodemailer from 'nodemailer';
 
 export const prerender = false;
 
 const PAM_EMAIL = 'hydrate@purestelectrolyte.com';
-const FROM_EMAIL = 'Purest Electrolyte <noreply@purestelectrolyte.com>';
 
 export const POST: APIRoute = async ({ request }) => {
-  // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
@@ -37,7 +36,6 @@ export const POST: APIRoute = async ({ request }) => {
       <h2 style="margin-top: 0; font-size: 22px;">🏅 New ${appLabel}</h2>
       <p style="color: #555; font-size: 14px;">Submitted ${submitted} (Mountain Time)</p>
       <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-
       <table style="width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.8;">
         <tr>
           <td style="padding: 6px 0; font-weight: bold; width: 160px; color: #555;">Name</td>
@@ -47,64 +45,53 @@ export const POST: APIRoute = async ({ request }) => {
           <td style="padding: 6px 0; font-weight: bold; color: #555;">Email</td>
           <td style="padding: 6px 0;"><a href="mailto:${email}" style="color: #1a1a1a;">${email}</a></td>
         </tr>
-        ${sport ? `
-        <tr>
+        ${sport ? `<tr>
           <td style="padding: 6px 0; font-weight: bold; color: #555;">Sport / Activity</td>
           <td style="padding: 6px 0;">${sport}</td>
         </tr>` : ''}
-        ${social_handle ? `
-        <tr>
+        ${social_handle ? `<tr>
           <td style="padding: 6px 0; font-weight: bold; color: #555;">Social Handle</td>
           <td style="padding: 6px 0;">${social_handle}</td>
         </tr>` : ''}
       </table>
-
       ${message ? `
       <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
       <h3 style="font-size: 15px; margin-bottom: 8px;">Their message:</h3>
       <p style="font-size: 15px; line-height: 1.7; background: #f9f9f9; padding: 16px; border-radius: 6px; margin: 0;">${message.replace(/\n/g, '<br/>')}</p>
       ` : ''}
-
       <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-      <p style="font-size: 13px; color: #888;">Reply directly to this email to reach the applicant.</p>
+      <p style="font-size: 13px; color: #888;">Hit Reply to respond directly to the applicant.</p>
     </div>
   `;
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY ?? import.meta.env.RESEND_API_KEY;
+  const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
-  if (!RESEND_API_KEY) {
-    console.error('RESEND_API_KEY is not configured in Vercel environment variables.');
-    // Still show success to the visitor — don't expose backend errors
+  if (!GMAIL_APP_PASSWORD) {
+    console.error('GMAIL_APP_PASSWORD not set in Vercel environment variables.');
     return new Response(JSON.stringify({ success: true }), { status: 200, headers });
   }
 
   try {
-    const emailRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: PAM_EMAIL,
+        pass: GMAIL_APP_PASSWORD,
       },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: [PAM_EMAIL],
-        reply_to: email,
-        subject: `New ${appLabel} — ${name}`,
-        html: htmlBody,
-      }),
     });
 
-    const result = await emailRes.json();
-
-    if (!emailRes.ok) {
-      console.error('Resend API error:', result);
-      return new Response(JSON.stringify({ error: 'Email delivery failed' }), { status: 500, headers });
-    }
+    await transporter.sendMail({
+      from: `"Purest Athlete Council" <${PAM_EMAIL}>`,
+      to: PAM_EMAIL,
+      replyTo: email,
+      subject: `New ${appLabel} — ${name}`,
+      html: htmlBody,
+    });
 
     return new Response(JSON.stringify({ success: true }), { status: 200, headers });
   } catch (err) {
-    console.error('Application submit error:', err);
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500, headers });
+    console.error('Email send error:', err);
+    return new Response(JSON.stringify({ error: 'Email delivery failed' }), { status: 500, headers });
   }
 };
 
