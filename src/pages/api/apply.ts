@@ -1,30 +1,35 @@
-// Vercel serverless function — handles athlete council & affiliate applications
-// Sends a direct email to Pam at hydrate@purestelectrolyte.com via Resend
+import type { APIRoute } from 'astro';
 
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
+export const prerender = false;
+
 const PAM_EMAIL = 'hydrate@purestelectrolyte.com';
 const FROM_EMAIL = 'Purest Electrolyte <noreply@purestelectrolyte.com>';
 
-export default async function handler(req, res) {
+export const POST: APIRoute = async ({ request }) => {
   // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json',
+  };
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  let body: any;
+  try {
+    body = await request.json();
+  } catch {
+    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers });
+  }
 
-  const { name, email, social_handle, message, sport, application_type } = req.body || {};
+  const { name, email, social_handle, message, sport, application_type } = body || {};
 
   if (!name || !email || !application_type) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers });
   }
 
   const appLabel = application_type === 'affiliate' ? 'Affiliate Application' : 'Athlete Council Application';
   const submitted = new Date().toLocaleString('en-US', {
     timeZone: 'America/Denver',
     dateStyle: 'full',
-    timeStyle: 'short'
+    timeStyle: 'short',
   });
 
   const htmlBody = `
@@ -61,43 +66,55 @@ export default async function handler(req, res) {
       ` : ''}
 
       <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-      <p style="font-size: 13px; color: #888;">Reply directly to this email to reach the applicant — just hit Reply.</p>
+      <p style="font-size: 13px; color: #888;">Reply directly to this email to reach the applicant.</p>
     </div>
   `;
 
+  const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
+
   if (!RESEND_API_KEY) {
-    console.error('RESEND_API_KEY is not set');
-    // Still return success to the visitor (don't show backend errors)
-    return res.status(200).json({ success: true, warning: 'email_not_configured' });
+    console.error('RESEND_API_KEY is not configured in Vercel environment variables.');
+    // Still show success to the visitor — don't expose backend errors
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers });
   }
 
   try {
     const emailRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: [PAM_EMAIL],
         reply_to: email,
         subject: `New ${appLabel} — ${name}`,
-        html: htmlBody
-      })
+        html: htmlBody,
+      }),
     });
 
     const result = await emailRes.json();
 
     if (!emailRes.ok) {
-      console.error('Resend error:', result);
-      return res.status(500).json({ error: 'Email delivery failed' });
+      console.error('Resend API error:', result);
+      return new Response(JSON.stringify({ error: 'Email delivery failed' }), { status: 500, headers });
     }
 
-    return res.status(200).json({ success: true });
-
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers });
   } catch (err) {
     console.error('Application submit error:', err);
-    return res.status(500).json({ error: 'Server error' });
+    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500, headers });
   }
-}
+};
+
+export const OPTIONS: APIRoute = async () => {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
+};
