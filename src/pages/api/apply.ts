@@ -3,8 +3,8 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 const PAM_CHAT_ID = '7600577677';
-const TELEGRAM_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN;
-const KLAVIYO_PRIVATE_KEY = import.meta.env.KLAVIYO_PRIVATE_KEY;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY;
 
 // Klaviyo list IDs for applicants (will be created on first use)
 const PARTNER_LIST_NAME = 'Affiliate Applications'; // Pam is renaming this in Klaviyo
