@@ -1,9 +1,149 @@
 import type { APIRoute } from 'astro';
-import nodemailer from 'nodemailer';
 
 export const prerender = false;
 
-const PAM_EMAIL = 'hydrate@purestelectrolyte.com';
+const PAM_CHAT_ID = '7600577677';
+const TELEGRAM_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN;
+const KLAVIYO_PRIVATE_KEY = import.meta.env.KLAVIYO_PRIVATE_KEY;
+
+// Klaviyo list IDs for applicants (will be created on first use)
+const AFFILIATE_LIST_NAME = 'Affiliate Applicants';
+const ATHLETE_COUNCIL_LIST_NAME = 'Athlete Council Applicants';
+
+async function klaviyoHeaders() {
+  return {
+    'Authorization': `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
+    'revision': '2024-07-15',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+}
+
+async function findOrCreateList(name: string): Promise<string | null> {
+  try {
+    const headers = await klaviyoHeaders();
+
+    // Search for existing list
+    const searchRes = await fetch(
+      `https://a.klaviyo.com/api/lists/?filter=equals(name,"${encodeURIComponent(name)}")`,
+      { headers }
+    );
+    const searchData = await searchRes.json();
+    if (searchData.data?.length > 0) {
+      return searchData.data[0].id;
+    }
+
+    // Create the list if it doesn't exist
+    const createRes = await fetch('https://a.klaviyo.com/api/lists/', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        data: { type: 'list', attributes: { name } }
+      })
+    });
+    const createData = await createRes.json();
+    return createData.data?.id || null;
+  } catch (err) {
+    console.error('Klaviyo list error:', err);
+    return null;
+  }
+}
+
+async function createOrUpdateProfile(attrs: Record<string, any>): Promise<string | null> {
+  try {
+    const headers = await klaviyoHeaders();
+    const res = await fetch('https://a.klaviyo.com/api/profiles/', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ data: { type: 'profile', attributes: attrs } })
+    });
+
+    if (res.status === 409) {
+      const conflictData = await res.json();
+      return conflictData.errors?.[0]?.meta?.duplicate_profile_id || null;
+    }
+
+    const data = await res.json();
+    return data.data?.id || null;
+  } catch (err) {
+    console.error('Klaviyo profile error:', err);
+    return null;
+  }
+}
+
+async function subscribeToList(profileId: string, listId: string) {
+  try {
+    const headers = await klaviyoHeaders();
+    await fetch(`https://a.klaviyo.com/api/lists/${listId}/relationships/profiles/`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        data: [{ type: 'profile', id: profileId }]
+      })
+    });
+  } catch (err) {
+    console.error('Klaviyo subscribe error:', err);
+  }
+}
+
+async function trackEvent(profileId: string, eventName: string, properties: Record<string, any>) {
+  try {
+    const headers = await klaviyoHeaders();
+    await fetch('https://a.klaviyo.com/api/events/', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        data: {
+          type: 'event',
+          attributes: {
+            profile: { data: { type: 'profile', id: profileId } },
+            metric: { data: { type: 'metric', attributes: { name: eventName } } },
+            properties,
+            time: new Date().toISOString(),
+          }
+        }
+      })
+    });
+  } catch (err) {
+    console.error('Klaviyo event error:', err);
+  }
+}
+
+async function sendTelegramNotification(appLabel: string, name: string, email: string, social_handle: string, sport: string, message: string) {
+  if (!TELEGRAM_BOT_TOKEN) return;
+
+  const submitted = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Denver',
+    dateStyle: 'short',
+    timeStyle: 'short',
+  });
+
+  const text = [
+    `🙌 *${appLabel}*`,
+    ``,
+    `👤 *${name}*`,
+    `📧 ${email}`,
+    social_handle ? `📱 ${social_handle}` : null,
+    sport ? `🏃 ${sport}` : null,
+    message ? `\n💬 _"${message}"_` : null,
+    ``,
+    `🕐 ${submitted} MT`,
+  ].filter(Boolean).join('\n');
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: PAM_CHAT_ID,
+        text,
+        parse_mode: 'Markdown',
+      }),
+    });
+  } catch (err) {
+    console.error('Telegram notification error:', err);
+  }
+}
 
 export const POST: APIRoute = async ({ request }) => {
   const headers = {
@@ -24,75 +164,59 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers });
   }
 
-  const appLabel = application_type === 'affiliate' ? 'Affiliate Application' : 'Athlete Council Application';
-  const submitted = new Date().toLocaleString('en-US', {
-    timeZone: 'America/Denver',
-    dateStyle: 'full',
-    timeStyle: 'short',
-  });
+  const isAffiliate = application_type === 'affiliate';
+  const appLabel = isAffiliate ? 'New Affiliate Application' : 'New Athlete Council Application';
+  const listName = isAffiliate ? AFFILIATE_LIST_NAME : ATHLETE_COUNCIL_LIST_NAME;
+  const eventName = isAffiliate ? 'Affiliate Application Submitted' : 'Athlete Council Application Submitted';
 
-  const htmlBody = `
-    <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; color: #1a1a1a;">
-      <h2 style="margin-top: 0; font-size: 22px;">🏅 New ${appLabel}</h2>
-      <p style="color: #555; font-size: 14px;">Submitted ${submitted} (Mountain Time)</p>
-      <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-      <table style="width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.8;">
-        <tr>
-          <td style="padding: 6px 0; font-weight: bold; width: 160px; color: #555;">Name</td>
-          <td style="padding: 6px 0;">${name}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; font-weight: bold; color: #555;">Email</td>
-          <td style="padding: 6px 0;"><a href="mailto:${email}" style="color: #1a1a1a;">${email}</a></td>
-        </tr>
-        ${sport ? `<tr>
-          <td style="padding: 6px 0; font-weight: bold; color: #555;">Sport / Activity</td>
-          <td style="padding: 6px 0;">${sport}</td>
-        </tr>` : ''}
-        ${social_handle ? `<tr>
-          <td style="padding: 6px 0; font-weight: bold; color: #555;">Social Handle</td>
-          <td style="padding: 6px 0;">${social_handle}</td>
-        </tr>` : ''}
-      </table>
-      ${message ? `
-      <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-      <h3 style="font-size: 15px; margin-bottom: 8px;">Their message:</h3>
-      <p style="font-size: 15px; line-height: 1.7; background: #f9f9f9; padding: 16px; border-radius: 6px; margin: 0;">${message.replace(/\n/g, '<br/>')}</p>
-      ` : ''}
-      <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;" />
-      <p style="font-size: 13px; color: #888;">Hit Reply to respond directly to the applicant.</p>
-    </div>
-  `;
+  const firstName = name.split(' ')[0];
+  const lastName = name.split(' ').slice(1).join(' ');
 
-  const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+  // Run in parallel — don't block on any of these
+  const tasks: Promise<any>[] = [];
 
-  if (!GMAIL_APP_PASSWORD) {
-    console.error('GMAIL_APP_PASSWORD not set in Vercel environment variables.');
-    return new Response(JSON.stringify({ success: true }), { status: 200, headers });
+  if (KLAVIYO_PRIVATE_KEY) {
+    tasks.push(
+      (async () => {
+        const [listId, profileId] = await Promise.all([
+          findOrCreateList(listName),
+          createOrUpdateProfile({
+            email,
+            first_name: firstName,
+            last_name: lastName,
+            properties: {
+              social_handle: social_handle || '',
+              application_type,
+              application_message: message || '',
+              sport: sport || '',
+            }
+          })
+        ]);
+
+        if (profileId) {
+          const followUps: Promise<any>[] = [
+            trackEvent(profileId, eventName, {
+              name, email,
+              social_handle: social_handle || '',
+              message: message || '',
+              sport: sport || '',
+              application_type,
+            })
+          ];
+          if (listId) followUps.push(subscribeToList(profileId, listId));
+          await Promise.all(followUps);
+        }
+      })()
+    );
   }
 
-  try {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: PAM_EMAIL,
-        pass: GMAIL_APP_PASSWORD,
-      },
-    });
+  tasks.push(
+    sendTelegramNotification(appLabel, name, email, social_handle || '', sport || '', message || '')
+  );
 
-    await transporter.sendMail({
-      from: `"Purest Athlete Council" <${PAM_EMAIL}>`,
-      to: PAM_EMAIL,
-      replyTo: email,
-      subject: `New ${appLabel} — ${name}`,
-      html: htmlBody,
-    });
+  await Promise.allSettled(tasks);
 
-    return new Response(JSON.stringify({ success: true }), { status: 200, headers });
-  } catch (err) {
-    console.error('Email send error:', err);
-    return new Response(JSON.stringify({ error: 'Email delivery failed' }), { status: 500, headers });
-  }
+  return new Response(JSON.stringify({ success: true }), { status: 200, headers });
 };
 
 export const OPTIONS: APIRoute = async () => {
