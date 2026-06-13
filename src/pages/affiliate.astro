@@ -124,6 +124,10 @@ import Layout from "@/layouts/Layout.astro";
         </button>
       </form>
 
+      <div id="partner-error" class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 text-center">
+        Something went wrong — please try again or email us at <a href="mailto:pam@purestelectrolyte.com" class="underline">pam@purestelectrolyte.com</a>
+      </div>
+
       <div id="partner-success" class="hidden text-center py-8">
         <div class="text-3xl mb-3">🎉</div>
         <div class="font-serif text-xl font-medium mb-2">Application received!</div>
@@ -134,12 +138,14 @@ import Layout from "@/layouts/Layout.astro";
     <script>
       const form = document.getElementById('partner-form');
       const success = document.getElementById('partner-success');
+      const errorMsg = document.getElementById('partner-error');
       const btn = document.getElementById('p-submit') as HTMLButtonElement;
 
       form?.addEventListener('submit', async (e) => {
         e.preventDefault();
         btn.textContent = 'Submitting...';
         btn.setAttribute('disabled', 'true');
+        errorMsg?.classList.add('hidden');
 
         const name = (document.getElementById('p-name') as HTMLInputElement).value.trim();
         const email = (document.getElementById('p-email') as HTMLInputElement).value.trim();
@@ -153,55 +159,31 @@ import Layout from "@/layouts/Layout.astro";
           : councilChecked ? 'Athlete Council'
           : 'Affiliate';
 
-        const firstName = name.split(' ')[0];
-        const lastName = name.split(' ').slice(1).join(' ');
-
         try {
-          // Submit directly to Klaviyo client-side API — no server env vars needed
-          await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
+          const res = await fetch('/api/partner-application', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'revision': '2024-10-15',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              data: {
-                type: 'subscription',
-                attributes: {
-                  custom_source: 'Brand Partner Program',
-                  profile: {
-                    data: {
-                      type: 'profile',
-                      attributes: {
-                        email,
-                        first_name: firstName,
-                        last_name: lastName,
-                        properties: {
-                          social_handle: handle,
-                          sport,
-                          partner_type: partnerType,
-                          application_message: message,
-                          source: 'brand-partner-application',
-                        }
-                      }
-                    }
-                  }
-                },
-                relationships: {
-                  list: {
-                    data: {
-                      type: 'list',
-                      id: 'UwYEZd'  // Affiliate Applications list (Pam renaming to Brand Partner Applications)
-                    }
-                  }
-                }
-              }
-            })
+              name,
+              email,
+              social_handle: handle,
+              sport,
+              partner_type: partnerType,
+              message,
+            }),
           });
-        } catch (_) {}
 
-        form?.classList.add('hidden');
-        success?.classList.remove('hidden');
+          if (!res.ok) throw new Error('Server error');
+
+          form?.classList.add('hidden');
+          success?.classList.remove('hidden');
+        } catch (_) {
+          btn.textContent = 'Submit Application →';
+          btn.removeAttribute('disabled');
+          if (errorMsg) {
+            errorMsg.classList.remove('hidden');
+          }
+        }
       });
     </script>
 
