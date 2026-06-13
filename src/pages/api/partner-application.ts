@@ -55,8 +55,8 @@ export const POST: APIRoute = async ({ request }) => {
       profileId = pd?.errors?.[0]?.meta?.duplicate_profile_id ?? null;
     }
 
-    // 2. Subscribe to Brand Partner Applications list via bulk-create-jobs
-    // This triggers list-based flows WITHOUT setting global email consent (no double opt-in)
+    // 2. Subscribe to Brand Partner Applications list — triggers the Klaviyo flow
+    // bulk-create-jobs only accepts email; profile properties already stored in step 1
     await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
       method: 'POST',
       headers: klaviyoHeaders,
@@ -66,27 +66,11 @@ export const POST: APIRoute = async ({ request }) => {
           attributes: {
             custom_source: 'Brand Partner Program',
             profiles: {
-              data: [{
-                type: 'profile',
-                attributes: {
-                  email,
-                  first_name: firstName,
-                  last_name: lastName,
-                  properties: {
-                    social_handle,
-                    sport,
-                    partner_type,
-                    application_message: message,
-                    source: 'brand-partner-application',
-                  },
-                },
-              }],
+              data: [{ type: 'profile', attributes: { email } }],
             },
           },
           relationships: {
-            list: {
-              data: { type: 'list', id: 'UwYEZd' },
-            },
+            list: { data: { type: 'list', id: 'UwYEZd' } },
           },
         },
       }),
