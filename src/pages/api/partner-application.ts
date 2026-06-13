@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
       'revision': '2024-10-15',
     };
 
-    // 1. Create/update profile with all form data (NO email consent — prevents double opt-in spam)
+    // 1. Create/update the profile with all form data
     const profileRes = await fetch('https://a.klaviyo.com/api/profiles/', {
       method: 'POST',
       headers: klaviyoHeaders,
@@ -46,7 +46,6 @@ export const POST: APIRoute = async ({ request }) => {
       }),
     });
 
-    // Get profile id (409 = already exists, use Location header or re-fetch)
     let profileId: string | null = null;
     if (profileRes.status === 201) {
       const pd = await profileRes.json();
@@ -56,16 +55,42 @@ export const POST: APIRoute = async ({ request }) => {
       profileId = pd?.errors?.[0]?.meta?.duplicate_profile_id ?? null;
     }
 
-    // 2. Add profile to Brand Partner Applications list (direct relationship, no consent trigger)
-    if (profileId) {
-      await fetch(`https://a.klaviyo.com/api/lists/UwYEZd/relationships/profiles/`, {
-        method: 'POST',
-        headers: klaviyoHeaders,
-        body: JSON.stringify({
-          data: [{ type: 'profile', id: profileId }],
-        }),
-      });
-    }
+    // 2. Subscribe to Brand Partner Applications list via bulk-create-jobs
+    // This triggers list-based flows WITHOUT setting global email consent (no double opt-in)
+    await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
+      method: 'POST',
+      headers: klaviyoHeaders,
+      body: JSON.stringify({
+        data: {
+          type: 'profile-subscription-bulk-create-job',
+          attributes: {
+            custom_source: 'Brand Partner Program',
+            profiles: {
+              data: [{
+                type: 'profile',
+                attributes: {
+                  email,
+                  first_name: firstName,
+                  last_name: lastName,
+                  properties: {
+                    social_handle,
+                    sport,
+                    partner_type,
+                    application_message: message,
+                    source: 'brand-partner-application',
+                  },
+                },
+              }],
+            },
+          },
+          relationships: {
+            list: {
+              data: { type: 'list', id: 'UwYEZd' },
+            },
+          },
+        },
+      }),
+    });
 
     // 2. Notify Pam via Telegram
     const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
