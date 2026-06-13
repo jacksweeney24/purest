@@ -149,22 +149,53 @@ import Layout from "@/layouts/Layout.astro";
 
         const affiliateChecked = (document.getElementById('p-type-affiliate') as HTMLInputElement).checked;
         const councilChecked = (document.getElementById('p-type-council') as HTMLInputElement).checked;
-        const partnerType = affiliateChecked && councilChecked ? 'both'
-          : affiliateChecked ? 'affiliate'
-          : councilChecked ? 'athlete_council'
-          : 'affiliate';
+        const partnerType = affiliateChecked && councilChecked ? 'Affiliate + Athlete Council'
+          : councilChecked ? 'Athlete Council'
+          : 'Affiliate';
+
+        const firstName = name.split(' ')[0];
+        const lastName = name.split(' ').slice(1).join(' ');
 
         try {
-          await fetch('/api/apply', {
+          // Submit directly to Klaviyo client-side API — no server env vars needed
+          await fetch('https://a.klaviyo.com/client/subscriptions/?company_id=TYfncY', {
             method: 'POST',
-            headers: { 'content-type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'revision': '2024-10-15',
+            },
             body: JSON.stringify({
-              name,
-              email,
-              social_handle: handle,
-              message,
-              sport,
-              application_type: partnerType,
+              data: {
+                type: 'subscription',
+                attributes: {
+                  custom_source: 'Brand Partner Program',
+                  profile: {
+                    data: {
+                      type: 'profile',
+                      attributes: {
+                        email,
+                        first_name: firstName,
+                        last_name: lastName,
+                        properties: {
+                          social_handle: handle,
+                          sport,
+                          partner_type: partnerType,
+                          application_message: message,
+                          source: 'brand-partner-application',
+                        }
+                      }
+                    }
+                  }
+                },
+                relationships: {
+                  list: {
+                    data: {
+                      type: 'list',
+                      id: 'UwYEZd'  // Affiliate Applications list (Pam renaming to Brand Partner Applications)
+                    }
+                  }
+                }
+              }
             })
           });
         } catch (_) {}
