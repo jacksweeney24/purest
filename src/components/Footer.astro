@@ -13,12 +13,6 @@ const year = new Date().getFullYear();
       <div class="space-y-3 md:col-span-1">
         <Logo className="h-7" />
         <p class="text-sm text-muted-foreground">{siteConfig.brand.tagline}</p>
-        <a
-          href={`mailto:${siteConfig.footer.email}`}
-          class="block text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {siteConfig.footer.email}
-        </a>
       </div>
 
       <!-- Shop -->
@@ -69,7 +63,7 @@ const year = new Date().getFullYear();
           <li>
             <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">Contact Us</a>
           </li>
-          <li class="text-xs select-all">{siteConfig.footer.email}</li>
+          <li><a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors break-all">{siteConfig.footer.email}</a></li>
           <li>
             <a
               href="https://purestelectrolyte.myshopify.com/tools/recurring/login"
