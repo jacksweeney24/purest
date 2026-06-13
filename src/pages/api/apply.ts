@@ -7,8 +7,8 @@ const TELEGRAM_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN;
 const KLAVIYO_PRIVATE_KEY = import.meta.env.KLAVIYO_PRIVATE_KEY;
 
 // Klaviyo list IDs for applicants (will be created on first use)
-const AFFILIATE_LIST_NAME = 'Affiliate Applicants';
-const ATHLETE_COUNCIL_LIST_NAME = 'Athlete Council Applicants';
+const AFFILIATE_LIST_NAME = 'Affiliate Applications';
+const ATHLETE_COUNCIL_LIST_NAME = 'Athlete Council Applications';
 
 async function klaviyoHeaders() {
   return {
