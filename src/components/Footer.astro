@@ -63,7 +63,7 @@ const year = new Date().getFullYear();
           <li>
             <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">Contact Us</a>
           </li>
-          <li><a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors break-all">{siteConfig.footer.email}</a></li>
+
           <li>
             <a
               href="https://purestelectrolyte.myshopify.com/tools/recurring/login"
@@ -77,8 +77,9 @@ const year = new Date().getFullYear();
 
     </div>
 
-    <div class="mt-10 border-t border-border/40 pt-6 text-sm text-muted-foreground">
-      © {year} {siteConfig.brand.name}. All rights reserved.
+    <div class="mt-10 border-t border-border/40 pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-muted-foreground">
+      <span>© {year} {siteConfig.brand.name}. All rights reserved.</span>
+      <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">{siteConfig.footer.email}</a>
     </div>
   </div>
 </footer>
