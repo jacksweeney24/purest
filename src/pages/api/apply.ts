@@ -7,8 +7,7 @@ const TELEGRAM_BOT_TOKEN = import.meta.env.TELEGRAM_BOT_TOKEN;
 const KLAVIYO_PRIVATE_KEY = import.meta.env.KLAVIYO_PRIVATE_KEY;
 
 // Klaviyo list IDs for applicants (will be created on first use)
-const AFFILIATE_LIST_NAME = 'Affiliate Applications';
-const ATHLETE_COUNCIL_LIST_NAME = 'Athlete Council Applications';
+const PARTNER_LIST_NAME = 'Affiliate Applications'; // Pam is renaming this in Klaviyo
 
 async function klaviyoHeaders() {
   return {
@@ -164,10 +163,12 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers });
   }
 
-  const isAffiliate = application_type === 'affiliate';
-  const appLabel = isAffiliate ? 'New Affiliate Application' : 'New Athlete Council Application';
-  const listName = isAffiliate ? AFFILIATE_LIST_NAME : ATHLETE_COUNCIL_LIST_NAME;
-  const eventName = isAffiliate ? 'Affiliate Application Submitted' : 'Athlete Council Application Submitted';
+  const typeLabel = application_type === 'athlete_council' ? 'Athlete Council'
+    : application_type === 'both' ? 'Affiliate + Athlete Council'
+    : 'Affiliate';
+  const appLabel = `New Partner Application — ${typeLabel}`;
+  const listName = PARTNER_LIST_NAME;
+  const eventName = 'Partner Application Submitted';
 
   const firstName = name.split(' ')[0];
   const lastName = name.split(' ').slice(1).join(' ');
