@@ -16,46 +16,56 @@ export const POST: APIRoute = async ({ request }) => {
 
     const firstName = name.split(' ')[0];
     const lastName = name.split(' ').slice(1).join(' ');
+    const klaviyoKey = import.meta.env.KLAVIYO_PRIVATE_KEY || 'pk_TYfncY_9f43fa7f9f876e4fd1eb52fd60459763e8';
+    const klaviyoHeaders = {
+      'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
+      'Content-Type': 'application/json',
+      'revision': '2024-10-15',
+    };
 
-    // 1. Add to Klaviyo Affiliate Applications list
-    const companyId = 'TYfncY';
-    const klaviyoRes = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${companyId}`, {
+    // 1. Create/update profile with all form data (NO email consent — prevents double opt-in spam)
+    const profileRes = await fetch('https://a.klaviyo.com/api/profiles/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'revision': '2024-10-15',
-      },
+      headers: klaviyoHeaders,
       body: JSON.stringify({
         data: {
-          type: 'subscription',
+          type: 'profile',
           attributes: {
-            custom_source: 'Brand Partner Program',
-            profile: {
-              data: {
-                type: 'profile',
-                attributes: {
-                  email,
-                  first_name: firstName,
-                  last_name: lastName,
-                  properties: {
-                    social_handle,
-                    sport,
-                    partner_type,
-                    application_message: message,
-                    source: 'brand-partner-application',
-                  },
-                },
-              },
-            },
-          },
-          relationships: {
-            list: {
-              data: { type: 'list', id: 'UwYEZd' },
+            email,
+            first_name: firstName,
+            last_name: lastName,
+            properties: {
+              social_handle,
+              sport,
+              partner_type,
+              application_message: message,
+              source: 'brand-partner-application',
             },
           },
         },
       }),
     });
+
+    // Get profile id (409 = already exists, use Location header or re-fetch)
+    let profileId: string | null = null;
+    if (profileRes.status === 201) {
+      const pd = await profileRes.json();
+      profileId = pd?.data?.id ?? null;
+    } else if (profileRes.status === 409) {
+      const pd = await profileRes.json();
+      profileId = pd?.errors?.[0]?.meta?.duplicate_profile_id ?? null;
+    }
+
+    // 2. Add profile to Brand Partner Applications list (direct relationship, no consent trigger)
+    if (profileId) {
+      await fetch(`https://a.klaviyo.com/api/lists/UwYEZd/relationships/profiles/`, {
+        method: 'POST',
+        headers: klaviyoHeaders,
+        body: JSON.stringify({
+          data: [{ type: 'profile', id: profileId }],
+        }),
+      });
+    }
 
     // 2. Notify Pam via Telegram
     const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
