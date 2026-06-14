@@ -110,6 +110,14 @@ import Layout from "@/layouts/Layout.astro";
             class="w-full border border-border rounded-lg px-4 py-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20 resize-none"></textarea>
         </div>
 
+        <!-- Honeypot: hidden from real users, bots fill it in automatically -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;tab-index:-1;">
+          <label for="p-url">Leave this blank</label>
+          <input id="p-url" name="url" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Timing check: real humans take a few seconds to fill in a form -->
+        <input type="hidden" name="form_loaded_at" id="p-loaded-at" value="" />
+
         <button type="submit" id="p-submit"
           class="w-full bg-foreground text-background font-semibold px-8 py-4 rounded-lg hover:opacity-80 transition-opacity">
           Submit Application &rarr;
@@ -135,6 +143,10 @@ import Layout from "@/layouts/Layout.astro";
   const errorMsg = document.getElementById('partner-error');
   const btn = document.getElementById('p-submit') as HTMLButtonElement;
 
+  // Record when the form was loaded so we can check timing server-side
+  const loadedAtField = document.getElementById('p-loaded-at') as HTMLInputElement;
+  if (loadedAtField) loadedAtField.value = Date.now().toString();
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     btn.textContent = 'Submitting...';
@@ -146,6 +158,8 @@ import Layout from "@/layouts/Layout.astro";
     const handle = (document.getElementById('p-handle') as HTMLInputElement).value.trim();
     const sport = (document.getElementById('p-sport') as HTMLInputElement).value.trim();
     const message = (document.getElementById('p-message') as HTMLTextAreaElement).value.trim();
+    const honeypot = (document.getElementById('p-url') as HTMLInputElement).value;
+    const loadedAt = (document.getElementById('p-loaded-at') as HTMLInputElement).value;
 
     try {
       const res = await fetch('/api/partner-application', {
@@ -158,6 +172,8 @@ import Layout from "@/layouts/Layout.astro";
           sport,
           partner_type: 'Brand Partner',
           message,
+          url: honeypot,
+          form_loaded_at: loadedAt,
         }),
       });
 

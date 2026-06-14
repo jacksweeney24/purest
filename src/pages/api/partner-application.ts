@@ -5,13 +5,33 @@ import type { APIRoute } from 'astro';
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { name, email, social_handle, sport, partner_type, message } = body;
+    const { name, email, social_handle, sport, partner_type, message, url: honeypot, form_loaded_at } = body;
 
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ success: false, error: 'Missing required fields' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
+    }
+
+    // 🪤 Honeypot check — bots fill in hidden fields, real humans don't see them
+    if (honeypot && honeypot.trim() !== '') {
+      // Silently succeed so bots think they got through
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // ⏱ Timing check — bots submit instantly, real humans take at least 3 seconds
+    if (form_loaded_at) {
+      const elapsed = Date.now() - parseInt(form_loaded_at, 10);
+      if (elapsed < 3000) {
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     const firstName = name.split(' ')[0];
