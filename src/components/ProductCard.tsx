@@ -104,7 +104,7 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group flex flex-col">
-      <a href={`/products/${product.handle}`} className="block relative flex-1">
+      <a href={`/products/${product.handle}`} className="block relative">
         {isBundle && (
           <div className="absolute top-3 left-3 z-10 bg-foreground text-background text-xs font-medium px-3 py-1 rounded-full">
             Best Value
@@ -150,12 +150,12 @@ export default function ProductCard({ product }: Props) {
       {hasVariants ? (
         <a
           href={`/products/${product.handle}`}
-          className="mt-4 inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+          className="mt-auto inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
         >
           Choose flavor →
         </a>
       ) : hasSubscription && firstPlanPrice ? (
-        <div className="mt-4 flex flex-col gap-2">
+        <div className="mt-auto pt-4 flex flex-col gap-2">
           {/* One-time button — always visible */}
           <button
             onClick={handleAdd}
@@ -221,7 +221,7 @@ export default function ProductCard({ product }: Props) {
         </div>
       ) : (
         <Button
-          className="mt-4"
+          className="mt-auto"
           variant="outline"
           disabled={soldOut}
           onClick={handleAdd}
