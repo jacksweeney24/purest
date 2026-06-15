@@ -104,7 +104,7 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <article className="group flex flex-col">
-      <a href={`/products/${product.handle}`} className="block relative">
+      <a href={`/products/${product.handle}`} className="block relative flex-1">
         {isBundle && (
           <div className="absolute top-3 left-3 z-10 bg-foreground text-background text-xs font-medium px-3 py-1 rounded-full">
             Best Value
