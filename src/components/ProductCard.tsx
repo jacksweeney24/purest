@@ -126,16 +126,21 @@ export default function ProductCard({ product }: Props) {
           <div className="flex items-baseline justify-between gap-2">
             <h3 className="text-base font-medium">{product.title}</h3>
             <div className="flex items-baseline gap-1.5 tabular-nums">
-              {compareAt && parseFloat(compareAt.amount) > parseFloat(price.amount) && (
+              {compareAt && parseFloat(compareAt.amount) > parseFloat(price.amount) ? (
                 <span className="text-sm text-muted-foreground line-through">
                   {formatPrice(compareAt.amount, compareAt.currencyCode)}
                 </span>
-              )}
+              ) : isBundle ? (
+                <span className="text-sm text-muted-foreground line-through">$66.98</span>
+              ) : null}
               <span className="text-base font-semibold">
                 {formatPrice(price.amount, price.currencyCode)}
               </span>
             </div>
           </div>
+          {isBundle && (
+            <p className="text-xs font-medium text-green-700 mt-0.5">You save $17.98 vs. buying separately</p>
+          )}
           <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
             {(flavorCopy as any)[product.handle]?.tagline ?? product.description}
           </p>
