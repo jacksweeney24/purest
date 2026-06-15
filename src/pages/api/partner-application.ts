@@ -36,7 +36,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     const firstName = name.split(' ')[0];
     const lastName = name.split(' ').slice(1).join(' ');
-    const klaviyoKey = import.meta.env.KLAVIYO_PRIVATE_KEY || 'pk_TYfncY_9f43fa7f9f876e4fd1eb52fd60459763e8';
+    const klaviyoKey = import.meta.env.KLAVIYO_PRIVATE_KEY;
+    if (!klaviyoKey) {
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500 });
+    }
     const klaviyoHeaders = {
       'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
       'Content-Type': 'application/json',
