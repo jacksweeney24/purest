@@ -20,14 +20,12 @@ import Layout from "@/layouts/Layout.astro";
       <div>
         <h2 class="font-serif text-2xl mb-3">What's Actually in Purest?</h2>
         <div class="grid gap-4 sm:grid-cols-2">
-          <div class="rounded-xl border border-border p-5">
-            <div class="text-2xl mb-2">🍋</div>
-            <h3 class="font-medium mb-1">Freeze-Dried Real Fruit</h3>
+          <div class="border-l-4 border-foreground pl-5 py-1">
+            <h3 class="font-serif font-semibold text-lg mb-1">Freeze-Dried Real Fruit</h3>
             <p class="text-sm text-muted-foreground">Whole fruit — ginger, limes, cherries, cranberries, hibiscus — freeze-dried to lock in flavor and natural sugars. No artificial flavoring. No concentrates. Real fruit.</p>
           </div>
-          <div class="rounded-xl border border-border p-5">
-            <div class="text-2xl mb-2">🧂</div>
-            <h3 class="font-medium mb-1">French Gray Sea Salt</h3>
+          <div class="border-l-4 border-foreground pl-5 py-1">
+            <h3 class="font-serif font-semibold text-lg mb-1">French Gray Sea Salt</h3>
             <p class="text-sm text-muted-foreground">Hand-harvested from France's Atlantic coast. Unrefined, unbleached, naturally rich in 85+ trace minerals. Not the cheap table salt used in most sports drinks.</p>
           </div>
         </div>
@@ -37,22 +35,22 @@ import Layout from "@/layouts/Layout.astro";
         <h2 class="font-serif text-2xl mb-4">What's NOT in Purest</h2>
         <div class="grid gap-3 sm:grid-cols-2">
           {[
-            ["❌", "Added sugar", "No sucrose, fructose, or glucose added"],
-            ["❌", "Artificial sweeteners", "No sucralose, aspartame, or synthetic sweeteners"],
-            ["❌", "Food dyes", "No Red 40, Blue 1, Yellow 5 or any synthetic coloring"],
-            ["❌", "Maltodextrin", "A cheap filler that spikes blood sugar — not here"],
-            ["❌", "Natural flavors", "An industry loophole for lab-made chemicals — we use actual fruit"],
-            ["❌", "Preservatives", "Nothing to extend shelf life artificially"],
-            ["❌", "Anti-caking agents", "No silicon dioxide or other processing aids"],
-          ].map(([icon, title, desc]) => (
-            <div class="flex gap-3 items-start p-3 rounded-lg bg-secondary/60">
-              <span class="text-base mt-0.5">{icon}</span>
+            ["Added sugar", "No sucrose, fructose, or glucose added"],
+            ["Artificial sweeteners", "No sucralose, aspartame, or synthetic sweeteners"],
+            ["Food dyes", "No Red 40, Blue 1, Yellow 5 or any synthetic coloring"],
+            ["Maltodextrin", "A cheap filler that spikes blood sugar — not here"],
+            ["Natural flavors", "An industry loophole for lab-made chemicals — we use actual fruit"],
+            ["Preservatives", "Nothing to extend shelf life artificially"],
+            ["Anti-caking agents", "No silicon dioxide or other processing aids"],
+          ].map(([title, desc]) => (
+            <div class="flex gap-3 items-start p-3 border-b border-border last:border-0">
+              <span class="text-xs font-bold text-muted-foreground mt-0.5 shrink-0">✕</span>
               <div>
                 <p class="text-sm font-medium">{title}</p>
                 <p class="text-xs text-muted-foreground mt-0.5">{desc}</p>
               </div>
             </div>
-          ))}
+          ))
         </div>
       </div>
 
