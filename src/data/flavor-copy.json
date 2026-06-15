@@ -5,7 +5,7 @@
     "bestFor": ["Morning hydration", "Long runs and hikes", "Post-workout recovery", "High altitude days"],
     "howToUse": "Mix one scoop into 12–16 oz of cold water. Drink before, during, or after exercise — or any time you need to feel human again.",
     "flavorNote": "Bright and citrusy with a warm ginger finish. Not sweet. Refreshing.",
-    "badge": "⭐ Our #1 Best Seller"
+    "badge": "Our #1 Best Seller"
   },
   "10-count-hibiscus-lime": {
     "tagline": "Floral, tart, and unexpectedly beautiful. Like summer in a jar.",
@@ -13,7 +13,7 @@
     "bestFor": ["Hot summer days", "Post-yoga or pilates", "Afternoon slump", "When you want something beautiful"],
     "howToUse": "Mix one scoop into 12–16 oz of cold water. Gorgeous over ice. Works especially well on hot days when you need hydration that feels like a treat.",
     "flavorNote": "Floral and tart with a hint of sweetness. Light and refreshing.",
-    "badge": "🌺 Fan Favorite"
+    "badge": "Fan Favorite"
   },
   "10-count-chocolate-cordyceps-1": {
     "tagline": "Your recovery flavor. Rich chocolate + cordyceps for the afternoon slump.",
@@ -21,7 +21,7 @@
     "bestFor": ["Post-workout recovery", "Afternoon energy dip", "Long training days", "When coffee isn't cutting it"],
     "howToUse": "Mix one scoop into 12–16 oz of water. Best after workouts or in the afternoon. Can also be mixed into warm water for a cozy drink.",
     "flavorNote": "Rich and chocolatey with earthy depth. Satisfying, not sweet.",
-    "badge": "🍄 Recovery Formula"
+    "badge": "Recovery Formula"
   },
   "10-serving-passion-cherry": {
     "tagline": "The sweetest one. Smooth, ripe, and easy to crave any time of day.",
@@ -29,7 +29,7 @@
     "bestFor": ["First-timers", "Kids and teens", "Light workouts", "Anytime cravings"],
     "howToUse": "Mix one scoop into 12–16 oz of cold water. The most crowd-pleasing flavor — great for sharing.",
     "flavorNote": "Smooth and fruity with a natural sweetness. The most approachable flavor.",
-    "badge": "🍒 Most Approachable"
+    "badge": "Most Approachable"
   },
   "10-servings-cranberry": {
     "tagline": "Crisp, refreshing, and perfectly tart. The one that wakes you up.",
@@ -37,7 +37,7 @@
     "bestFor": ["Morning wake-up", "Cold weather runs", "Skiing and snowboarding", "When you need a jolt"],
     "howToUse": "Mix one scoop into 12–16 oz of cold water. Especially refreshing over ice or after outdoor winter activity.",
     "flavorNote": "Tart and crisp with a cooling mint finish. Bold and refreshing.",
-    "badge": "❄️ Bold & Bracing"
+    "badge": "Bold & Bracing"
   },
   "20-count-variety-pack": {
     "tagline": "Try all 5 flavors. Find your favorite. Five days of real hydration.",
@@ -45,7 +45,7 @@
     "bestFor": ["First-time buyers", "Gift for a friend", "Race expos and events", "Travel-friendly hydration"],
     "howToUse": "Each vial makes one serving. Mix with 12–16 oz of cold water. Try a different flavor each day.",
     "flavorNote": "All five flavors in one kit: Ginger LimeAid, Hibiscus Lime, Chocolate Cordyceps, Passion Cherry, and Cranberry Mint.",
-    "badge": "🎁 Best Starting Point"
+    "badge": "Best Starting Point"
   },
   "free-purest-glass-water-bottle": {
     "tagline": "Pure taste, zero plastic. The perfect companion for your daily hydration ritual.",
@@ -53,6 +53,6 @@
     "bestFor": ["Daily use at home or office", "Gym and studio", "Hiking and outdoor adventures", "Anywhere you bring water"],
     "howToUse": "Add your Purest scoop directly to the bottle, fill with cold water, shake, and go. Dishwasher safe.",
     "flavorNote": "No plastic taste. Just pure water and Purest.",
-    "badge": "🍶 Zero Plastic"
+    "badge": "Zero Plastic"
   }
 }
