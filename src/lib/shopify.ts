@@ -293,7 +293,7 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
       priceRange { minVariantPrice { amount currencyCode } }
       images(first: 10) { edges { node { url altText } } }
       variants(first: 10) {
-        edges { node { id title price { amount currencyCode } compareAtPrice { amount currencyCode } availableForSale } }
+        edges { node { id title price { amount currencyCode } compareAtPrice { amount currencyCode } availableForSale quantityAvailable } }
       }
       sellingPlanGroups(first: 5) {
         edges {

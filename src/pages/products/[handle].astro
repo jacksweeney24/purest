@@ -181,6 +181,15 @@ const price = new Intl.NumberFormat("en-US", {
           </div>
         </div>
 
+        {product.variants?.some((v: any) => v.availableForSale && (v.quantityAvailable ?? 1) <= 0) && (
+          <div class="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 mb-4">
+            <span class="text-lg">⏳</span>
+            <div>
+              <p class="font-semibold text-amber-900 text-sm">Currently on backorder</p>
+              <p class="text-amber-800 text-sm">Order now and we'll ship when it's available.</p>
+            </div>
+          </div>
+        )}
         {product.descriptionHtml ? (
           <div class="text-base leading-relaxed text-foreground/75 space-y-3 prose prose-sm max-w-none" set:html={product.descriptionHtml} />
         ) : product.description ? (
