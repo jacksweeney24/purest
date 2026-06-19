@@ -37,69 +37,62 @@ export const POST: APIRoute = async ({ request }) => {
     const firstName = name.split(' ')[0];
     const lastName = name.split(' ').slice(1).join(' ');
     const klaviyoKey = import.meta.env.KLAVIYO_PRIVATE_KEY;
-    if (!klaviyoKey) {
-      return new Response(JSON.stringify({ error: 'Server configuration error' }), { status: 500 });
-    }
-    const klaviyoHeaders = {
-      'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
-      'Content-Type': 'application/json',
-      'revision': '2024-10-15',
-    };
 
-    // 1. Create/update the profile with all form data
-    const profileRes = await fetch('https://a.klaviyo.com/api/profiles/', {
-      method: 'POST',
-      headers: klaviyoHeaders,
-      body: JSON.stringify({
-        data: {
-          type: 'profile',
-          attributes: {
-            email,
-            first_name: firstName,
-            last_name: lastName,
-            properties: {
-              social_handle,
-              sport,
-              partner_type,
-              application_message: message,
-              source: 'brand-partner-application',
+    // Only call Klaviyo if the key is available
+    if (klaviyoKey) {
+      const klaviyoHeaders = {
+        'Authorization': `Klaviyo-API-Key ${klaviyoKey}`,
+        'Content-Type': 'application/json',
+        'revision': '2024-10-15',
+      };
+
+      // 1. Create/update the profile with all form data
+      const profileRes = await fetch('https://a.klaviyo.com/api/profiles/', {
+        method: 'POST',
+        headers: klaviyoHeaders,
+        body: JSON.stringify({
+          data: {
+            type: 'profile',
+            attributes: {
+              email,
+              first_name: firstName,
+              last_name: lastName,
+              properties: {
+                social_handle,
+                sport,
+                partner_type,
+                application_message: message,
+                source: 'brand-partner-application',
+              },
             },
           },
-        },
-      }),
-    });
+        }),
+      });
 
-    let profileId: string | null = null;
-    if (profileRes.status === 201) {
-      const pd = await profileRes.json();
-      profileId = pd?.data?.id ?? null;
-    } else if (profileRes.status === 409) {
-      const pd = await profileRes.json();
-      profileId = pd?.errors?.[0]?.meta?.duplicate_profile_id ?? null;
-    }
-
-    // 2. Subscribe to Brand Partner Applications list — triggers the Klaviyo flow
-    // bulk-create-jobs only accepts email; profile properties already stored in step 1
-    await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
-      method: 'POST',
-      headers: klaviyoHeaders,
-      body: JSON.stringify({
-        data: {
-          type: 'profile-subscription-bulk-create-job',
-          attributes: {
-            custom_source: 'Brand Partner Program',
-            profiles: {
-              data: [{ type: 'profile', attributes: { email } }],
+      // 2. Subscribe to Brand Partner Applications list — triggers the Klaviyo flow
+      await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
+        method: 'POST',
+        headers: klaviyoHeaders,
+        body: JSON.stringify({
+          data: {
+            type: 'profile-subscription-bulk-create-job',
+            attributes: {
+              custom_source: 'Brand Partner Program',
+              profiles: {
+                data: [{ type: 'profile', attributes: { email } }],
+              },
+            },
+            relationships: {
+              list: { data: { type: 'list', id: 'UwYEZd' } },
             },
           },
-          relationships: {
-            list: { data: { type: 'list', id: 'UwYEZd' } },
-          },
-        },
-      }),
-    });
+        }),
+      });
+    } else {
+      console.warn('KLAVIYO_PRIVATE_KEY not set in Vercel env — skipping Klaviyo. Set it in the Vercel dashboard.');
+    }
 
-    // 2. Notify Pam via Telegram
+    // Always notify Pam via Telegram regardless of Klaviyo status
     const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
     const chatId = import.meta.env.NOTIFICATION_CHAT_ID || '7600577677';
 
@@ -121,6 +114,10 @@ export const POST: APIRoute = async ({ request }) => {
           text: notifText,
         }),
       });
+    } else {
+      // Fallback: log to console so at least it's visible in Vercel logs
+      console.log(`[PARTNER APPLICATION] ${name} | ${email} | ${social_handle} | ${sport}`);
+      console.log(`[PARTNER APPLICATION MESSAGE] ${message}`);
     }
 
     return new Response(JSON.stringify({ success: true }), {
