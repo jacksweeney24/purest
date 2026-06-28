@@ -293,7 +293,7 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
       priceRange { minVariantPrice { amount currencyCode } }
       images(first: 10) { edges { node { url altText } } }
       variants(first: 10) {
-        edges { node { id title price { amount currencyCode } compareAtPrice { amount currencyCode } availableForSale quantityAvailable } }
+        edges { node { id title price { amount currencyCode } compareAtPrice { amount currencyCode } availableForSale } }
       }
       sellingPlanGroups(first: 5) {
         edges {
@@ -320,7 +320,12 @@ export async function getProduct(handle: string): Promise<Product & { images: Pr
   }`;
   type Resp = { product: any };
   const { data, errors } = await shopifyFetch<Resp>(query);
-  if (errors?.length || !data?.product) return null;
+  // Treat fatal errors (missing product) as null, but allow partial-data errors (e.g. missing scopes for optional fields)
+  if (!data?.product) return null;
+  if (errors?.length) {
+    // Log non-fatal errors (e.g. unauthenticated_read_product_inventory) but continue
+    console.warn('[shopify] getProduct partial errors:', errors.map(e => e.message).join('; '));
+  }
   const p = data.product;
   const images = p.images.edges.map((e: any) => e.node);
   return {
