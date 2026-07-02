@@ -17,8 +17,9 @@ if (!product) return Astro.redirect("/products");
 
 // Fetch other flavors to show in the "Try Other Flavors" section
 const allProducts = await getProducts();
+const flavorHandles = ['10-count-ginger-limeaid','10-count-hibiscus-lime','10-serving-passion-cherry','10-servings-cranberry','10-count-chocolate-cordyceps-1'];
 const otherFlavors = allProducts.filter(
-  (p) => p.handle !== handle && p.title.toLowerCase().startsWith('10 serv')
+  (p) => flavorHandles.includes(p.handle) && p.handle !== handle
 );
 
 // Extract numeric product ID from Shopify GID (e.g. gid://shopify/Product/123456)
@@ -224,6 +225,19 @@ const price = new Intl.NumberFormat("en-US", {
     </div>
   </section>
 
+  {/* Try Other Flavors */}
+  {otherFlavors.length > 0 && (
+    <section class="container py-10 border-t border-stone-100">
+      <h2 class="font-serif text-2xl mb-2">Try other flavors</h2>
+      <p class="text-sm text-foreground/60 mb-8">Same formula, different flavor. Add any to your cart below.</p>
+      <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {otherFlavors.map((p) => (
+          <ProductCard product={p} client:load />
+        ))}
+      </div>
+    </section>
+  )}
+
   {/* Flavor story + details section */}
   {(() => {
     const copy = (flavorCopy as any)[product.handle];
@@ -276,19 +290,6 @@ const price = new Intl.NumberFormat("en-US", {
       </section>
     );
   })()}
-
-  {/* Other Flavors */}
-  {otherFlavors.length > 0 && (
-    <section class="container py-12 border-t border-stone-100">
-      <h2 class="font-serif text-2xl mb-2">Try other flavors</h2>
-      <p class="text-sm text-foreground/60 mb-8">Each flavor, same formula. Find your favorite.</p>
-      <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-        {otherFlavors.map((p) => (
-          <ProductCard product={p} client:load />
-        ))}
-      </div>
-    </section>
-  )}
 
   {/* Judge.me All Reviews */}
   <section class="container py-12 border-t border-stone-100">
