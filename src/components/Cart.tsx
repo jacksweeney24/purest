@@ -15,6 +15,7 @@ import {
   closeCart,
   removeFromCart,
   updateQuantity,
+  updateSellingPlan,
 } from "@/lib/cart-store";
 import { createCheckout } from "@/lib/shopify";
 import { formatPrice } from "@/lib/utils";
