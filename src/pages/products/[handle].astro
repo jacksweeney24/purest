@@ -65,11 +65,12 @@ const price = new Intl.NumberFormat("en-US", {
         {product.images.length > 0 ? (
           <>
             <!-- Native scroll-snap carousel -->
-            <div class="relative w-full rounded-lg overflow-hidden bg-white" style="aspect-ratio:1/1">
+            <!-- overflow:clip clips visually like overflow:hidden but does NOT intercept touch events (iOS Safari fix) -->
+            <div class="relative w-full rounded-lg bg-white" style="aspect-ratio:1/1; overflow:clip;">
               <div
                 id="image-gallery"
                 class="flex w-full h-full overflow-x-scroll cursor-zoom-in"
-                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;"
+                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x;"
               >
                 {product.images.map((img: any, i: number) => (
                   <div
@@ -413,12 +414,13 @@ const price = new Intl.NumberFormat("en-US", {
     document.body.style.overflow = '';
   }
 
-  // Tap on slide opens lightbox
-  let isScrolling = false;
-  gallery?.addEventListener('scroll', () => { isScrolling = true; setTimeout(() => { isScrolling = false; }, 100); }, { passive: true });
+  // Tap on slide opens lightbox — use touch delta to distinguish tap from swipe
+  let touchMoved = false;
+  gallery?.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
+  gallery?.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
 
   slides.forEach((wrap, i) => {
-    wrap.addEventListener('click', () => { if (!isScrolling) openLightbox(i); });
+    wrap.addEventListener('click', () => { if (!touchMoved) openLightbox(i); });
   });
 
   lightboxClose?.addEventListener('click', closeLightbox);
