@@ -211,6 +211,10 @@ const {
         // Don't show if already dismissed or subscribed
         if (localStorage.getItem(STORAGE_KEY)) return;
 
+        // Don't show on race/event landing pages — they have their own signup
+        const noPopupPaths = ['/aspenmarathon', '/lajolla'];
+        if (noPopupPaths.some(p => window.location.pathname.startsWith(p))) return;
+
         function showPopup() {
           if (!popup) return;
           popup.classList.remove('hidden');
