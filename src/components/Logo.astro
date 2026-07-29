@@ -2,12 +2,12 @@
 /*
  * Reusable logo component.
  *
- * Uses <picture> so modern browsers get the smaller WebP and older browsers
- * fall back to PNG. Both files share the same intrinsic 800×312 aspect ratio,
- * so we only set `height` and let the browser compute the width — this
- * prevents layout shift while letting us style the height in Tailwind.
+ * Uses the approved singular PUREST ELECTROLYTE wordmark.
+ * The image has a 1524×493 aspect ratio, so both intrinsic dimensions are set
+ * and the browser can scale it without layout shift while Tailwind controls
+ * its displayed height.
  *
- * Source aspect ratio: 800 / 312 ≈ 2.564.
+ * Source aspect ratio: 1524 / 493 ≈ 3.091.
  */
 
 interface Props {
@@ -23,8 +23,8 @@ const { className = "h-7", alt = "Purest Electrolyte" } = Astro.props;
 <img
     src="/images/purest-logo.png"
     alt={alt}
-    width="1280"
-    height="475"
+    width="1524"
+    height="493"
     class:list={["w-auto max-w-[100px] sm:max-w-[120px]", className]}
     loading="eager"
     decoding="async"
