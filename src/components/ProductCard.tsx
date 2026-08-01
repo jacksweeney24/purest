@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { addToCart } from "@/lib/cart-store";
 import type { Product, SellingPlan } from "@/lib/shopify";
@@ -24,6 +24,15 @@ export default function ProductCard({ product }: Props) {
   // State: is the frequency picker open?
   const [showFrequency, setShowFrequency] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<string>(allPlans[0]?.id ?? "");
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+
+  // Astro renders the buttons before React attaches their event handlers. Keep
+  // them visibly unavailable during that short window so an early mobile tap
+  // cannot be silently lost.
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const selectedPlan = allPlans.find((p) => p.id === selectedPlanId) ?? allPlans[0];
 
@@ -73,6 +82,8 @@ export default function ProductCard({ product }: Props) {
       imageUrl: product.image?.url ?? null,
     });
     setShowFrequency(false);
+    setJustAdded(true);
+    window.setTimeout(() => setJustAdded(false), 1500);
   }
 
   // Build CartPlan objects for the store
@@ -158,12 +169,14 @@ export default function ProductCard({ product }: Props) {
         <div className="mt-auto pt-4 flex flex-col gap-2">
           {/* One-time button — always visible */}
           <button
+            type="button"
             onClick={handleAdd}
-            disabled={soldOut}
+            disabled={soldOut || !isHydrated}
+            aria-label={justAdded ? `${product.title} added to cart` : `Add ${product.title} to cart for ${formatPrice(price.amount, price.currencyCode)}`}
             className="flex items-center justify-between w-full rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
           >
             <span className="flex items-center gap-1.5">
-              <span className="text-xs">↗</span> One-time
+              <span className="text-xs">{justAdded ? "✓" : "↗"}</span> {justAdded ? "Added" : "One-time"}
             </span>
             <span className="font-semibold">{formatPrice(price.amount, price.currencyCode)}</span>
           </button>
@@ -172,7 +185,9 @@ export default function ProductCard({ product }: Props) {
           {!showFrequency ? (
             <div>
               <button
+                type="button"
                 onClick={() => setShowFrequency(true)}
+                disabled={!isHydrated}
                 className="flex items-center justify-between w-full rounded-full bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 <span className="flex items-center gap-1.5">
@@ -189,6 +204,7 @@ export default function ProductCard({ product }: Props) {
               <div className="flex gap-2 flex-wrap">
                 {allPlans.map((plan) => (
                   <button
+                    type="button"
                     key={plan.id}
                     onClick={() => setSelectedPlanId(plan.id)}
                     className={`flex-1 min-w-0 rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${
@@ -205,12 +221,14 @@ export default function ProductCard({ product }: Props) {
                 <span>{selectedPlan?.name}</span>
               </div>
               <button
+                type="button"
                 onClick={handleSubscribeConfirm}
                 className="w-full rounded-full bg-foreground text-background py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 Subscribe for {selectedPlanPrice}
               </button>
               <button
+                type="button"
                 onClick={() => setShowFrequency(false)}
                 className="text-xs text-muted-foreground hover:text-foreground text-center transition-colors"
               >
