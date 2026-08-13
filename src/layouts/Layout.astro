@@ -16,6 +16,8 @@ const {
   title = siteConfig.brand.name,
   description = siteConfig.brand.tagline,
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, "https://www.purestelectrolyte.com").toString();
 ---
 
 <!doctype html>
@@ -24,6 +26,7 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
@@ -55,15 +58,16 @@ const {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Purest Electrolyte",
-      "url": "https://purestelectrolyte.com",
-      "logo": "https://purestelectrolyte.com/images/purest-logo.png",
+      "url": "https://www.purestelectrolyte.com",
+      "logo": "https://www.purestelectrolyte.com/images/purest-logo.png",
       "image": [
-        "https://purestelectrolyte.com/images/product-lineup.jpg",
-        "https://purestelectrolyte.com/images/ginger-lime-hero.jpg"
+        "https://www.purestelectrolyte.com/images/product-lineup.jpg",
+        "https://www.purestelectrolyte.com/images/ginger-lime-hero.jpg"
       ],
-      "description": "Premium electrolyte drink mix made with real fruit and natural sea salt. No synthetic ingredients, no added sugar.",
+      "description": "Purest Electrolyte makes real fruit electrolyte powder packaged in clear glass jars with French gray sea salt and no natural flavors.",
       "sameAs": [
-        "https://www.instagram.com/purestelectrolyte"
+        "https://www.instagram.com/purestelectrolyte",
+        "https://www.facebook.com/p/Purest-Electrolyte-61558585146763/"
       ]
     }
     </script>
@@ -73,16 +77,16 @@ const {
     <meta property="og:site_name" content="Purest Electrolyte" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://purestelectrolyte.com/images/product-lineup.jpg" />
+    <meta property="og:image" content="https://www.purestelectrolyte.com/images/product-lineup.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://purestelectrolyte.com" />
+    <meta property="og:url" content={canonicalURL} />
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://purestelectrolyte.com/images/product-lineup.jpg" />
+    <meta name="twitter:image" content="https://www.purestelectrolyte.com/images/product-lineup.jpg" />
 
     <slot name="head" />
 
