@@ -64,48 +64,62 @@ const price = new Intl.NumberFormat("en-US", {
       <div class="space-y-3">
         {product.images.length > 0 ? (
           <>
-            <!-- Native scroll-snap carousel -->
-            <!-- overflow:clip clips visually like overflow:hidden but does NOT intercept touch events (iOS Safari fix) -->
-            <div class="relative w-full rounded-lg bg-white" style="aspect-ratio:1/1; overflow:clip;">
+            <!-- One-image-at-a-time gallery. Avoids iOS scroll-snap stopping between slides. -->
+            <div class="relative w-full rounded-lg bg-white overflow-hidden" style="aspect-ratio:1/1;">
               <div
                 id="image-gallery"
-                class="flex w-full h-full overflow-x-auto cursor-zoom-in select-none"
-                style="scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x pan-y pinch-zoom; overscroll-behavior-x: contain; -webkit-user-select: none; -webkit-touch-callout: none;"
+                class="relative w-full h-full cursor-zoom-in select-none overflow-hidden"
+                style="touch-action: pan-y pinch-zoom; -webkit-user-select:none; -webkit-touch-callout:none;"
+                tabindex="0"
+                aria-label="Product image gallery"
               >
                 {product.images.map((img: any, i: number) => (
                   <div
-                    class="gallery-slide-wrap flex-shrink-0 w-full h-full flex items-center justify-center bg-white"
-                    style="scroll-snap-align: start;"
+                    class={`gallery-slide-wrap absolute inset-0 w-full h-full items-center justify-center bg-white ${i === 0 ? 'flex' : 'hidden'}`}
                     data-src={img.url}
                     data-alt={img.altText ?? product.title}
+                    data-index={String(i)}
+                    aria-hidden={i === 0 ? 'false' : 'true'}
                   >
                     <img
                       src={img.url}
                       alt={img.altText ?? product.title}
-                      class="w-full h-full object-contain p-3"
+                      class="block w-full h-full object-contain p-3"
                       draggable="false"
                       loading={i === 0 ? 'eager' : 'lazy'}
-                      style="pointer-events:none;"
+                      style="pointer-events:none; max-width:100%;"
                     />
                   </div>
                 ))}
               </div>
 
-              {/* Zoom hint */}
               <div class="absolute top-2 right-2 bg-black/30 text-white text-xs px-2 py-1 rounded-full pointer-events-none">
                 tap to zoom
               </div>
 
-              {/* Dot indicators */}
               {product.images.length > 1 && (
-                <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
-                  {product.images.map((_img: any, i: number) => (
-                    <span
-                      class={`dot-indicator block w-2 h-2 rounded-full transition-colors duration-200 ${i === 0 ? 'bg-stone-700' : 'bg-stone-300'}`}
-                      data-index={String(i)}
-                    />
-                  ))}
-                </div>
+                <>
+                  <button
+                    id="gallery-prev"
+                    type="button"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/90 shadow flex items-center justify-center text-2xl"
+                    aria-label="Previous product image"
+                  >‹</button>
+                  <button
+                    id="gallery-next"
+                    type="button"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/90 shadow flex items-center justify-center text-2xl"
+                    aria-label="Next product image"
+                  >›</button>
+                  <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 pointer-events-none">
+                    {product.images.map((_img: any, i: number) => (
+                      <span
+                        class={`dot-indicator block w-2 h-2 rounded-full transition-colors duration-200 ${i === 0 ? 'bg-stone-700' : 'bg-stone-300'}`}
+                        data-index={String(i)}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
 
@@ -352,53 +366,52 @@ const price = new Intl.NumberFormat("en-US", {
 
 <script>
   const gallery = document.getElementById('image-gallery') as HTMLElement;
+  const slides = Array.from(document.querySelectorAll('.gallery-slide-wrap')) as HTMLElement[];
   const thumbnails = Array.from(document.querySelectorAll('.thumbnail-btn')) as HTMLButtonElement[];
   const thumbnailStrip = document.querySelector('.thumbnail-strip') as HTMLElement | null;
   const dots = Array.from(document.querySelectorAll('.dot-indicator')) as HTMLElement[];
+  const galleryPrev = document.getElementById('gallery-prev');
+  const galleryNext = document.getElementById('gallery-next');
   let activeIndex = 0;
-  let scrollFrame = 0;
 
-  function updateActive(index: number) {
-    if (index < 0 || index >= Math.max(dots.length, thumbnails.length)) return;
+  function showGalleryImage(index: number, centerThumb = true) {
+    if (!slides.length) return;
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
     activeIndex = index;
-    dots.forEach((d, i) => {
-      d.classList.toggle('bg-stone-700', i === index);
-      d.classList.toggle('bg-stone-300', i !== index);
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('flex', i === index);
+      slide.classList.toggle('hidden', i !== index);
+      slide.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-stone-700', i === index);
+      dot.classList.toggle('bg-stone-300', i !== index);
     });
     thumbnails.forEach((button, i) => {
       button.classList.toggle('border-stone-700', i === index);
       button.classList.toggle('border-transparent', i !== index);
     });
+
+    if (centerThumb) {
+      const button = thumbnails[index];
+      if (thumbnailStrip && button) {
+        const left = button.offsetLeft - (thumbnailStrip.clientWidth - button.offsetWidth) / 2;
+        thumbnailStrip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+      }
+    }
   }
 
-  // Keep thumbnail movement inside its own strip. scrollIntoView() can move
-  // the entire page on mobile Safari, which made the gallery appear to float.
-  function centerThumbnail(index: number) {
-    const button = thumbnails[index];
-    if (!thumbnailStrip || !button) return;
-    const left = button.offsetLeft - (thumbnailStrip.clientWidth - button.offsetWidth) / 2;
-    thumbnailStrip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
-  }
-
-  thumbnails.forEach((btn, i) => {
-    btn.addEventListener('click', () => {
-      if (gallery) gallery.scrollTo({ left: gallery.clientWidth * i, behavior: 'smooth' });
-      updateActive(i);
-      centerThumbnail(i);
-    });
+  thumbnails.forEach((button, index) => {
+    button.addEventListener('click', () => showGalleryImage(index));
   });
-
-  // Update the selected dot once per animation frame without moving the page.
-  if (gallery) {
-    gallery.addEventListener('scroll', () => {
-      cancelAnimationFrame(scrollFrame);
-      scrollFrame = requestAnimationFrame(() => {
-        const width = gallery.clientWidth || 1;
-        const index = Math.round(gallery.scrollLeft / width);
-        if (index !== activeIndex) updateActive(index);
-      });
-    }, { passive: true });
-  }
+  galleryPrev?.addEventListener('click', () => showGalleryImage(activeIndex - 1));
+  galleryNext?.addEventListener('click', () => showGalleryImage(activeIndex + 1));
+  gallery?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') showGalleryImage(activeIndex - 1);
+    if (event.key === 'ArrowRight') showGalleryImage(activeIndex + 1);
+  });
 
   // Lightbox
   const lightbox = document.getElementById('lightbox') as HTMLElement;
@@ -407,7 +420,6 @@ const price = new Intl.NumberFormat("en-US", {
   const lightboxPrev = document.getElementById('lightbox-prev');
   const lightboxNext = document.getElementById('lightbox-next');
   const lightboxCounter = document.getElementById('lightbox-counter');
-  const slides = Array.from(document.querySelectorAll('.gallery-slide-wrap')) as HTMLElement[];
   let lightboxIndex = 0;
 
   function showLightboxAt(index: number) {
@@ -458,6 +470,15 @@ const price = new Intl.NumberFormat("en-US", {
     if (!touch) return;
     if (Math.abs(touch.clientX - touchStartX) > 8 || Math.abs(touch.clientY - touchStartY) > 8) {
       touchMoved = true;
+    }
+  }, { passive: true });
+  gallery?.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      showGalleryImage(activeIndex + (deltaX < 0 ? 1 : -1));
     }
   }, { passive: true });
 
