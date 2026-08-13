@@ -69,8 +69,8 @@ const price = new Intl.NumberFormat("en-US", {
             <div class="relative w-full rounded-lg bg-white" style="aspect-ratio:1/1; overflow:clip;">
               <div
                 id="image-gallery"
-                class="flex w-full h-full overflow-x-scroll cursor-zoom-in"
-                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x;"
+                class="flex w-full h-full overflow-x-auto cursor-zoom-in select-none"
+                style="scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-x pan-y pinch-zoom; overscroll-behavior-x: contain; -webkit-user-select: none; -webkit-touch-callout: none;"
               >
                 {product.images.map((img: any, i: number) => (
                   <div
@@ -112,23 +112,32 @@ const price = new Intl.NumberFormat("en-US", {
             <!-- Lightbox overlay -->
             <div
               id="lightbox"
-              class="fixed inset-0 z-50 bg-black hidden items-center justify-center"
+              class="fixed inset-0 z-50 bg-black/95 hidden items-center justify-center"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Product image viewer"
+              aria-hidden="true"
+              style="height:100dvh; overscroll-behavior:contain;"
             >
               <!-- Close -->
               <button
                 id="lightbox-close"
-                class="absolute top-4 right-4 z-10 text-white text-3xl leading-none w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
-                aria-label="Close"
-              >✕</button>
+                type="button"
+                class="absolute right-3 z-20 text-white text-base font-medium min-w-24 h-12 px-4 flex items-center justify-center gap-2 bg-white/15 border border-white/30 rounded-full"
+                style="top:max(0.75rem, env(safe-area-inset-top));"
+                aria-label="Close image viewer"
+              ><span aria-hidden="true" class="text-2xl leading-none">✕</span> Close</button>
               <!-- Prev -->
               <button
                 id="lightbox-prev"
+                type="button"
                 class="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-white text-2xl w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
                 aria-label="Previous"
               >‹</button>
               <!-- Next -->
               <button
                 id="lightbox-next"
+                type="button"
                 class="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-white text-2xl w-12 h-12 flex items-center justify-center bg-black/40 rounded-full"
                 aria-label="Next"
               >›</button>
@@ -139,14 +148,15 @@ const price = new Intl.NumberFormat("en-US", {
                 id="lightbox-img"
                 src=""
                 alt=""
-                class="max-w-full max-h-full object-contain"
-                style="touch-action: pinch-zoom;"
+                class="max-w-[100vw] object-contain select-none"
+                style="max-height:calc(100dvh - 7rem); touch-action:pan-x pan-y pinch-zoom; -webkit-user-select:none; -webkit-touch-callout:none;"
+                draggable="false"
               />
             </div>
 
             <!-- Thumbnail row -->
             {product.images.length > 1 && (
-              <div class="flex gap-2 overflow-x-auto pb-1">
+              <div class="thumbnail-strip flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none; overscroll-behavior-x:contain;">
                 {product.images.map((img: any, i: number) => (
                   <button
                     class={`flex-shrink-0 w-20 h-20 rounded-md overflow-hidden bg-white border-2 transition-colors thumbnail-btn ${i === 0 ? 'border-stone-700' : 'border-transparent hover:border-stone-400'}`}
@@ -343,34 +353,50 @@ const price = new Intl.NumberFormat("en-US", {
 <script>
   const gallery = document.getElementById('image-gallery') as HTMLElement;
   const thumbnails = Array.from(document.querySelectorAll('.thumbnail-btn')) as HTMLButtonElement[];
+  const thumbnailStrip = document.querySelector('.thumbnail-strip') as HTMLElement | null;
   const dots = Array.from(document.querySelectorAll('.dot-indicator')) as HTMLElement[];
-  const total = thumbnails.length;
+  let activeIndex = 0;
+  let scrollFrame = 0;
 
   function updateActive(index: number) {
+    if (index < 0 || index >= Math.max(dots.length, thumbnails.length)) return;
+    activeIndex = index;
     dots.forEach((d, i) => {
       d.classList.toggle('bg-stone-700', i === index);
       d.classList.toggle('bg-stone-300', i !== index);
     });
-    thumbnails.forEach((b, i) => {
-      b.classList.toggle('border-stone-700', i === index);
-      b.classList.toggle('border-transparent', i !== index);
+    thumbnails.forEach((button, i) => {
+      button.classList.toggle('border-stone-700', i === index);
+      button.classList.toggle('border-transparent', i !== index);
     });
-    thumbnails[index]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
 
-  // Thumbnail clicks scroll the carousel to the right slide
+  // Keep thumbnail movement inside its own strip. scrollIntoView() can move
+  // the entire page on mobile Safari, which made the gallery appear to float.
+  function centerThumbnail(index: number) {
+    const button = thumbnails[index];
+    if (!thumbnailStrip || !button) return;
+    const left = button.offsetLeft - (thumbnailStrip.clientWidth - button.offsetWidth) / 2;
+    thumbnailStrip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+  }
+
   thumbnails.forEach((btn, i) => {
     btn.addEventListener('click', () => {
-      if (gallery) gallery.scrollTo({ left: gallery.offsetWidth * i, behavior: 'smooth' });
+      if (gallery) gallery.scrollTo({ left: gallery.clientWidth * i, behavior: 'smooth' });
       updateActive(i);
+      centerThumbnail(i);
     });
   });
 
-  // Update dots as user scrolls/swipes
+  // Update the selected dot once per animation frame without moving the page.
   if (gallery) {
     gallery.addEventListener('scroll', () => {
-      const index = Math.round(gallery.scrollLeft / gallery.offsetWidth);
-      updateActive(index);
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = requestAnimationFrame(() => {
+        const width = gallery.clientWidth || 1;
+        const index = Math.round(gallery.scrollLeft / width);
+        if (index !== activeIndex) updateActive(index);
+      });
     }, { passive: true });
   }
 
@@ -403,21 +429,37 @@ const price = new Intl.NumberFormat("en-US", {
     if (!lightbox) return;
     lightbox.classList.remove('hidden');
     lightbox.classList.add('flex');
+    lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     showLightboxAt(index);
+    requestAnimationFrame(() => lightboxClose?.focus());
   }
 
   function closeLightbox() {
     if (!lightbox) return;
     lightbox.classList.add('hidden');
     lightbox.classList.remove('flex');
+    lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    gallery?.focus({ preventScroll: true });
   }
 
   // Tap on slide opens lightbox — use touch delta to distinguish tap from swipe
   let touchMoved = false;
-  gallery?.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
-  gallery?.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
+  let touchStartX = 0;
+  let touchStartY = 0;
+  gallery?.addEventListener('touchstart', (event) => {
+    touchMoved = false;
+    touchStartX = event.touches[0]?.clientX ?? 0;
+    touchStartY = event.touches[0]?.clientY ?? 0;
+  }, { passive: true });
+  gallery?.addEventListener('touchmove', (event) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    if (Math.abs(touch.clientX - touchStartX) > 8 || Math.abs(touch.clientY - touchStartY) > 8) {
+      touchMoved = true;
+    }
+  }, { passive: true });
 
   slides.forEach((wrap, i) => {
     wrap.addEventListener('click', () => { if (!touchMoved) openLightbox(i); });
@@ -426,5 +468,30 @@ const price = new Intl.NumberFormat("en-US", {
   lightboxClose?.addEventListener('click', closeLightbox);
   lightboxPrev?.addEventListener('click', () => showLightboxAt(lightboxIndex - 1));
   lightboxNext?.addEventListener('click', () => showLightboxAt(lightboxIndex + 1));
-  lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  lightbox?.addEventListener('click', (event) => {
+    if (event.target === lightbox || event.target === lightboxImg) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !lightbox?.classList.contains('hidden')) closeLightbox();
+  });
+
+  // Swipe left/right for another image; swipe down to close.
+  let lightboxTouchX = 0;
+  let lightboxTouchY = 0;
+  lightbox?.addEventListener('touchstart', (event) => {
+    lightboxTouchX = event.touches[0]?.clientX ?? 0;
+    lightboxTouchY = event.touches[0]?.clientY ?? 0;
+  }, { passive: true });
+  lightbox?.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    const deltaX = touch.clientX - lightboxTouchX;
+    const deltaY = touch.clientY - lightboxTouchY;
+    if (Math.abs(deltaY) > 80 && Math.abs(deltaY) > Math.abs(deltaX)) {
+      closeLightbox();
+    } else if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      showLightboxAt(lightboxIndex + (deltaX < 0 ? 1 : -1));
+    }
+  }, { passive: true });
 </script>
