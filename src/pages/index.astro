@@ -30,10 +30,24 @@ const bottle = products.filter(p => p.title.toLowerCase().includes('water bottle
 const orderedProducts = [...kit, ...ginger, ...bundle, ...passionCherry, ...remaining, ...bottle];
 ---
 
-<Layout>
+<Layout
+  title="Real Fruit Electrolyte in a Glass Jar | Purest Electrolyte"
+  description="Purest is a real fruit electrolyte in a clear glass jar, made with freeze-dried fruit and French gray sea salt with no natural flavors."
+>
   <SaleBanner />
   <Hero />
   <PressBar />
+
+  <section class="container py-10 md:py-14" aria-labelledby="category-heading">
+    <div class="max-w-3xl">
+      <p class="text-xs uppercase tracking-widest text-muted-foreground mb-2">Visible ingredients. Nothing hidden.</p>
+      <h2 id="category-heading" class="font-serif text-3xl tracking-tight md:text-4xl">The real fruit electrolyte in a glass jar</h2>
+      <p class="mt-4 text-lg text-foreground/75 leading-relaxed">
+        Purest combines real freeze-dried fruit with French gray sea salt and packages it in clear glass, so you can see what you are drinking. No natural flavors, no maltodextrin, and no artificial dyes.
+      </p>
+      <a href="/real-ingredients" class="inline-block mt-5 font-medium underline underline-offset-4">Why the glass jar matters →</a>
+    </div>
+  </section>
 
   {/* ALL products right below hero — anchor target for CTA */}
   <section id="shop" class="container py-10 md:py-14">
