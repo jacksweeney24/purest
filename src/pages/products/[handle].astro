@@ -31,7 +31,7 @@ const price = new Intl.NumberFormat("en-US", {
 }).format(parseFloat(product.priceRange.minVariantPrice.amount));
 ---
 
-<Layout title={`${product.title} · Purest Electrolyte`} description={product.description}>
+<Layout title={`${product.title} Real Fruit Electrolyte in Glass Jar | Purest`} description={product.description}>
 
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
@@ -39,16 +39,20 @@ const price = new Intl.NumberFormat("en-US", {
   "name": product.title,
   "image": product.images.map((img: any) => img.url),
   "description": product.description,
+  "category": "Real fruit electrolyte powder in a glass jar",
+  "material": "Clear glass jar",
   "brand": {
     "@type": "Brand",
     "name": "Purest Electrolyte"
   },
   "offers": {
     "@type": "Offer",
-    "url": `https://purestelectrolyte.com/products/${product.handle}`,
+    "url": `https://www.purestelectrolyte.com/products/${product.handle}`,
     "priceCurrency": product.priceRange.minVariantPrice.currencyCode,
     "price": parseFloat(product.priceRange.minVariantPrice.amount).toFixed(2),
-    "availability": "https://schema.org/InStock"
+    "availability": product.variants?.some((variant: any) => variant.availableForSale)
+      ? "https://schema.org/InStock"
+      : "https://schema.org/OutOfStock"
   }
 })} />
   <section class="container py-12 md:py-16 overflow-x-clip">
