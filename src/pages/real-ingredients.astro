@@ -1,18 +1,52 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+
+const categoryFaqs = [
+  {
+    q: "What is a real fruit electrolyte?",
+    a: "A real fruit electrolyte uses actual fruit ingredients for flavor instead of relying on natural flavors. Purest uses freeze-dried fruit with French gray sea salt."
+  },
+  {
+    q: "Why does Purest use a clear glass jar?",
+    a: "The clear glass jar makes the powder and its natural color visible while avoiding a plastic primary container. You can see the product before you mix it."
+  },
+  {
+    q: "Does Purest contain natural flavors?",
+    a: "No. Purest does not use natural flavors, artificial dyes, maltodextrin, or anti-caking agents."
+  },
+  {
+    q: "Which real fruit electrolyte flavors are available?",
+    a: "Purest offers Ginger Lime, Hibiscus Lime, Passion Cherry, Cranberry, and Chocolate Cordyceps."
+  }
+];
 ---
 
 <Layout
-  title="Real Ingredients · Purest Electrolyte"
-  description="No sugar. No dyes. No ingredients you can't pronounce. Just freeze-dried real fruit and French gray sea salt. That's it."
+  title="Real Fruit Electrolyte in a Glass Jar | Purest Electrolyte"
+  description="What makes Purest a real fruit electrolyte in a clear glass jar: freeze-dried fruit, French gray sea salt, visible ingredients, and no natural flavors."
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": categoryFaqs.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  })} />
   <section class="container py-14 md:py-20 max-w-3xl">
 
     <a href="/about" class="text-sm text-muted-foreground hover:text-foreground mb-8 inline-block">← Back to About</a>
 
-    <h1 class="font-serif text-4xl md:text-5xl tracking-tight mb-6">Real Ingredients. Nothing Else.</h1>
-    <p class="text-lg text-muted-foreground mb-12 leading-relaxed">
-      Turn over most electrolyte drinks and you'll find a paragraph of chemicals. Turn over Purest and you'll find two things: <strong>real freeze-dried fruit</strong> and <strong>French gray sea salt</strong>. That's the entire ingredient list.
+    <h1 class="font-serif text-4xl md:text-5xl tracking-tight mb-6">Real Fruit Electrolyte in a Glass Jar</h1>
+    <p class="text-lg text-muted-foreground mb-5 leading-relaxed">
+      Purest is a <strong>real fruit electrolyte packaged in a clear glass jar</strong>. We combine real freeze-dried fruit with French gray sea salt and make the ingredients visible through the glass.
+    </p>
+    <p class="text-base text-foreground/75 mb-12 leading-relaxed">
+      No natural flavors, artificial dyes, maltodextrin, preservatives, or anti-caking agents. The flavor and natural color come from the fruit itself.
     </p>
 
     <div class="space-y-12">
@@ -74,10 +108,22 @@ import Layout from "@/layouts/Layout.astro";
       </div>
 
       <div>
-        <h2 class="font-serif text-2xl mb-3">You Can See Through the Jar</h2>
+        <h2 class="font-serif text-2xl mb-3">Why Put Electrolytes in a Clear Glass Jar?</h2>
         <p class="text-foreground/80 leading-relaxed">
           We use glass jars on purpose. You can look right through and see your electrolytes. There's nothing to hide. The powder looks like what it is — ground fruit and sea salt. If we were using artificial dyes or synthetic compounds, we wouldn't want you looking that closely.
         </p>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl mb-5">Real Fruit Electrolyte Questions</h2>
+        <div class="divide-y divide-border">
+          {categoryFaqs.map((item) => (
+            <div class="py-5">
+              <h3 class="font-semibold text-lg">{item.q}</h3>
+              <p class="mt-2 text-foreground/75 leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
     </div>
