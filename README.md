@@ -68,6 +68,10 @@ PUBLIC_SHOPIFY_STOREFRONT_TOKEN=<your token>
 
 The app auto-detects these. With both set, products and checkout pull from Shopify; without them, mock products from `src/data/products.json` are used.
 
+## Publishing Shopify product changes
+
+Product pages are generated from Shopify during the Vercel build. After publishing a new product or editing Shopify product copy, trigger a Vercel production deployment so the storefront includes the latest catalog content.
+
 ## State management
 
 The cart is shared across React islands using **nanostores** (`src/lib/cart-store.ts`). React Context doesn't work in Astro because each `client:load` component is a separate React tree. Nanostores is a 1KB store that works across islands. The cart is also persisted to `localStorage` so it survives page navigations.
