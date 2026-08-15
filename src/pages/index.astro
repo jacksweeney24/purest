@@ -14,20 +14,19 @@ import WhatsInside from "@/components/WhatsInside.astro";
 import PressBar from "@/components/PressBar.astro";
 
 const products = await getProducts();
-// Price anchor order: $15.99 kit first → $25.99 jars → $59 bundle → remaining flavors → bottle last
-const kit = products.filter(p => p.handle === '20-count-variety-pack');
-const ginger = products.filter(p => p.handle === '10-count-ginger-limeaid');
-const bundle = products.filter(p => p.handle === 'the-hydration-ritual-kit');
-const passionCherry = products.filter(p => p.handle === '10-serving-passion-cherry');
-const remaining = products.filter(p =>
-  !p.title.toLowerCase().includes('water bottle') &&
-  p.handle !== 'the-hydration-ritual-kit' &&
-  p.handle !== '20-count-variety-pack' &&
-  p.handle !== '10-count-ginger-limeaid' &&
-  p.handle !== '10-serving-passion-cherry'
+// Keep the homepage grid in the exact merchandising order requested.
+const productOrder = [
+  '10-count-ginger-limeaid',
+  '5-day-hydration-kit',
+  '10-count-hibiscus-lime',
+  '10-serving-passion-cherry',
+  '10-count-chocolate-cordyceps-1',
+  '10-servings-cranberry',
+  'free-purest-glass-water-bottle',
+];
+const orderedProducts = productOrder.flatMap(handle =>
+  products.filter(product => product.handle === handle)
 );
-const bottle = products.filter(p => p.title.toLowerCase().includes('water bottle'));
-const orderedProducts = [...kit, ...ginger, ...bundle, ...passionCherry, ...remaining, ...bottle];
 ---
 
 <Layout
