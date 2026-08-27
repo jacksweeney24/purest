@@ -215,8 +215,8 @@ const canonicalURL = new URL(Astro.url.pathname, "https://www.purestelectrolyte.
         // Don't show if already dismissed or subscribed
         if (localStorage.getItem(STORAGE_KEY)) return;
 
-        // Don't show on race/event landing pages — they have their own signup
-        const noPopupPaths = ['/aspenmarathon', '/lajolla'];
+        // Don't interrupt pages with their own form or signup experience
+        const noPopupPaths = ['/contact', '/aspenmarathon', '/lajolla'];
         if (noPopupPaths.some(p => window.location.pathname.startsWith(p))) return;
 
         function showPopup() {
