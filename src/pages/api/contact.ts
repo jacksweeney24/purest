@@ -3,6 +3,8 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 
 const DEFAULT_NOTIFICATION_CHAT_ID = '7600577677';
+const DEFAULT_CONTACT_EMAIL = 'hydrate@purestelectrolyte.com';
+const DEFAULT_FROM_EMAIL = 'Purest Website <contact@updates.purestelectrolyte.com>';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type ContactMessage = {
@@ -21,6 +23,43 @@ function jsonResponse(status: number, body: Record<string, unknown>) {
 
 function cleanText(value: unknown, maxLength: number) {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
+}
+
+async function sendEmailNotification(
+  contact: ContactMessage,
+  apiKey: string,
+  to: string,
+  from: string,
+) {
+  const subject = contact.orderNumber
+    ? `Website contact from ${contact.name} — order ${contact.orderNumber}`
+    : `Website contact from ${contact.name}`;
+
+  const message = [
+    `Name: ${contact.name}`,
+    `Email: ${contact.email}`,
+    contact.orderNumber ? `Order: ${contact.orderNumber}` : null,
+    '',
+    contact.message,
+  ].filter((line) => line !== null).join('\n');
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      reply_to: contact.email,
+      subject,
+      text: message,
+    }),
+  });
+
+  if (!response.ok) throw new Error(`Email provider returned ${response.status}`);
+  return true;
 }
 
 async function sendTelegramNotification(contact: ContactMessage, botToken: string, chatId: string) {
@@ -152,21 +191,44 @@ export const POST: APIRoute = async ({ request }) => {
   const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
   const chatId = import.meta.env.NOTIFICATION_CHAT_ID || DEFAULT_NOTIFICATION_CHAT_ID;
   const klaviyoKey = import.meta.env.KLAVIYO_PRIVATE_KEY;
-  const deliveries: Promise<boolean>[] = [];
+  const resendApiKey = import.meta.env.RESEND_API_KEY;
+  const contactEmail = import.meta.env.CONTACT_TO_EMAIL || DEFAULT_CONTACT_EMAIL;
+  const fromEmail = import.meta.env.CONTACT_FROM_EMAIL || DEFAULT_FROM_EMAIL;
 
-  if (botToken) deliveries.push(sendTelegramNotification(contact, botToken, chatId));
-  if (klaviyoKey) deliveries.push(recordKlaviyoContact(contact, klaviyoKey));
-
-  if (!deliveries.length) {
-    console.error('Contact form has no configured delivery channel.');
+  if (!resendApiKey) {
+    console.error('[contact] RESEND_API_KEY is not configured.');
     return jsonResponse(503, { success: false, error: 'Contact form is temporarily unavailable' });
   }
 
-  const outcomes = await Promise.allSettled(deliveries);
-  const delivered = outcomes.some((outcome) => outcome.status === 'fulfilled' && outcome.value);
+  const deliveries: Array<{ channel: string; promise: Promise<boolean> }> = [
+    {
+      channel: 'email',
+      promise: sendEmailNotification(contact, resendApiKey, contactEmail, fromEmail),
+    },
+  ];
 
-  if (!delivered) {
-    console.error('All configured contact form delivery channels failed.');
+  if (botToken) {
+    deliveries.push({
+      channel: 'telegram',
+      promise: sendTelegramNotification(contact, botToken, chatId),
+    });
+  }
+  if (klaviyoKey) {
+    deliveries.push({
+      channel: 'klaviyo',
+      promise: recordKlaviyoContact(contact, klaviyoKey),
+    });
+  }
+
+  const outcomes = await Promise.allSettled(deliveries.map(({ promise }) => promise));
+  outcomes.forEach((outcome, index) => {
+    if (outcome.status === 'rejected') {
+      console.error(`[contact] ${deliveries[index].channel} delivery failed:`, String(outcome.reason));
+    }
+  });
+
+  const emailOutcome = outcomes[0];
+  if (emailOutcome.status !== 'fulfilled' || !emailOutcome.value) {
     return jsonResponse(502, { success: false, error: 'Message could not be delivered' });
   }
 
