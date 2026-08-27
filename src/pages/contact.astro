@@ -91,7 +91,7 @@ const contactEmail = "hydrate@purestelectrolyte.com";
           >
             Send Message →
           </button>
-          <p class="text-center text-xs text-muted-foreground">
+          <p id="contact-status" class="text-center text-xs text-muted-foreground" aria-live="polite">
             Your message will be sent directly to Purest Electrolyte.
           </p>
         </form>
@@ -132,9 +132,41 @@ const contactEmail = "hydrate@purestelectrolyte.com";
 </Layout>
 
 <script>
+  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
+  const submitButton = document.getElementById('contact-submit') as HTMLButtonElement | null;
+  const contactStatus = document.getElementById('contact-status');
   const copyButton = document.getElementById('copy-email') as HTMLButtonElement | null;
   const copyStatus = document.getElementById('copy-status');
   const emailAddress = document.getElementById('contact-email-address')?.textContent?.trim() ?? '';
+
+  contactForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+    }
+    if (contactStatus) contactStatus.textContent = 'Sending your message…';
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { Accept: 'application/json' },
+      });
+
+      if (!response.ok) throw new Error('Form submission failed');
+      window.location.assign('/contact-thank-you');
+    } catch {
+      if (contactStatus) {
+        contactStatus.textContent = 'Your message could not be sent. Please try again or email hydrate@purestelectrolyte.com.';
+      }
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message →';
+      }
+    }
+  });
 
   copyButton?.addEventListener('click', async () => {
     try {
