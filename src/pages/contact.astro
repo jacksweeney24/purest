@@ -2,7 +2,6 @@
 import Layout from "@/layouts/Layout.astro";
 
 const contactEmail = "hydrate@purestelectrolyte.com";
-const contactFormId = "0e72c1824009de656f2f464daeeef01d";
 ---
 
 <Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. Pam reads every message personally.">
@@ -23,13 +22,9 @@ const contactFormId = "0e72c1824009de656f2f464daeeef01d";
         <form
           id="contact-form"
           class="space-y-5"
-          action={`https://formsubmit.co/${contactFormId}`}
-          method="POST"
+          action={`mailto:${contactEmail}`}
+          method="GET"
         >
-          <input type="hidden" name="_subject" value="New message from the Purest Electrolyte website" />
-          <input type="hidden" name="_next" value="https://www.purestelectrolyte.com/thank-you/" />
-          <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_captcha" value="true" />
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label class="mb-1.5 block text-sm font-medium" for="contact-name">Your name</label>
@@ -87,11 +82,6 @@ const contactFormId = "0e72c1824009de656f2f464daeeef01d";
             ></textarea>
           </div>
 
-          <div aria-hidden="true" class="absolute -left-[9999px] -top-[9999px] opacity-0 pointer-events-none">
-            <label for="contact-honey">Leave this blank</label>
-            <input id="contact-honey" name="_honey" type="text" tabindex="-1" autocomplete="off" />
-          </div>
-
           <button
             id="contact-submit"
             type="submit"
@@ -99,6 +89,9 @@ const contactFormId = "0e72c1824009de656f2f464daeeef01d";
           >
             Send Message →
           </button>
+          <p id="email-app-note" class="text-center text-xs text-muted-foreground">
+            This opens your email app with the message filled in. Review it and press Send.
+          </p>
         </form>
 
       </div>
@@ -137,9 +130,28 @@ const contactFormId = "0e72c1824009de656f2f464daeeef01d";
 </Layout>
 
 <script>
+  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
   const copyButton = document.getElementById('copy-email') as HTMLButtonElement | null;
   const copyStatus = document.getElementById('copy-status');
   const emailAddress = document.getElementById('contact-email-address')?.textContent?.trim() ?? '';
+
+  contactForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(contactForm);
+    const name = String(formData.get('name') ?? '').trim();
+    const email = String(formData.get('email') ?? '').trim();
+    const orderNumber = String(formData.get('order_number') ?? '').trim();
+    const message = String(formData.get('message') ?? '').trim();
+    const subject = orderNumber
+      ? `Website contact from ${name} — order ${orderNumber}`
+      : `Website contact from ${name}`;
+    const details = [`Name: ${name}`, `Email: ${email}`];
+    if (orderNumber) details.push(`Order number: ${orderNumber}`);
+    const body = `${details.join('\n')}\n\n${message}`;
+
+    window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
 
   copyButton?.addEventListener('click', async () => {
     try {
