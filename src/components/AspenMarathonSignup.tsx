@@ -115,7 +115,9 @@ export default function AspenMarathonSignup({ dark = false }: { dark?: boolean }
         {status === "submitting" ? "Entering…" : "Enter to Win"}
       </Button>
       {status === "error" && (
-        <p className="text-xs text-red-500 text-center">Something went wrong. Try again or email us at hydrate@purestelectrolyte.com</p>
+        <p className="text-xs text-red-500 text-center">
+          Something went wrong. Try again or <a href="/contact" className="underline">contact us</a>.
+        </p>
       )}
       <p className={`text-xs text-center ${dark ? "text-background/50" : "text-muted-foreground"}`}>
         No spam. Unsubscribe anytime.

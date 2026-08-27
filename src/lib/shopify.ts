@@ -65,6 +65,31 @@ export interface Product {
   sellingPlanGroups: SellingPlanGroup[];
 }
 
+/**
+ * Repairs known stale or malformed links embedded in Shopify blog HTML.
+ * Keeping this at the content boundary also protects rebuilt pages when an old
+ * Shopify article has not yet been edited in the Shopify admin.
+ */
+export function repairArticleLinks(html: string): string {
+  return html.replace(/\bhref=(['"])(.*?)\1/gi, (match, quote: string, rawHref: string) => {
+    const href = rawHref.trim();
+
+    if (href.startsWith('/article-preview')) {
+      return `href=${quote}/science${quote}`;
+    }
+
+    if (href === 'undefined' || href === 'www.purestelectrolyte.com') {
+      return `href=${quote}/products${quote}`;
+    }
+
+    if (/^\/products\/cranberry-mint\/?(?:[?#].*)?$/.test(href)) {
+      return `href=${quote}/products/10-servings-cranberry${quote}`;
+    }
+
+    return match;
+  });
+}
+
 // --- API client ------------------------------------------------------------
 
 /**
@@ -244,7 +269,11 @@ export async function getArticle(blogHandle: string, articleHandle: string): Pro
   type Resp = { blog: { articleByHandle: any } };
   const { data, errors } = await shopifyFetch<Resp>(query);
   if (errors?.length || !data?.blog?.articleByHandle) return null;
-  return data.blog.articleByHandle;
+  const article = data.blog.articleByHandle;
+  return {
+    ...article,
+    contentHtml: repairArticleLinks(article.contentHtml ?? ''),
+  };
 }
 
 export async function getBlogArticles(blogHandle: string): Promise<{ handle: string; title: string; excerptHtml: string; publishedAt: string; image: { url: string; altText: string | null } | null }[]> {
@@ -264,7 +293,10 @@ export async function getBlogArticles(blogHandle: string): Promise<{ handle: str
   type Resp = { blog: { articles: { edges: { node: any }[] } } };
   const { data, errors } = await shopifyFetch<Resp>(query);
   if (errors?.length || !data?.blog) return [];
-  return data.blog.articles.edges.map((e: any) => e.node);
+  return data.blog.articles.edges.map((e: any) => ({
+    ...e.node,
+    excerptHtml: repairArticleLinks(e.node.excerptHtml ?? ''),
+  }));
 }
 
 /** Fetches a single product by handle with all images. */

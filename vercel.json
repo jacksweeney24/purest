@@ -1,3 +1,25 @@
 {
-  "framework": "astro"
+  "framework": "astro",
+  "redirects": [
+    {
+      "source": "/article-preview",
+      "destination": "/science",
+      "permanent": true
+    },
+    {
+      "source": "/science/undefined",
+      "destination": "/products",
+      "permanent": true
+    },
+    {
+      "source": "/science/www.purestelectrolyte.com",
+      "destination": "/products",
+      "permanent": true
+    },
+    {
+      "source": "/products/cranberry-mint",
+      "destination": "/products/10-servings-cranberry",
+      "permanent": true
+    }
+  ]
 }

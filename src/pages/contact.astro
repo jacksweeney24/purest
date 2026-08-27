@@ -1,43 +1,188 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+
+const contactEmail = "hydrate@purestelectrolyte.com";
 ---
 
-<Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. We'd love to hear from you.">
-  <section class="container py-20 md:py-28 max-w-2xl text-center">
-
-    <p class="text-xs uppercase tracking-widest text-muted-foreground">Get in touch</p>
-    <h1 class="mt-4 font-serif text-4xl tracking-tight md:text-5xl">
-      We'd love to hear from you.
-    </h1>
-    <p class="mt-4 text-muted-foreground text-lg">
-      Questions about a product, an order, wholesale, press, or anything else — just reach out.
-      Pam reads every message personally.
-    </p>
-
-    {/* Big clickable email — works with any email program */}
-    <a
-      href="mailto:hydrate@purestelectrolyte.com"
-      class="mt-10 inline-block rounded-full bg-foreground px-10 py-6 font-serif text-xl md:text-2xl text-background hover:bg-foreground/90 transition-colors break-all"
-    >
-      hydrate@purestelectrolyte.com
-    </a>
-
-    <p class="mt-6 text-sm text-muted-foreground">
-      Tap the email above to open it in your email app
-    </p>
-
-    <p class="mt-3 text-sm text-muted-foreground">
-      Or copy and paste: <span class="font-medium text-foreground select-all">hydrate@purestelectrolyte.com</span>
-    </p>
-
-    <div class="mt-16 pt-12 border-t border-border space-y-3 text-sm text-muted-foreground">
-      <p>Aspen, Colorado · Developed at 8,900 ft</p>
-      <p>
-        <a href="https://instagram.com/purestelectrolyte" class="underline underline-offset-2 hover:text-foreground">
-          @purestelectrolyte on Instagram
-        </a>
+<Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. Pam reads every message personally.">
+  <section class="container max-w-4xl py-20 md:py-28">
+    <header class="mx-auto max-w-2xl text-center">
+      <p class="text-xs uppercase tracking-widest text-muted-foreground">Get in touch</p>
+      <h1 class="mt-4 font-serif text-4xl tracking-tight md:text-5xl">
+        We'd love to hear from you.
+      </h1>
+      <p class="mt-4 text-lg text-muted-foreground">
+        Questions about a product, an order, wholesale, press, or anything else — just reach out.
+        Pam reads every message personally.
       </p>
-    </div>
+    </header>
 
+    <div class="mt-12 grid gap-8 md:grid-cols-[minmax(0,1fr)_18rem] md:items-start">
+      <div class="rounded-xl border border-border p-6 sm:p-8">
+        <form id="contact-form" class="space-y-5">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="mb-1.5 block text-sm font-medium" for="contact-name">Your name</label>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+                maxlength="120"
+                placeholder="Your name"
+                class="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              />
+            </div>
+            <div>
+              <label class="mb-1.5 block text-sm font-medium" for="contact-email">Email address</label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                maxlength="254"
+                placeholder="you@example.com"
+                class="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="mb-1.5 block text-sm font-medium" for="contact-order">
+              Order number <span class="font-normal text-muted-foreground">(optional)</span>
+            </label>
+            <input
+              id="contact-order"
+              name="order_number"
+              type="text"
+              autocomplete="off"
+              maxlength="80"
+              placeholder="Order number"
+              class="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+            />
+          </div>
+
+          <div>
+            <label class="mb-1.5 block text-sm font-medium" for="contact-message">How can we help?</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              rows="6"
+              maxlength="5000"
+              placeholder="Tell us what's on your mind..."
+              class="w-full resize-y rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-foreground/20"
+            ></textarea>
+          </div>
+
+          <div aria-hidden="true" class="absolute -left-[9999px] -top-[9999px] opacity-0 pointer-events-none">
+            <label for="contact-website">Leave this blank</label>
+            <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <input id="contact-loaded-at" name="form_loaded_at" type="hidden" value="" />
+
+          <button
+            id="contact-submit"
+            type="submit"
+            class="w-full rounded-lg bg-foreground px-8 py-4 font-semibold text-background transition-opacity hover:opacity-80 disabled:cursor-wait disabled:opacity-60"
+          >
+            Send Message →
+          </button>
+        </form>
+
+        <div id="contact-error" class="mt-4 hidden rounded-lg border border-red-200 bg-red-50 p-4 text-center text-sm text-red-700" role="alert">
+          Your message couldn't be sent. Please try again, or copy our email address from the email box on this page.
+        </div>
+
+        <div id="contact-success" class="hidden py-10 text-center" role="status" tabindex="-1">
+          <p class="font-serif text-2xl font-medium">Message received.</p>
+          <p class="mt-2 text-sm text-muted-foreground">Pam will get back to you as soon as possible.</p>
+        </div>
+      </div>
+
+      <aside id="email-contact" class="rounded-xl bg-secondary p-6 sm:p-8">
+        <h2 class="font-serif text-2xl">Prefer email?</h2>
+        <p class="mt-3 text-sm text-muted-foreground">
+          Copy the address below and paste it into any email app.
+        </p>
+        <p id="contact-email-address" class="mt-5 break-all font-medium select-all">{contactEmail}</p>
+        <button
+          id="copy-email"
+          type="button"
+          class="mt-4 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm font-medium transition-colors hover:bg-muted"
+        >
+          Copy email address
+        </button>
+        <p id="copy-status" class="mt-2 min-h-5 text-center text-xs text-muted-foreground" aria-live="polite"></p>
+
+        <div class="mt-8 border-t border-border pt-6 text-sm text-muted-foreground">
+          <p>Aspen, Colorado</p>
+          <p class="mt-1">Developed at 8,900 ft</p>
+          <a href="https://instagram.com/purestelectrolyte" class="mt-4 inline-block underline underline-offset-2 hover:text-foreground">
+            @purestelectrolyte on Instagram
+          </a>
+        </div>
+      </aside>
+    </div>
   </section>
 </Layout>
+
+<script>
+  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
+  const contactSubmit = document.getElementById('contact-submit') as HTMLButtonElement | null;
+  const contactError = document.getElementById('contact-error');
+  const contactSuccess = document.getElementById('contact-success');
+  const loadedAt = document.getElementById('contact-loaded-at') as HTMLInputElement | null;
+
+  if (loadedAt) loadedAt.value = Date.now().toString();
+
+  contactForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!contactSubmit) return;
+
+    contactSubmit.disabled = true;
+    contactSubmit.textContent = 'Sending...';
+    contactError?.classList.add('hidden');
+
+    const formData = new FormData(contactForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error('Contact request failed');
+
+      contactForm.classList.add('hidden');
+      contactSuccess?.classList.remove('hidden');
+      (contactSuccess as HTMLElement | null)?.focus();
+    } catch {
+      contactSubmit.disabled = false;
+      contactSubmit.textContent = 'Send Message →';
+      contactError?.classList.remove('hidden');
+    }
+  });
+
+  const copyButton = document.getElementById('copy-email') as HTMLButtonElement | null;
+  const copyStatus = document.getElementById('copy-status');
+  const emailAddress = document.getElementById('contact-email-address')?.textContent?.trim() ?? '';
+
+  copyButton?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(emailAddress);
+      copyButton.textContent = 'Copied!';
+      if (copyStatus) copyStatus.textContent = 'Email address copied to your clipboard.';
+      window.setTimeout(() => {
+        copyButton.textContent = 'Copy email address';
+        if (copyStatus) copyStatus.textContent = '';
+      }, 2500);
+    } catch {
+      if (copyStatus) copyStatus.textContent = `Copy this address: ${emailAddress}`;
+    }
+  });
+</script>

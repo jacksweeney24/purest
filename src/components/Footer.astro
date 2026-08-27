@@ -69,7 +69,7 @@ const year = new Date().getFullYear();
             >Facebook</a>
           </li>
           <li>
-            <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">Contact Us</a>
+            <a href="/contact" class="hover:text-foreground transition-colors">Contact Us</a>
           </li>
 
           <li>
@@ -87,7 +87,7 @@ const year = new Date().getFullYear();
 
     <div class="mt-10 border-t border-border/40 pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-muted-foreground">
       <span>© {year} {siteConfig.brand.name}. All rights reserved.</span>
-      <a href={`mailto:${siteConfig.footer.email}`} class="hover:text-foreground transition-colors">{siteConfig.footer.email}</a>
+      <a href="/contact" class="hover:text-foreground transition-colors" aria-label="Contact Purest Electrolyte">{siteConfig.footer.email}</a>
     </div>
   </div>
 </footer>
