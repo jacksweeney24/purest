@@ -5,7 +5,7 @@ const contactEmail = "hydrate@purestelectrolyte.com";
 ---
 
 <Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. Pam reads every message personally.">
-  <section class="container max-w-4xl py-20 md:py-28">
+  <section class="container max-w-5xl py-20 md:py-28">
     <header class="mx-auto max-w-2xl text-center">
       <p class="text-xs uppercase tracking-widest text-muted-foreground">Get in touch</p>
       <h1 class="mt-4 font-serif text-4xl tracking-tight md:text-5xl">
@@ -17,9 +17,18 @@ const contactEmail = "hydrate@purestelectrolyte.com";
       </p>
     </header>
 
-    <div class="mt-12 grid gap-8 md:grid-cols-[minmax(0,1fr)_18rem] md:items-start">
+    <div class="mt-12 grid gap-8 md:grid-cols-[minmax(0,1fr)_20rem] md:items-start">
       <div class="rounded-xl border border-border p-6 sm:p-8">
-        <form id="contact-form" class="space-y-5">
+        <form
+          id="contact-form"
+          class="space-y-5"
+          action={`https://formsubmit.co/${contactEmail}`}
+          method="POST"
+        >
+          <input type="hidden" name="_subject" value="New message from the Purest Electrolyte website" />
+          <input type="hidden" name="_next" value="https://www.purestelectrolyte.com/thank-you/" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="true" />
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label class="mb-1.5 block text-sm font-medium" for="contact-name">Your name</label>
@@ -78,10 +87,9 @@ const contactEmail = "hydrate@purestelectrolyte.com";
           </div>
 
           <div aria-hidden="true" class="absolute -left-[9999px] -top-[9999px] opacity-0 pointer-events-none">
-            <label for="contact-website">Leave this blank</label>
-            <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            <label for="contact-honey">Leave this blank</label>
+            <input id="contact-honey" name="_honey" type="text" tabindex="-1" autocomplete="off" />
           </div>
-          <input id="contact-loaded-at" name="form_loaded_at" type="hidden" value="" />
 
           <button
             id="contact-submit"
@@ -92,14 +100,6 @@ const contactEmail = "hydrate@purestelectrolyte.com";
           </button>
         </form>
 
-        <div id="contact-error" class="mt-4 hidden rounded-lg border border-red-200 bg-red-50 p-4 text-center text-sm text-red-700" role="alert">
-          Your message couldn't be sent. Please try again, or copy our email address from the email box on this page.
-        </div>
-
-        <div id="contact-success" class="hidden py-10 text-center" role="status" tabindex="-1">
-          <p class="font-serif text-2xl font-medium">Message received.</p>
-          <p class="mt-2 text-sm text-muted-foreground">Pam will get back to you as soon as possible.</p>
-        </div>
       </div>
 
       <aside id="email-contact" class="rounded-xl bg-secondary p-6 sm:p-8">
@@ -107,7 +107,13 @@ const contactEmail = "hydrate@purestelectrolyte.com";
         <p class="mt-3 text-sm text-muted-foreground">
           Copy the address below and paste it into any email app.
         </p>
-        <p id="contact-email-address" class="mt-5 break-all font-medium select-all">{contactEmail}</p>
+        <a
+          id="contact-email-address"
+          href={`mailto:${contactEmail}`}
+          class="mt-5 block whitespace-nowrap text-sm font-medium tracking-tight underline-offset-2 hover:underline select-all"
+        >
+          {contactEmail}
+        </a>
         <button
           id="copy-email"
           type="button"
@@ -130,44 +136,6 @@ const contactEmail = "hydrate@purestelectrolyte.com";
 </Layout>
 
 <script>
-  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
-  const contactSubmit = document.getElementById('contact-submit') as HTMLButtonElement | null;
-  const contactError = document.getElementById('contact-error');
-  const contactSuccess = document.getElementById('contact-success');
-  const loadedAt = document.getElementById('contact-loaded-at') as HTMLInputElement | null;
-
-  if (loadedAt) loadedAt.value = Date.now().toString();
-
-  contactForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    if (!contactSubmit) return;
-
-    contactSubmit.disabled = true;
-    contactSubmit.textContent = 'Sending...';
-    contactError?.classList.add('hidden');
-
-    const formData = new FormData(contactForm);
-    const payload = Object.fromEntries(formData.entries());
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error('Contact request failed');
-
-      contactForm.classList.add('hidden');
-      contactSuccess?.classList.remove('hidden');
-      (contactSuccess as HTMLElement | null)?.focus();
-    } catch {
-      contactSubmit.disabled = false;
-      contactSubmit.textContent = 'Send Message →';
-      contactError?.classList.remove('hidden');
-    }
-  });
-
   const copyButton = document.getElementById('copy-email') as HTMLButtonElement | null;
   const copyStatus = document.getElementById('copy-status');
   const emailAddress = document.getElementById('contact-email-address')?.textContent?.trim() ?? '';
