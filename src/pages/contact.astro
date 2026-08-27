@@ -22,9 +22,11 @@ const contactEmail = "hydrate@purestelectrolyte.com";
         <form
           id="contact-form"
           class="space-y-5"
-          action={`mailto:${contactEmail}`}
-          method="GET"
+          action="https://formspree.io/f/xgaewbzw"
+          method="POST"
+          accept-charset="UTF-8"
         >
+          <input type="hidden" name="_subject" value="New message from the Purest website" />
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label class="mb-1.5 block text-sm font-medium" for="contact-name">Your name</label>
@@ -89,8 +91,8 @@ const contactEmail = "hydrate@purestelectrolyte.com";
           >
             Send Message →
           </button>
-          <p id="email-app-note" class="text-center text-xs text-muted-foreground">
-            This opens your email app with the message filled in. Review it and press Send.
+          <p class="text-center text-xs text-muted-foreground">
+            Your message will be sent directly to Purest Electrolyte.
           </p>
         </form>
 
@@ -130,28 +132,9 @@ const contactEmail = "hydrate@purestelectrolyte.com";
 </Layout>
 
 <script>
-  const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
   const copyButton = document.getElementById('copy-email') as HTMLButtonElement | null;
   const copyStatus = document.getElementById('copy-status');
   const emailAddress = document.getElementById('contact-email-address')?.textContent?.trim() ?? '';
-
-  contactForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(contactForm);
-    const name = String(formData.get('name') ?? '').trim();
-    const email = String(formData.get('email') ?? '').trim();
-    const orderNumber = String(formData.get('order_number') ?? '').trim();
-    const message = String(formData.get('message') ?? '').trim();
-    const subject = orderNumber
-      ? `Website contact from ${name} — order ${orderNumber}`
-      : `Website contact from ${name}`;
-    const details = [`Name: ${name}`, `Email: ${email}`];
-    if (orderNumber) details.push(`Order number: ${orderNumber}`);
-    const body = `${details.join('\n')}\n\n${message}`;
-
-    window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
 
   copyButton?.addEventListener('click', async () => {
     try {
