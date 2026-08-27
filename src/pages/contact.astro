@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 
 const contactEmail = "hydrate@purestelectrolyte.com";
+const contactFormId = "0e72c1824009de656f2f464daeeef01d";
 ---
 
 <Layout title="Contact · Purest Electrolyte" description="Get in touch with Purest Electrolyte. Pam reads every message personally.">
@@ -22,7 +23,7 @@ const contactEmail = "hydrate@purestelectrolyte.com";
         <form
           id="contact-form"
           class="space-y-5"
-          action={`https://formsubmit.co/${contactEmail}`}
+          action={`https://formsubmit.co/${contactFormId}`}
           method="POST"
         >
           <input type="hidden" name="_subject" value="New message from the Purest Electrolyte website" />
