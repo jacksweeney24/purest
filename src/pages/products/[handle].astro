@@ -64,7 +64,7 @@ const price = new Intl.NumberFormat("en-US", {
 
     <div class="grid min-w-0 gap-10 md:grid-cols-2 md:items-start">
 
-      <!-- Image gallery -->
+      <!-- Product gallery is refreshed from current Shopify media at build time. -->
       <div class="space-y-3 min-w-0 w-full max-w-full" data-product-media-source="shopify">
         {product.images.length > 0 ? (
           <>
