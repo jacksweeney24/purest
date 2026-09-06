@@ -1,74 +1,53 @@
 ---
 import siteConfig from "@/data/site-config.json";
 
-const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
+const { image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
-<section class="w-full bg-stone-50 overflow-hidden">
-  <picture class="hero-photo relative block aspect-[2048/1185] w-full overflow-hidden">
+<section class="w-full overflow-hidden bg-stone-50 md:grid md:grid-cols-[minmax(320px,0.8fr)_minmax(0,1.2fr)] xl:grid-cols-[minmax(430px,0.78fr)_minmax(0,1.35fr)]">
+  <picture class="block w-full md:order-2 md:self-start">
     <source srcset={image} type="image/webp" />
     <img
       src={imageFallback}
       alt={imageAlt}
-      class="absolute inset-0 h-full w-full object-cover object-[50%_95%]"
+      class="block h-auto w-full"
       loading="eager"
       fetchpriority="high"
     />
   </picture>
 
-  <div class="border-t border-foreground/10">
-    <div class="container py-6 sm:py-8 md:py-10 lg:py-7">
-      <div class="grid gap-6 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-12 lg:gap-20">
-        <div class="max-w-xl">
-          <div class="text-sm text-foreground/60">
-            Loved by athletes, parents & everyday hydrators
-          </div>
-
-          <h1 class="mt-4 font-serif text-[2.55rem] leading-[0.96] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Your new<br /><em>hydration ritual.</em>
-          </h1>
-        </div>
-
-        <div class="max-w-xl md:self-end">
-          <ul class="space-y-2 text-sm text-foreground/75 md:text-base">
-            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
-            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
-            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
-          </ul>
-
-          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#shop"
-              class="inline-flex h-[52px] items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
-            >
-              Shop now →
-            </a>
-            <a
-              href="/products/5-day-hydration-kit"
-              class="inline-flex h-[52px] items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-medium text-foreground transition-all hover:bg-foreground/5"
-            >
-              Try the 5-Day Kit — $15.99
-            </a>
-          </div>
-
-          <p class="mt-4 text-xs text-foreground/40">Free shipping on orders over $39</p>
-        </div>
+  <div class="border-t border-foreground/10 md:order-1 md:flex md:items-center md:border-r md:border-t-0">
+    <div class="mx-auto flex w-full max-w-xl flex-col px-6 py-6 sm:px-8 sm:py-8 md:px-8 md:py-6 lg:px-10 xl:px-14 xl:py-10">
+      <div class="order-1 text-sm text-foreground/60">
+        Loved by athletes, parents & everyday hydrators
       </div>
+
+      <h1 class="order-2 mt-4 font-serif text-[2.55rem] leading-[0.96] tracking-tight sm:text-5xl md:mt-3 md:text-5xl xl:mt-4 xl:text-[4rem]">
+        Your new<br /><em>hydration ritual.</em>
+      </h1>
+
+      <ul class="order-4 mt-6 space-y-2 text-sm text-foreground/75 md:order-3 md:mt-5 xl:mt-7 xl:text-base">
+        <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
+        <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
+        <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
+      </ul>
+
+      <div class="order-3 mt-5 flex flex-col gap-3 md:order-4 md:mt-4 xl:mt-5">
+        <a
+          href="#shop"
+          class="inline-flex h-[52px] items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+        >
+          Shop now →
+        </a>
+        <a
+          href="/products/5-day-hydration-kit"
+          class="inline-flex h-[52px] items-center justify-center rounded-full border border-foreground/20 px-6 text-center text-base font-medium text-foreground transition-all hover:bg-foreground/5"
+        >
+          Try the 5-Day Kit — $15.99
+        </a>
+      </div>
+
+      <p class="order-5 mt-4 text-xs text-foreground/40 md:mt-3 xl:mt-4">Free shipping on orders over $39</p>
     </div>
   </div>
 </section>
-
-<style>
-  @media (min-width: 768px) {
-    .hero-photo {
-      aspect-ratio: auto;
-      height: min(57.861vw, max(360px, calc(100svh - 342px)));
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .hero-photo {
-      height: min(57.861vw, max(400px, calc(100svh - 318px)));
-    }
-  }
-</style>
