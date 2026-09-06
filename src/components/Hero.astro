@@ -1,12 +1,11 @@
 ---
 import siteConfig from "@/data/site-config.json";
 
-const { image, imageFallback, imageAlt } = siteConfig.hero;
+const { imageFallback, imageAlt } = siteConfig.hero;
 ---
 
 <section class="relative flex min-h-[720px] w-full items-center overflow-hidden bg-slate-900 md:min-h-[760px] lg:min-h-[820px]">
   <picture class="absolute inset-0">
-    <source srcset={image} type="image/webp" />
     <img
       src={imageFallback}
       alt={imageAlt}
@@ -15,9 +14,6 @@ const { image, imageFallback, imageAlt } = siteConfig.hero;
       fetchpriority="high"
     />
   </picture>
-
-  <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/5"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10"></div>
 
   <div class="container relative z-10 py-16 md:py-20">
     <div class="max-w-[660px] space-y-5 text-white">
