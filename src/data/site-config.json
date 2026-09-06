@@ -8,8 +8,8 @@
     "subheadline": "Real fruit + real salt = real hydration. Nothing else.",
     "cta": "Shop now",
     "ctaHref": "/products",
-    "image": "/images/hero-all-flavors.webp",
-    "imageFallback": "/images/blog/purest-electrolyte-clear-glass-jars.jpg",
+    "image": "/images/purest-allflavors-black.png",
+    "imageFallback": "/images/purest-allflavors-black.png",
     "imageAlt": "All 5 Purest Electrolyte flavors on a tropical beach - Ginger Limeaid, Hibiscus Lime, Passion Cherry, Cranberry, and Chocolate"
   },
   "saleBanner": {
