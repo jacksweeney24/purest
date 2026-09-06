@@ -5,19 +5,19 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
 <section class="w-full bg-stone-50 overflow-hidden">
-  <picture class="relative block aspect-[2048/1185] w-full overflow-hidden">
+  <picture class="hero-photo relative block aspect-[2048/1185] w-full overflow-hidden">
     <source srcset={image} type="image/webp" />
     <img
       src={imageFallback}
       alt={imageAlt}
-      class="absolute inset-0 h-full w-full object-cover object-bottom"
+      class="absolute inset-0 h-full w-full object-cover object-[50%_95%]"
       loading="eager"
       fetchpriority="high"
     />
   </picture>
 
   <div class="border-t border-foreground/10">
-    <div class="container py-6 sm:py-8 md:py-10 lg:py-12">
+    <div class="container py-6 sm:py-8 md:py-10 lg:py-7">
       <div class="grid gap-6 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-12 lg:gap-20">
         <div class="max-w-xl">
           <div class="text-sm text-foreground/60">
@@ -57,3 +57,18 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
     </div>
   </div>
 </section>
+
+<style>
+  @media (min-width: 768px) {
+    .hero-photo {
+      aspect-ratio: auto;
+      height: min(57.861vw, max(360px, calc(100svh - 342px)));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-photo {
+      height: min(57.861vw, max(400px, calc(100svh - 318px)));
+    }
+  }
+</style>
