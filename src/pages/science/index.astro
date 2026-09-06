@@ -14,6 +14,21 @@ const articles = await getBlogArticles("science");
     </header>
 
     <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <a href="/science/electrolyte-in-a-glass-jar" class="group block rounded-xl border border-border/60 bg-white p-6 transition-shadow hover:shadow-md">
+        <div class="mb-4 aspect-video overflow-hidden rounded-lg bg-stone-100">
+          <img
+            src="/images/blog/purest-electrolyte-clear-glass-jars.jpg"
+            alt="Five flavors of Purest Electrolyte powder in clear glass jars with naturally colored fruit powders visible"
+            width="2048"
+            height="1365"
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          />
+        </div>
+        <p class="text-xs text-muted-foreground">September 6, 2026</p>
+        <h2 class="mt-2 font-serif text-xl tracking-tight transition-opacity group-hover:opacity-70">Why We Put Purest Electrolyte Powder in a Clear Glass Jar</h2>
+        <p class="mt-2 line-clamp-3 text-sm text-muted-foreground">Purest Electrolyte is a premium real fruit electrolyte powder packaged in clear glass. We chose a glass jar because transparency should not stop at the ingredient label.</p>
+      </a>
+
       {articles.map((article) => (
         <a href={`/science/${article.handle}`} class="group block rounded-xl border border-border/60 bg-white p-6 transition-shadow hover:shadow-md">
           {article.image && (

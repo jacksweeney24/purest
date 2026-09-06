@@ -2,6 +2,16 @@
   "framework": "astro",
   "redirects": [
     {
+      "source": "/blog",
+      "destination": "/science",
+      "permanent": true
+    },
+    {
+      "source": "/blog/electrolyte-in-a-glass-jar",
+      "destination": "/science/electrolyte-in-a-glass-jar",
+      "permanent": true
+    },
+    {
       "source": "/article-preview",
       "destination": "/science",
       "permanent": true
