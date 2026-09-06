@@ -1,7 +1,7 @@
 ---
 import siteConfig from "@/data/site-config.json";
 
-const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
+const { image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
 <section class="relative flex min-h-[720px] w-full items-center overflow-hidden bg-slate-900 md:min-h-[760px] lg:min-h-[820px]">
@@ -37,10 +37,10 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
 
       <div class="flex flex-col gap-3 pt-1 sm:flex-row">
         <a
-          href={ctaHref}
+          href="#shop"
           class="inline-flex h-14 items-center justify-center rounded-full bg-white px-10 text-base font-medium text-black transition-all duration-150 hover:bg-white/90 active:scale-[0.98]"
         >
-          {cta}
+          Shop now →
         </a>
         <a
           href="/products/5-day-hydration-kit"
