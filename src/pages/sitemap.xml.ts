@@ -9,6 +9,8 @@ const staticPaths = [
   "/real-ingredients",
   "/why-french-gray-sea-salt",
   "/about",
+  "/blog",
+  "/blog/electrolyte-in-a-glass-jar",
   "/science",
   "/faq",
   "/contact",

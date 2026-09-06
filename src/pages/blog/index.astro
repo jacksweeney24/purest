@@ -1,0 +1,46 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Purest Electrolyte Blog"
+  description="Stories about Purest Electrolyte, real fruit hydration, mineral rich sea salt, and why our electrolyte powder comes in a clear glass jar."
+  image="/images/blog/purest-electrolyte-clear-glass-jars.jpg"
+  imageWidth={2048}
+  imageHeight={1365}
+>
+  <section class="container max-w-5xl py-14 md:py-20">
+    <header class="mb-10 border-b border-border pb-8 md:mb-14">
+      <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Purest Electrolyte</p>
+      <h1 class="mt-3 font-serif text-4xl tracking-tight md:text-5xl">Blog</h1>
+    </header>
+
+    <article class="grid items-center gap-7 md:grid-cols-[1.2fr_1fr] md:gap-12">
+      <a href="/blog/electrolyte-in-a-glass-jar" class="block overflow-hidden bg-secondary">
+        <img
+          src="/images/blog/purest-electrolyte-clear-glass-jars.jpg"
+          alt="Five flavors of Purest Electrolyte powder in clear glass jars with naturally colored fruit powders visible"
+          width="2048"
+          height="1365"
+          class="aspect-[3/2] h-full w-full object-cover transition-transform duration-500 hover:scale-[1.015]"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-muted-foreground">Glass jar hydration</p>
+        <h2 class="mt-3 font-serif text-3xl leading-tight tracking-tight md:text-4xl">
+          <a href="/blog/electrolyte-in-a-glass-jar" class="hover:opacity-70 transition-opacity">
+            Why We Put Purest Electrolyte Powder in a Clear Glass Jar
+          </a>
+        </h2>
+        <p class="mt-5 leading-relaxed text-foreground/75">
+          Purest Electrolyte is a premium real fruit electrolyte powder packaged in clear glass. We chose a glass jar because transparency should not stop at the ingredient label.
+        </p>
+        <a href="/blog/electrolyte-in-a-glass-jar" class="mt-6 inline-flex border-b border-foreground pb-1 text-sm font-medium">
+          Read the article
+        </a>
+      </div>
+    </article>
+  </section>
+</Layout>

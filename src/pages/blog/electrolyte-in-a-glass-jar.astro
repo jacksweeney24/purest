@@ -1,0 +1,217 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+const title = "Electrolyte in a Glass Jar: Why Purest Uses Clear Glass";
+const description = "Purest is a real fruit electrolyte powder in a clear glass jar. Discover why we chose visible glass for premium hydration made with real fruit and real salt.";
+const canonical = "https://www.purestelectrolyte.com/blog/electrolyte-in-a-glass-jar";
+const publishedTime = "2026-09-06T08:00:00-06:00";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: "Why We Put Purest Electrolyte Powder in a Clear Glass Jar",
+  description,
+  image: [
+    "https://www.purestelectrolyte.com/images/blog/purest-electrolyte-clear-glass-jars.jpg",
+    "https://www.purestelectrolyte.com/images/blog/pam-sweeney-founder-purest-electrolyte.jpg",
+    "https://www.purestelectrolyte.com/images/blog/purest-electrolyte-five-day-glass-vials.jpg",
+    "https://www.purestelectrolyte.com/images/blog/purest-electrolyte-glass-vial-sunlight.jpg",
+  ],
+  datePublished: publishedTime,
+  dateModified: publishedTime,
+  author: {
+    "@type": "Person",
+    name: "Pam Sweeney",
+    url: "https://www.purestelectrolyte.com/about",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Purest Electrolyte",
+    url: "https://www.purestelectrolyte.com",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.purestelectrolyte.com/images/purest-logo.png",
+    },
+  },
+  mainEntityOfPage: canonical,
+  keywords: [
+    "electrolyte in a glass jar",
+    "electrolyte powder in a glass jar",
+    "glass jar electrolyte",
+    "real fruit electrolyte powder",
+    "Purest Electrolyte",
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  image="/images/blog/purest-electrolyte-clear-glass-jars.jpg"
+  imageWidth={2048}
+  imageHeight={1365}
+  type="article"
+  publishedTime={publishedTime}
+  modifiedTime={publishedTime}
+>
+  <Fragment slot="head">
+    <meta name="author" content="Pam Sweeney" />
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  </Fragment>
+
+  <article class="pb-16 md:pb-24">
+    <header class="container max-w-4xl pb-8 pt-12 text-center md:pb-10 md:pt-20">
+      <a href="/blog" class="text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground">Purest Blog</a>
+      <h1 class="mx-auto mt-5 max-w-4xl font-serif text-4xl leading-[1.08] tracking-tight md:text-6xl">
+        Why We Put Purest Electrolyte Powder in a Clear Glass Jar
+      </h1>
+      <p class="mt-5 text-sm text-muted-foreground">By Pam Sweeney, Founder of Purest Electrolyte</p>
+      <time datetime="2026-09-06" class="sr-only">September 6, 2026</time>
+    </header>
+
+    <figure class="container max-w-6xl px-0 sm:px-6">
+      <img
+        src="/images/blog/purest-electrolyte-clear-glass-jars.jpg"
+        alt="Five flavors of Purest Electrolyte powder in clear glass jars with naturally colored fruit powders visible"
+        width="2048"
+        height="1365"
+        class="aspect-[3/2] w-full object-cover sm:rounded-sm"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+
+    <div class="container max-w-3xl pt-10 md:pt-14">
+      <div class="space-y-6 text-[1.0625rem] leading-8 text-foreground/85 md:text-lg">
+        <p>Purest Electrolyte is a premium real fruit electrolyte powder packaged in clear glass. We chose a glass jar because transparency should not stop at the ingredient label. You should be able to see the powder, its genuine fruit color, and the texture that comes from real ingredients before you mix your first glass.</p>
+
+        <p>The jar is not decoration. It is our promise.</p>
+
+        <p class="font-medium text-foreground">Real fruit + real salt = real hydration. In full view.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">I could not find the electrolyte I wanted</h2>
+
+        <figure class="mx-auto max-w-md py-2 md:py-4">
+          <img
+            src="/images/blog/pam-sweeney-founder-purest-electrolyte.jpg"
+            alt="Pam Sweeney, founder of Purest Electrolyte, with a clear glass electrolyte jar in Aspen, Colorado"
+            width="1365"
+            height="2048"
+            class="aspect-[2/3] w-full object-cover object-center rounded-sm"
+            loading="lazy"
+          />
+        </figure>
+
+        <p>I did not set out to create one more electrolyte brand. I created Purest because I could not find an electrolyte I felt good about giving to my family or using myself.</p>
+
+        <p>I live at 8,900 feet in Aspen, Colorado, and I have four children who are all athletes. Hydration has always mattered in our home. After my own experience with hyponatremia, it became deeply personal. I started reading labels more carefully and looking at what was actually inside the products we were drinking.</p>
+
+        <p>Again and again, I found powders made with artificial colors, mysterious natural flavors, fillers, and highly processed ingredients. The branding often looked clean, but the ingredient list told a different story.</p>
+
+        <p>I wanted something made from ingredients that still looked and tasted like where they came from. Real fruit. Mineral rich sea salt. Nothing disguised as fruit flavor. Nothing neon. Nothing hidden.</p>
+
+        <p>Once the formula felt honest, the packaging had to feel honest too.</p>
+
+        <p>Purest is still a real founder led company. I care about what goes into every jar because my family drinks it too.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">Why a clear glass jar was the right choice</h2>
+
+        <p>Most electrolyte powders are packaged in opaque individual packets. We wanted to show off our beautiful real ingredients. The best way to show our true commitment to our ingredients is to show them to the world. We don’t have any mystery white powders that are flavored raspberry. We did not want to create a beautiful real fruit powder and then hide it inside plastic.</p>
+
+        <p>We wanted you to see it.</p>
+
+        <p>The clear glass jar lets you look at the powder before you ever put it in water. You can see its color, its texture, and the visible character of real fruit. You do not have to rely only on a picture printed on the package. The product itself is right there.</p>
+
+        <p>Glass does not make a formula clean. Ingredients do. But a clear glass jar invites you to look more closely, and that is exactly what we want.</p>
+
+        <p>Read the label. Look through the jar. Ask questions. We built Purest for people who do.</p>
+
+        <figure class="my-8 md:my-12">
+          <img
+            src="/images/blog/purest-electrolyte-five-day-glass-vials.jpg"
+            alt="Purest Electrolyte five day hydration kit with naturally colored powders visible in clear glass vials"
+            width="2048"
+            height="1365"
+            class="aspect-[3/2] w-full object-cover rounded-sm"
+            loading="lazy"
+          />
+        </figure>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">The color you see comes from real fruit</h2>
+
+        <p>Real fruit has color. It has texture. It has character.</p>
+
+        <p>Our Ginger Lime powder looks different from our Hibiscus Lime. Passion Cherry has its own rich fruit tone. Cranberry looks like cranberry. Chocolate Cordyceps carries the deep, natural color of cacao.</p>
+
+        <p>These powders do not need artificial dyes to announce their flavors. They do not need to look fluorescent. Their colors come from real fruit and real plant ingredients, which is why seeing the powder through the glass matters so much.</p>
+
+        <p>The color may also vary slightly from one harvest to another. That is part of working with agricultural ingredients instead of trying to make nature look identical every time. A lime, cherry, cranberry, or hibiscus flower is not manufactured from a color code.</p>
+
+        <p>When you mix Purest into water, you may notice some natural texture or settling. Stir it or shake it again. That is not a flaw. It is a reminder that you are drinking an electrolyte powder made with real fruit rather than a flavor system designed to imitate it.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">What is inside a jar of Purest Electrolyte</h2>
+
+        <p>Real organic freeze dried fruit and our solar sea salt blend form the heart of Purest Electrolyte. Exact ingredients vary by flavor, and every jar clearly shows its full ingredient list and Nutrition Facts.</p>
+
+        <p>Across our collection, you will find over 700mg of naturally occurring Sodium per serving and a broad spectrum of over 85+trace minerals from our sea salt blend. You will not find added sugar, natural flavors, artificial dyes, maltodextrin, silicon dioxide, or other anti caking agents.</p>
+
+        <p>The flavor comes from actual fruit. The salt comes from the sea. The colors are the colors of the ingredients themselves.</p>
+
+        <p>That is what we mean by real fruit, real salt, real hydration.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">What SUN powered hydration means to us</h2>
+
+        <p>Purest is powered by natural processes that existed long before electrolyte powders did.</p>
+
+        <p>Our fruit begins in sunlight and is freeze dried to preserve its genuine flavor and color. Our sun dried solar sea salts are formed through the elemental work of sea, sun, wind, and time. The water evaporates and leaves behind mineral rich salt crystals that are carefully harvested rather than stripped down into ordinary table salt.</p>
+
+        <p>We bring the fruit and salt together in a powder that still carries a sense of where it came from.</p>
+
+        <p>Fruit grown in sunlight. Sea salt crystallized with sunlight. A clear glass jar that lets you see the result. We have taken something created by Mother Nature and made it simple to mix into your water each day.</p>
+
+        <p>It is not a candy flavored shortcut pretending to be wellness. It is hydration built from real ingredients with a real origin.</p>
+
+        <figure class="my-8 md:my-12">
+          <img
+            src="/images/blog/purest-electrolyte-glass-vial-sunlight.jpg"
+            alt="Purest Electrolyte powder visible through clear glass in sunlight"
+            width="2048"
+            height="1365"
+            class="aspect-[3/2] w-full object-cover rounded-sm"
+            loading="lazy"
+          />
+        </figure>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">Premium should mean more than a beautiful label</h2>
+
+        <p>We call Purest a premium electrolyte because of the choices behind it, not because we put a luxury word on the package.</p>
+
+        <p>Real organic fruit costs more than a flavor powder. Carefully harvested solar sea salt costs more than ordinary processed salt.</p>
+
+        <p>We also wanted the package to have a life after the last serving.</p>
+
+        <p>When your Purest jar is empty, wash it and use it again. It can hold sea salt, spices, tea, vitamins, seeds, travel essentials, or another small part of your daily ritual. If you do not reuse it, glass can be recycled wherever your local program accepts it.</p>
+
+        <p>The jar was never meant to feel disposable. It was designed to be useful, beautiful, and worth keeping.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">Made for athletes, parents, and everyday hydrators</h2>
+
+        <p>Purest began with my family, but it was never meant only for elite athletes.</p>
+
+        <p>It is for runners, hikers, surfers, cyclists, travelers, parents, people living at altitude, and anyone who wants to be more thoughtful about what they add to their water. It can be part of a hard training day or a quiet morning at home.</p>
+
+        <p>That is why we call it a hydration ritual. It is not about chasing a dramatic flavor or waiting until you feel depleted. It is about making real hydration a visible, repeatable part of everyday life.</p>
+
+        <h2 class="pt-7 font-serif text-3xl leading-tight text-foreground md:pt-10 md:text-4xl">Nothing hidden</h2>
+
+        <p>Purest Electrolyte comes in a clear glass jar because it is the only package that feels as honest as the product.</p>
+
+        <p>You can see the powder. You can read every ingredient. You can taste the real fruit. You can understand where the salt comes from.</p>
+
+        <p>No mystery. No neon colors. No attempt to make real food look like something created in a lab.</p>
+
+        <p class="font-medium text-foreground">Just real fruit, real salt, and real hydration in a glass jar.</p>
+      </div>
+    </div>
+  </article>
+</Layout>
