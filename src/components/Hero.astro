@@ -5,12 +5,12 @@ const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
 <section class="w-full bg-stone-50 overflow-hidden">
-  <picture class="relative block h-[200px] w-full overflow-hidden min-[360px]:h-[225px] sm:h-[300px] md:h-[360px] lg:h-[430px] xl:h-[470px]">
+  <picture class="block w-full overflow-hidden">
     <source srcset={image} type="image/webp" />
     <img
       src={imageFallback}
       alt={imageAlt}
-      class="absolute inset-0 h-full w-full object-cover object-[50%_65%]"
+      class="block h-auto w-full"
       loading="eager"
       fetchpriority="high"
     />
