@@ -4,8 +4,8 @@ import siteConfig from "@/data/site-config.json";
 const { imageFallback, imageAlt } = siteConfig.hero;
 ---
 
-<section class="relative flex min-h-[720px] w-full items-center overflow-hidden bg-slate-900 md:min-h-[760px] lg:min-h-[820px]">
-  <picture class="absolute inset-0">
+<section class="w-full overflow-hidden bg-stone-50">
+  <picture class="block h-[430px] w-full overflow-hidden sm:h-[520px] md:h-[620px] lg:h-[720px] xl:h-[820px]">
     <img
       src={imageFallback}
       alt={imageAlt}
@@ -15,38 +15,40 @@ const { imageFallback, imageAlt } = siteConfig.hero;
     />
   </picture>
 
-  <div class="container relative z-10 py-16 md:py-20">
-    <div class="max-w-[660px] space-y-5 text-white">
-      <div class="flex items-center gap-2 text-sm">
-        <span class="text-white/80">Loved by athletes, parents & everyday hydrators</span>
+  <div class="border-t border-black/5">
+    <div class="container py-12 md:py-16 lg:py-20">
+      <div class="max-w-[760px] space-y-5 text-foreground">
+        <div class="flex items-center gap-2 text-sm">
+          <span class="text-foreground/60">Loved by athletes, parents & everyday hydrators</span>
+        </div>
+
+        <h1 class="font-serif text-5xl leading-[0.98] tracking-tight md:text-6xl lg:text-7xl">
+          Your new<br /><em>hydration ritual.</em>
+        </h1>
+
+        <ul class="space-y-2.5 text-sm text-foreground/75 md:text-base">
+          <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
+          <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
+          <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
+        </ul>
+
+        <div class="flex flex-col gap-3 pt-1 sm:flex-row">
+          <a
+            href="#shop"
+            class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+          >
+            Shop now →
+          </a>
+          <a
+            href="/products/5-day-hydration-kit"
+            class="inline-flex h-14 items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-medium text-foreground transition-all hover:bg-foreground/5"
+          >
+            Try the 5-Day Kit — $15.99
+          </a>
+        </div>
+
+        <p class="text-xs text-foreground/40">Free shipping on orders over $39</p>
       </div>
-
-      <h1 class="font-serif text-5xl leading-[0.98] tracking-tight drop-shadow-sm md:text-6xl lg:text-7xl">
-        Your new<br /><em>hydration ritual.</em>
-      </h1>
-
-      <ul class="space-y-2.5 text-sm text-white/90 drop-shadow-sm md:text-base">
-        <li class="flex items-start gap-2"><span class="font-bold text-lime-300">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
-        <li class="flex items-start gap-2"><span class="font-bold text-lime-300">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
-        <li class="flex items-start gap-2"><span class="font-bold text-lime-300">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
-      </ul>
-
-      <div class="flex flex-col gap-3 pt-1 sm:flex-row">
-        <a
-          href="#shop"
-          class="inline-flex h-14 items-center justify-center rounded-full bg-white px-10 text-base font-medium text-black transition-all duration-150 hover:bg-white/90 active:scale-[0.98]"
-        >
-          Shop now →
-        </a>
-        <a
-          href="/products/5-day-hydration-kit"
-          class="inline-flex h-14 items-center justify-center rounded-full border border-white/70 bg-black/20 px-8 text-base font-medium text-white backdrop-blur-sm transition-all hover:bg-black/35"
-        >
-          Try the 5-Day Kit — $15.99
-        </a>
-      </div>
-
-      <p class="text-xs text-white/70">Free shipping on orders over $39</p>
     </div>
   </div>
 </section>
