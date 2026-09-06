@@ -4,65 +4,56 @@ import siteConfig from "@/data/site-config.json";
 const { cta, ctaHref, image, imageFallback, imageAlt } = siteConfig.hero;
 ---
 
-{/*
- * Split hero: text left, product image right — LMNT-style layout.
- * Purest's light, airy brand feel instead of LMNT's dark aesthetic.
- */}
 <section class="w-full bg-stone-50 overflow-hidden">
-  <div class="container">
-    <div class="grid md:grid-cols-2 min-h-[480px] md:min-h-[560px] items-center gap-8 py-12 md:py-0">
+  <picture class="relative block h-[200px] w-full overflow-hidden min-[360px]:h-[225px] sm:h-[300px] md:h-[360px] lg:h-[430px] xl:h-[470px]">
+    <source srcset={image} type="image/webp" />
+    <img
+      src={imageFallback}
+      alt={imageAlt}
+      class="absolute inset-0 h-full w-full object-cover object-[50%_65%]"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </picture>
 
-      {/* Left: headline + description + CTA — order-2 on mobile so image shows first */}
-      <div class="space-y-3 py-4 md:py-8 order-2 md:order-1">
+  <div class="border-t border-foreground/10">
+    <div class="container py-6 sm:py-8 md:py-10 lg:py-12">
+      <div class="grid gap-6 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:gap-12 lg:gap-20">
+        <div class="max-w-xl">
+          <div class="text-sm text-foreground/60">
+            Loved by athletes, parents & everyday hydrators
+          </div>
 
-        {/* Social proof */}
-        <div class="flex items-center gap-2 text-sm">
-          <span class="text-foreground/60">Loved by athletes, parents & everyday hydrators</span>
+          <h1 class="mt-4 font-serif text-[2.55rem] leading-[0.96] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            Your new<br /><em>hydration ritual.</em>
+          </h1>
         </div>
 
-        <h1 class="font-serif text-5xl leading-tight tracking-tight md:text-6xl lg:text-7xl">
-          Your new<br /><em>hydration ritual.</em>
-        </h1>
+        <div class="max-w-xl md:self-end">
+          <ul class="space-y-2 text-sm text-foreground/75 md:text-base">
+            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
+            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
+            <li class="flex items-start gap-2"><span class="font-bold text-green-600">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
+          </ul>
 
-        {/* Benefit bullets */}
-        <ul class="space-y-2 text-sm text-foreground/75">
-          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 85+ trace minerals from natural sun-dried sea salt</li>
-          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 700+ mg naturally occurring sodium — no synthetic salt</li>
-          <li class="flex items-center gap-2"><span class="text-green-600 font-bold">✓</span> 0 added sugar, 0 anti-caking agents, 0 maltodextrin</li>
-        </ul>
+          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+            <a
+              href="#shop"
+              class="inline-flex h-[52px] items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
+            >
+              Shop now →
+            </a>
+            <a
+              href="/products/5-day-hydration-kit"
+              class="inline-flex h-[52px] items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-medium text-foreground transition-all hover:bg-foreground/5"
+            >
+              Try the 5-Day Kit — $15.99
+            </a>
+          </div>
 
-        <div class="flex flex-col sm:flex-row gap-3">
-          <a
-            href="#shop"
-            class="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-base font-medium text-primary-foreground transition-all duration-150 hover:bg-primary/90 active:scale-[0.98]"
-          >
-            Shop now →
-          </a>
-          <a
-            href="/products/5-day-hydration-kit"
-            class="inline-flex h-14 items-center justify-center rounded-full border border-foreground/20 px-8 text-base font-medium text-foreground transition-all hover:bg-foreground/5"
-          >
-            Try the 5-Day Kit — $15.99
-          </a>
+          <p class="mt-4 text-xs text-foreground/40">Free shipping on orders over $39</p>
         </div>
-
-        <p class="text-xs text-foreground/40">Free shipping on orders over $39</p>
       </div>
-
-      {/* Right: product image — order-1 on mobile so it shows first */}
-      <div class="relative h-[360px] md:h-full md:min-h-[560px] -mx-4 md:mx-0 md:-mr-8 lg:-mr-16 order-1 md:order-2">
-        <picture>
-          <source srcset={image} type="image/webp" />
-          <img
-            src={imageFallback}
-            alt={imageAlt}
-            class="absolute inset-0 w-full h-full object-contain object-center"
-            loading="eager"
-            fetchpriority="high"
-          />
-        </picture>
-      </div>
-
     </div>
   </div>
 </section>
